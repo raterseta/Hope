@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Hope</string>
+    <string name="first_board_st_line">Jangan sampai\nkejahatan seksual\nterjadi di sekitar anda!</string>
+    <string name="first_board_nd_line">Tidak memandang gender, kejahatan seksual\ndapat terjadi kepada siapapun</string>
+    <string name="second_board_st_line">Bicara sebebasnya,\nIdentitasmu tetap menjadi\nrahasiamu.</string>
+    <string name="second_board_nd_line">Tidak perlu khawatir akan identitasmu,\nruang bicaramu bebas disini</string>
+    <string name="third_board_st_line">Kota yang cerdas,\nberawal dari lingkungan\nyang aman.</string>
+    <string name="third_board_nd_line">Bukan hanya teknologi saja, kota cerdas\nharuslah memiliki lingkungan yang aman juga</string>
 </resources>
