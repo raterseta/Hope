@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.hope.ui.composables.bottomNav.BottomNavComposable
 import com.example.hope.ui.theme.HopeTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +20,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HopeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        //contoh penggunaan BottomNav
+                        BottomNavComposable()
+                    }
+                ) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
@@ -43,6 +50,16 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     HopeTheme {
-        Greeting("Android")
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BottomNavComposable()
+            }
+        ) { innerPadding ->
+            Greeting(
+                name = "Preview",
+                modifier = Modifier.padding(innerPadding)
+            )
+        }
     }
 }
