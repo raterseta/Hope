@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hope.ui.composables.bottomNav.BottomNavComposable
+import com.example.hope.ui.composables.topNav.TopNavComposable
 import com.example.hope.ui.theme.HopeTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,6 +26,14 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         //contoh penggunaan BottomNav
                         BottomNavComposable()
+                    },
+                    topBar = {
+                        TopNavComposable(
+                            username = "Elaina",
+                            profilePicture = R.drawable.elaina_stiker,
+                            onProfileClick = {  },
+                            onSearch = {  },
+                        ) { }
                     }
                 ) { innerPadding ->
                     Greeting(
@@ -54,6 +63,14 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
                 BottomNavComposable()
+            },
+            topBar = {
+                TopNavComposable(
+                    username = "Elaina",
+                    profilePicture = R.drawable.elaina_stiker,
+                    onProfileClick = { },
+                    onSearch = {  },
+                ) { }
             }
         ) { innerPadding ->
             Greeting(
