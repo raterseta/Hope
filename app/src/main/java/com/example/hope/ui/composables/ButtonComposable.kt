@@ -22,7 +22,8 @@ import com.example.hope.ui.theme.White
 fun ButtonComposable(
     text: String,
     onClick: () -> Unit,
-    isHighlighted: Boolean
+    isHighlighted: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
@@ -32,7 +33,7 @@ fun ButtonComposable(
         ),
         shape = RoundedCornerShape(50),
         modifier = Modifier
-            .padding(8.dp)
+            .padding(8.dp),
     ){
         Text(
             text = text,
@@ -45,8 +46,8 @@ fun ButtonComposable(
 @Composable
 private fun PrevButtonComposable() {
     ButtonComposable(
-        text = "Click",
+        text = "apacoba aaf",
         onClick = { TODO() },
-        isHighlighted = false
+        isHighlighted = true
     )
 }

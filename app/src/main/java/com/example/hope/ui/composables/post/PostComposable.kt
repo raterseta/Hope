@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -84,7 +81,7 @@ fun PostComposable(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
             Column(
@@ -109,7 +106,9 @@ fun PostComposable(
                 modifier = Modifier.align(Alignment.Top)
             ) {
                 Icon(
-                    imageVector = if (isBookmarked) Icons.Filled.Favorite else Icons.Outlined.Favorite,
+                    painter = painterResource(
+                        id = if (isBookmarked) R.drawable.bookmark_filled else R.drawable.bookmark_outlined
+                    ),
                     contentDescription = if (isBookmarked) "Remove Bookmark" else "Add Bookmark"
                 )
             }

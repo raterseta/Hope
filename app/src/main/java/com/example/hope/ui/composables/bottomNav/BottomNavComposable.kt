@@ -3,7 +3,12 @@ package com.example.hope.ui.composables.bottomNav
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
@@ -39,7 +44,16 @@ fun BottomNavComposable(
 
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surface) // Atur warna sesuai tema
+            .fillMaxWidth()
+            .padding(
+                bottom = WindowInsets.navigationBars
+                    .asPaddingValues()
+                    .calculateBottomPadding()
+            )
+    ) {
         items.forEachIndexed { index, item ->
             AddItem(
                 screen = item,
