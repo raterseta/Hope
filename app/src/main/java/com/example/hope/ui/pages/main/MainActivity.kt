@@ -24,12 +24,14 @@ import com.example.hope.ui.composables.post.getDummyPosts
 import com.example.hope.ui.composables.post.getSavedPosts
 import com.example.hope.ui.composables.topNav.SimpleTopNavComposable
 import com.example.hope.ui.composables.topNav.TopNavComposable
+import com.example.hope.ui.pages.upload.UploadPage
 import com.example.hope.ui.theme.HopeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             HopeTheme {
                 var currentScreen by remember { mutableStateOf(Screen.Home) }
@@ -55,7 +57,7 @@ class MainActivity : ComponentActivity() {
                                 onSearch = { },
                                 onFilterClick = { }
                             )
-                            Screen.Add -> {TODO()}
+                            Screen.Add -> {}
                             Screen.Chat -> {TODO()}
                             Screen.Bookmark -> SimpleTopNavComposable(
                                 title = "Saved Posts",
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     when (currentScreen) {
                         Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
-                        Screen.Add -> TODO()
+                        Screen.Add -> UploadPage(innerPadding = innerPadding)
                         Screen.Chat -> TODO()
                         Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))
                     }
