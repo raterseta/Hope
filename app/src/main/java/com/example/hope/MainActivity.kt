@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.hope.ui.composables.bottomNav.BottomNavComposable
+import com.example.hope.ui.composables.topNav.TopNavComposable
 import com.example.hope.ui.theme.HopeTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +21,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HopeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        //contoh penggunaan BottomNav
+                        BottomNavComposable()
+                    },
+                    topBar = {
+                        TopNavComposable(
+                            username = "Elaina",
+                            profilePicture = R.drawable.elaina_stiker,
+                            onProfileClick = {  },
+                            onSearch = {  },
+                        ) { }
+                    }
+                ) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
@@ -29,6 +45,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+//change1
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
@@ -42,6 +59,24 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     HopeTheme {
-        Greeting("Android")
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BottomNavComposable()
+            },
+            topBar = {
+                TopNavComposable(
+                    username = "Elaina",
+                    profilePicture = R.drawable.elaina_stiker,
+                    onProfileClick = { },
+                    onSearch = {  },
+                ) { }
+            }
+        ) { innerPadding ->
+            Greeting(
+                name = "Preview",
+                modifier = Modifier.padding(innerPadding)
+            )
+        }
     }
 }
