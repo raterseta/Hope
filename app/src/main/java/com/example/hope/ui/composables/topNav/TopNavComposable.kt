@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +29,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,12 +68,16 @@ fun TopNavComposable(
         color = LightBlue,
         shadowElevation = 4.dp,
         modifier = Modifier.fillMaxWidth()
-            .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(start = 12.dp, end = 12.dp)
+                .padding(
+                    top = WindowInsets.statusBars
+                        .asPaddingValues()
+                        .calculateTopPadding()
+                )
         ) {
             // Row 1: Greeting and Profile Picture
             Row(
@@ -102,7 +112,7 @@ fun TopNavComposable(
                 onValueChange = onSearch,
                 label = { Text("Search") },
                 modifier = Modifier
-                    .fillMaxWidth(3/4f)
+                    .fillMaxWidth(3 / 4f)
                     .align(Alignment.CenterHorizontally)
                     .height(32.dp),
                 singleLine = true,
@@ -141,6 +151,24 @@ fun TopNavComposable(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleTopNavComposable(
+    title: String,
+    onBackClick: () -> Unit
+) {
+    TopAppBar(
+        title = { Text(text = title) },
+        navigationIcon = {
+            IconButton(onClick = onBackClick) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = LightBlue
+        )
+    )
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -151,4 +179,5 @@ private fun PrevTopNavComposable() {
         onProfileClick = { TODO() },
         onSearch = { TODO() },
     ) { }
+
 }

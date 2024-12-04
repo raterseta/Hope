@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,17 +17,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hope.ui.pages.main.Screen
 import com.example.hope.ui.theme.DarkBlue
 import com.example.hope.ui.theme.LightBlue
-import com.example.hope.ui.theme.PoppinsFontFamily
 import com.example.hope.ui.theme.White
 
 @Composable
-fun BottomNavComposable(modifier: Modifier = Modifier) {
+fun BottomNavComposable(
+    modifier: Modifier = Modifier,
+    onItemSelected: (Screen) -> Unit // Callback when an item is selected
+) {
     val items = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
@@ -38,16 +39,20 @@ fun BottomNavComposable(modifier: Modifier = Modifier) {
 
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
-    Row {
+    Row(modifier = modifier) {
         items.forEachIndexed { index, item ->
             AddItem(
                 screen = item,
                 selected = index == selectedItemIndex,
-                onClick = { selectedItemIndex = index },
+                onClick = {
+                    selectedItemIndex = index
+                    onItemSelected(item.screen) // Notify parent to update screen
+                }
             )
         }
     }
 }
+
 
 @Composable
 fun RowScope.AddItem(
@@ -92,5 +97,7 @@ fun RowScope.AddItem(
 @Preview
 @Composable
 private fun BottomNavPreview() {
-    BottomNavComposable()
+    BottomNavComposable(
+        onItemSelected = {}
+    )
 }
