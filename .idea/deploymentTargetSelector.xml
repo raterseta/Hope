@@ -4,7 +4,6 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="RegisterProfilePagePreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -16,7 +15,6 @@
       </SelectionState>
       <SelectionState runConfigName="ProfileUserPagePreview">
         <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
     </selectionStates>
   </component>
 </project>
