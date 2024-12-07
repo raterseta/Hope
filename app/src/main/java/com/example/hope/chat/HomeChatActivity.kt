@@ -1,217 +1,189 @@
 package com.example.hope.chat
 
-import android.graphics.Paint
-import android.text.TextPaint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
 import com.example.hope.R
-import kotlin.math.max
 
 @Composable
-fun HomeChatPage(
-    sizeWidth: TextUnit,
-    screenWidth: Dp,
-    logoSize: Dp,
-    poppins_bold: FontFamily,
-    poppins_regular: FontFamily
-) {
+fun HomeChatPage(sizeWidth: androidx.compose.ui.unit.TextUnit, screenWidth: androidx.compose.ui.unit.Dp, poppins_bold: FontFamily, poppins_regular: FontFamily) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        // Header
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Column (
+//            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(top = screenWidth * 0.05f, bottom = screenWidth * 0.05f)
-            ) {
+                .background(Color(0xFF8EACCD))
+                .fillMaxWidth()
+        ){
+            Row (modifier = Modifier
+                .padding(top = screenWidth*0.05f, bottom = screenWidth*0.05f)
+            ){
                 Image(
                     painter = painterResource(id = R.drawable.profileee),
                     contentDescription = "Logo",
                     modifier = Modifier
-                        .size(screenWidth * 0.2f)
+                        .size(screenWidth*0.2f)
                         .offset(x = screenWidth * 0.04f)
+                        .padding()
                 )
                 Text(
-                    text = "Nalo Nama",
-                    fontSize = sizeWidth * 0.07f,
+                    text = "Akun saya",
+                    fontSize = sizeWidth*0.07f,
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins_bold,
                     modifier = Modifier
-                        .padding(start = screenWidth * 0.09f)
-                        .offset(y = screenWidth * 0.045f)
+                        .padding(start= screenWidth*0.09f)
+                        .offset(y = screenWidth*0.045f)
+
                 )
             }
         }
-        // Body
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxSize()
-                .background(Color(0xFFFFFFFF))
-        ) {
-            // Dynamic Padding Logic
-            DynamicPaddingServerColumn(
-//                text = "satu",
-                text = "satusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatu",
-                sizeWidth = sizeWidth,
-                screenWidth = screenWidth,
-                poppins_bold = poppins_regular
-            )
-            DynamicPaddingClientColumn(
-                text = "satu",
-//                text = "satusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatusatu",
-                sizeWidth = sizeWidth,
-                screenWidth = screenWidth,
-                poppins_bold = poppins_regular
-            )
-        }
-    }
-}
-
-// Dynamic Padding Column
-@Composable
-fun DynamicPaddingServerColumn(
-    text: String,
-    sizeWidth: TextUnit,
-    screenWidth: Dp,
-    poppins_bold: FontFamily
-) {
-    val fontSize = sizeWidth * 0.05f
-    val calculatedEndPadding = calculateDynamicEndPaddingServer(text, fontSize, screenWidth)
-
-    Column(
-        modifier = Modifier
-            .padding(top = screenWidth*0.05f, end = calculatedEndPadding)
+        Column (modifier = Modifier
             .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .background(Color(0xFFDEE5D4))
-                .fillMaxWidth()
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF))
         ) {
-            Row(
+            Box(
                 modifier = Modifier
-                    .padding(
-                        top = screenWidth * 0.005f,
-                        bottom = screenWidth * 0.05f
+                    .padding(bottom = screenWidth * 0.05f)
+                    .fillMaxWidth()
+                    .shadow(
+                        elevation = 20.dp, // Tingkat bayangan
+                        shape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp), // Hanya sudut bawah
+                        clip = false
                     )
-            ) {
-                Text(
-                    text = text,
-                    fontSize = fontSize,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = poppins_bold,
+            ) { Column(
                     modifier = Modifier
-                        .padding(start = screenWidth * 0.05f, end = screenWidth*0.05f)
-                        .offset(y = screenWidth * 0.03f),
-                    overflow = TextOverflow.Clip
-                )
+                        .fillMaxWidth()
+                        .background(Color.White) // Pastikan latar belakang putih
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(top = screenWidth * 0.05f, bottom = screenWidth * 0.05f)
+                            .fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.profileee),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .size(screenWidth * 0.17f)
+                                .offset(x = screenWidth * 0.05f)
+                        )
+                        Text(
+                            text = "Nalo Nama",
+                            fontSize = sizeWidth * 0.05f,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = poppins_bold,
+                            modifier = Modifier
+                                .padding(start = screenWidth * 0.07f)
+                                .offset(y = screenWidth * 0.03f)
+                        )
+
+
+                    }
+                }
+            }
+
+            Column (modifier = Modifier){
+                Column (modifier = Modifier
+                    .padding(start = screenWidth*0.05f, end = screenWidth*0.05f)
+                ){
+                    /*
+                    * Buat menjadi logika, untuk psikolog yang aktif maka dia akan ditaruh diatas dan berwarna 0xFFDEE5D4
+                    * Jika yang tidak menyala, maka akan ditaruh dibawahnya
+                    * Buat Statik dulu untuk Akun User, Buat Ada 5
+                    * */
+                    //Psikolog lain yang sedang melakukan chatting dengan client
+                    Column (modifier = Modifier
+                        .background(Color(0xFFDEE5D4), shape = RoundedCornerShape(screenWidth*0.03f)) // Menambahkan sudut tumpul
+                        .fillMaxWidth()
+                    ){
+                        Row (verticalAlignment = Alignment.CenterVertically,modifier = Modifier
+                            .padding(top = screenWidth*0.05f, bottom = screenWidth*0.05f)
+
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.profileee),
+                                contentDescription = "Logo",
+                                modifier = Modifier
+                                    .size(screenWidth*0.17f)
+                                    .offset(x = screenWidth * 0.05f)
+                                    .padding()
+                            )
+                            Text(
+                                text = "Psikolog yang aktif",
+                                fontSize = sizeWidth*0.045f,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = poppins_bold,
+                                modifier = Modifier
+                                    .padding(start= screenWidth*0.07f, end = screenWidth*0.08f)
+//                                    .offset(y = screenWidth*0.03f)
+
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(screenWidth*0.05f) // Menentukan ukuran lingkaran
+                                    .clip(CircleShape) // Membuat bentuk lingkaran
+                                    .background(Color.Green) // Memberikan warna hijau
+                                    .padding(top = screenWidth*0.05f)
+                            )
+                        }
+                    }
+
+                    //Psikolog lain tidak aktif chatting dengan client
+                    Column (modifier = Modifier)
+                    {
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                            .padding(top = screenWidth*0.05f, bottom = screenWidth*0.05f),
+
+                        ){
+                            Image(
+                                painter = painterResource(id = R.drawable.profileee),
+                                contentDescription = "Logo",
+                                modifier = Modifier
+                                    .size(screenWidth*0.17f)
+                                    .offset(x = screenWidth * 0.05f)
+                                    .padding()
+                            )
+                            Text(
+                                text = "Psikolog yang tidak aktif",
+                                fontSize = sizeWidth*0.045f,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = poppins_bold,
+                                modifier = Modifier
+                                    .padding(start= screenWidth*0.07f)
+//                                    .offset(y = screenWidth*0.03f)
+
+                            )
+                        }
+                    }
+                }
             }
         }
+
+
     }
-}
-
-@Composable
-fun DynamicPaddingClientColumn(
-    text: String,
-    sizeWidth: TextUnit,
-    screenWidth: Dp,
-    poppins_bold: FontFamily
-) {
-    val fontSize = sizeWidth * 0.05f
-    val calculatedStartPadding = calculateDynamicStartPaddingClient(text, fontSize, screenWidth)
-
-    Column(
-        modifier = Modifier
-            .padding(top = screenWidth*0.05f, start = calculatedStartPadding)
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .background(Color(0xFF8EC1CD))
-                .fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(
-                        top = screenWidth * 0.005f,
-                        bottom = screenWidth * 0.05f
-                    )
-            ) {
-                Text(
-                    text = text,
-                    fontSize = fontSize,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = poppins_bold,
-                    modifier = Modifier
-                        .padding(start = screenWidth * 0.05f, end = screenWidth*0.05f)
-                        .offset(y = screenWidth * 0.03f),
-                    overflow = TextOverflow.Clip
-                )
-            }
-        }
-    }
-}
-
-// Function to calculate dynamic end padding using TextPaint
-@Composable
-fun calculateDynamicEndPaddingServer(
-    text: String,
-    fontSize: TextUnit,
-    screenWidth: Dp
-): Dp {
-    val density = LocalDensity.current
-    val textPaint = remember {
-        TextPaint().apply {
-            textSize = with(density) { fontSize.toPx() }
-        }
-    }
-
-    val textWidth = textPaint.measureText(text)
-    val screenWidthPx = with(density) { screenWidth.toPx() }
-    val minPadding = screenWidthPx * 0.05f // Minimal padding akhir
-
-    // Hitung padding dinamis
-    val dynamicPadding = max(minPadding, screenWidthPx - textWidth - screenWidthPx * 0.2f)
-
-    return with(density) { dynamicPadding.toDp() }
-}
-
-@Composable
-fun calculateDynamicStartPaddingClient(
-    text: String,
-    fontSize: TextUnit,
-    screenWidth: Dp
-): Dp {
-    val density = LocalDensity.current
-    val textPaint = remember {
-        TextPaint().apply {
-            textSize = with(density) { fontSize.toPx() }
-        }
-    }
-
-    val textWidth = textPaint.measureText(text)
-    val screenWidthPx = with(density) { screenWidth.toPx() }
-    val minPadding = screenWidthPx * 0.05f // Minimal padding awal
-
-    // Hitung padding dinamis untuk sisi awal
-    val dynamicPadding = max(minPadding, screenWidthPx - textWidth - screenWidthPx * 0.2f)
-
-    return with(density) { dynamicPadding.toDp() }
 }
