@@ -1,14 +1,10 @@
 package com.example.hope
 
 import androidx.compose.foundation.background
-<<<<<<< HEAD
-import androidx.compose.foundation.layout.padding
-=======
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
->>>>>>> bintang
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
@@ -21,27 +17,14 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-<<<<<<< HEAD
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDefaults.shape
-=======
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
->>>>>>> bintang
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-<<<<<<< HEAD
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-=======
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hope.chat.ContentChatPage
 import com.example.hope.chat.HomeChatPage
->>>>>>> bintang
 
 data class BottomNavItemOld(
     val selectedIcon: ImageVector,
@@ -62,9 +44,6 @@ data class BottomNavItemOld(
 )
 
 @Composable
-<<<<<<< HEAD
-fun TempActivity(modifier: Modifier = Modifier) {
-=======
 fun TempActivity(
     sizeWidth: TextUnit,
     screenWidth: Dp,
@@ -75,7 +54,6 @@ fun TempActivity(
     selectedPage: String
 ) {
     // Menentukan item bottom navigation
->>>>>>> bintang
     val items = listOf(
         BottomNavItemOld(
             selectedIcon = Icons.Filled.Home,
@@ -95,15 +73,6 @@ fun TempActivity(
         ),
     )
 
-<<<<<<< HEAD
-    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
-
-    Scaffold(
-        bottomBar = {
-            NavigationBar(
-                containerColor = Color(0xFF323C58)
-            ) {
-=======
     // Menyimpan index item yang terpilih
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
@@ -117,7 +86,6 @@ fun TempActivity(
                 modifier = Modifier.height(navBarHeight)  // Apply dynamic height to the NavigationBar
             ) {
                 // Menampilkan item navigasi berdasarkan daftar items
->>>>>>> bintang
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedItemIndex == index,
@@ -125,20 +93,6 @@ fun TempActivity(
                             selectedItemIndex = index
                         },
                         icon = {
-<<<<<<< HEAD
-                            Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    item.selectedIcon
-                                } else {
-                                    item.unselectedIcon
-                                },
-                                contentDescription = null,
-                                tint = if(index == selectedItemIndex) Color(0xFF8EACCD) else Color.White
-                            )
-                        },
-                        modifier = Modifier
-                            .background(Color.Transparent) // Menghilangkan highlight (background) bundar
-=======
                             val iconSize = (screenWidth * 0.07f)
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 val iconColor = when (index) {
@@ -185,20 +139,12 @@ fun TempActivity(
                         ),
                         modifier = Modifier
                             .background(Color.Transparent)
->>>>>>> bintang
                             .padding(0.dp)
                     )
                 }
             }
         },
         content = { innerPadding ->
-<<<<<<< HEAD
-            // Konten utama berubah sesuai dengan tab yang dipilih
-            Text(
-                modifier = Modifier.padding(innerPadding),
-                text = "Example of a scaffold with a bottom app bar."
-            )
-=======
             when (selectedPage) {
                 "HomeChatPage" -> HomeChatPage(sizeWidth, screenWidth, poppinsBold, poppinsRegular)
                 "ContentChatPage" -> ContentChatPage(sizeWidth, screenWidth, logoSize, poppinsBold, poppinsRegular)
@@ -208,26 +154,13 @@ fun TempActivity(
                     modifier = Modifier.padding(innerPadding)
                 )
             }
->>>>>>> bintang
         }
     )
 }
 
-<<<<<<< HEAD
-@Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-
-}
-=======
->>>>>>> bintang
 
 @Preview
 @Composable
 private fun BottomNavPreview() {
-<<<<<<< HEAD
-    TempActivity()
-}
-=======
     // TempActivity(sizeWidth = 16.sp, screenWidth = 360.dp, screenHeight = 640.dp, logoSize = 24.dp, poppinsBold = FontFamily.Default, poppinsRegular = FontFamily.Default, selectedPage = "HomeChatPage")
 }
->>>>>>> bintang
