@@ -4,6 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< HEAD
       <SelectionState runConfigName="RegisterProfilePagePreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -15,6 +16,9 @@
       </SelectionState>
       <SelectionState runConfigName="ProfileUserPagePreview">
         <option name="selectionMode" value="DROPDOWN" />
+=======
+      </SelectionState>
+>>>>>>> bintang
     </selectionStates>
   </component>
 </project>
