@@ -78,6 +78,7 @@ dependencies {
     // Accompanist libraries
     implementation("com.google.accompanist:accompanist-pager:0.26.5-rc")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.26.5-rc")
+    implementation(libs.androidx.navigation.compose)
 
     // Testing libraries
     testImplementation(libs.junit)
