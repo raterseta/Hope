@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "250357930033",
+    "firebase_url": "https://hope-d55fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hope-d55fd",
+    "storage_bucket": "hope-d55fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250357930033:android:b03000f893fd1f2da81d10",
+        "android_client_info": {
+          "package_name": "com.example.hope"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4DNhigYp74yF_EbxxGe3-AHUNJtRA3NA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

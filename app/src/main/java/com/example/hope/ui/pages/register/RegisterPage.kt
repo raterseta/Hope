@@ -31,15 +31,16 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
 fun RegisterPage(
     onBackClick: () -> Unit,
-    onRegisterClick: (String, String, String) -> Unit,
+    onRegisterClick: () -> Unit,
     onGoogleSignInClick: () -> Unit,
     onLoginClick: () -> Unit,
-    viewModel: RegisterPageViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: RegisterViewModel = viewModel()
 ) {
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
@@ -86,7 +87,7 @@ fun RegisterPage(
                 Text(text = "Email", color = Color.Black, fontSize = 16.sp)
                 BasicTextField(
                     value = email,
-                    onValueChange = viewModel::onEmailChange,
+                    onValueChange = { viewModel.onEmailChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -109,7 +110,7 @@ fun RegisterPage(
                 Text(text = "Password", color = Color.Black, fontSize = 16.sp)
                 BasicTextField(
                     value = password,
-                    onValueChange = viewModel::onPasswordChange,
+                    onValueChange = { viewModel.onPasswordChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -149,7 +150,7 @@ fun RegisterPage(
                 Text(text = "Confirm Password", color = Color.Black, fontSize = 16.sp)
                 BasicTextField(
                     value = confirmedPassword,
-                    onValueChange = viewModel::onConfirmedPasswordChange,
+                    onValueChange = { viewModel.onConfirmedPasswordChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -187,7 +188,7 @@ fun RegisterPage(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Button(
-                    onClick = { onRegisterClick(email, password, confirmedPassword) },
+                    onClick = { onRegisterClick() },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .height(42.dp)
@@ -250,9 +251,7 @@ fun RegisterPage(
 fun RegisterPagePreview() {
     RegisterPage(
         onBackClick = { println("Back clicked") },
-        onRegisterClick = { email, password, confirmedPassword ->
-            println("Register clicked with email: $email, password: $password, confirmedPassword: $confirmedPassword")
-        },
+        onRegisterClick = { },
         onGoogleSignInClick = { println("Google Sign-In clicked") },
         onLoginClick = { println("Login clicked") }
     )

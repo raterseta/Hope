@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.hope.R
 
 @Composable
@@ -30,9 +32,8 @@ fun ProfileUserPage(
     selectedAvatarId: Int?,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    onLogoutClick: () -> Unit,
-    viewModel: ProfileUserPageViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-
+    navController: NavController,
+    viewModel: ProfileUserPageViewModel = viewModel()
     ) {
     val email = viewModel.email.value
     val birthDate = viewModel.birthDate.value
@@ -209,7 +210,15 @@ fun ProfileUserPage(
 
             // Tombol Logout
             Button(
-                onClick = { onLogoutClick() },
+                onClick = {
+                    viewModel.signout {
+                        // Setelah logout, navigasi ke halaman login/register
+                        navController.navigate("loginPage") {
+                            // Clear backstack to prevent going back to profile page
+                            popUpTo("homePage") { inclusive = true }
+                        }
+                    }
+                          },
                 modifier = Modifier
                     .height(48.dp)
                     .fillMaxWidth(0.5f),
@@ -230,6 +239,7 @@ fun ProfileUserPagePreview() {
         selectedAvatarId = R.drawable.avatar3,
         onBackClick = { println("Back clicked") },
         onEditClick = { println("Edit clicked") },
-        onLogoutClick = { println("Logout clicked") }
+        navController = TODO(),
+        viewModel = TODO(),
     )
 }

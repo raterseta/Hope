@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 
 }
 
@@ -60,6 +61,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database.ktx)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.database)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -84,5 +89,8 @@ dependencies {
 
     implementation(libs.material3)
     implementation("androidx.compose.material3:material3-window-size-class:1.3.1")
+
+    implementation(libs.androidx.navigation.compose)
+
 
 }

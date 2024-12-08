@@ -4,17 +4,15 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-      <SelectionState runConfigName="RegisterProfilePagePreview">
-        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2024-12-08T12:34:23.290059100Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=SSCEYT7HEA7XYLDI" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="LoginPagePreview">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="RegisterPagePreview">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="ProfileUserPagePreview">
-        <option name="selectionMode" value="DROPDOWN" />
     </selectionStates>
   </component>
 </project>

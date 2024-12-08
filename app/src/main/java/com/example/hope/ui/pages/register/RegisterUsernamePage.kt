@@ -23,13 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hope.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun RegisterUsernamePage(
     selectedAvatarId: Int?,
     onBackClick: () -> Unit,
-    onConfirmClick: (String, String, String) -> Unit,
-    viewModel: RegisterUsernamePageViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    onConfirmClick: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
 
 ) {
     val username by viewModel.username.collectAsState()
@@ -196,7 +198,7 @@ fun RegisterUsernamePage(
 
             // Tombol Confirm
             Button(
-                onClick = { onConfirmClick(username, birthDate, phoneNumber) },
+                onClick =  onConfirmClick ,
                 modifier = Modifier
                     .height(48.dp)
                     .fillMaxWidth(0.5f),
@@ -216,8 +218,6 @@ fun RegisterUsernamePagePreview() {
     RegisterUsernamePage(
         selectedAvatarId = R.drawable.avatar3,
         onBackClick = { println("Back clicked") },
-        onConfirmClick = { username, birthDate, phoneNumber ->
-            println("Confirmed: $username, $birthDate, $phoneNumber")
-        }
+        onConfirmClick = {     }
     )
 }

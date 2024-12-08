@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,18 +47,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.R
 import com.example.hope.ui.composables.ButtonComposable
 import com.example.hope.ui.theme.LightBlue
 
 @Composable
 fun TopNavComposable(
-    username: String,
-    profilePicture: Int,
     onProfileClick: () -> Unit,
     onSearch: (String) -> Unit,
-    onFilterClick: (FilterButton) -> Unit
+    onFilterClick: (FilterButton) -> Unit,
+    viewModel: TopNavViewModel = viewModel()
 ) {
+    val userProfile by viewModel.userProfile.collectAsState()
+
     val items = listOf(
         FilterButton.Official,
         FilterButton.Komunitas,
@@ -87,7 +90,7 @@ fun TopNavComposable(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Halo, $username",
+                    text = "Halo, ${userProfile?.username ?: "User"}",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -95,7 +98,7 @@ fun TopNavComposable(
                     onClick = onProfileClick
                 ) {
                     Image(
-                        painter = painterResource(profilePicture),
+                        painter = painterResource(userProfile?.avatarID ?: R.drawable.avatar3),
                         contentDescription = "Profile",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -176,10 +179,10 @@ fun SimpleTopNavComposable(
 @Composable
 private fun PrevTopNavComposable() {
     TopNavComposable(
-        username = "Elaina",
-        profilePicture = R.drawable.elaina_stiker,
         onProfileClick = { TODO() },
         onSearch = { TODO() },
-    ) { }
+        onFilterClick = TODO(),
+        viewModel = TODO(),
+    )
 
 }

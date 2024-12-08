@@ -32,8 +32,6 @@ fun EditProfileUserPage(
     onLogoutClick: () -> Unit,
     onUploadGalleryClick: () -> Unit,
     viewModel: EditProfileUserPageViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-
-
 ) {
     Scaffold(
         containerColor = Color.White

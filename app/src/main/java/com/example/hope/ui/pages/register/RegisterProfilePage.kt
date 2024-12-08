@@ -24,10 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hope.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RegisterProfilePage(
-    viewModel: RegisterProfilePageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: RegisterViewModel = viewModel(),
     onBackClick: () -> Unit,
     onConfirmClick: (Int?) -> Unit,
     onUploadGalleryClick: () -> Unit
@@ -122,7 +123,7 @@ fun RegisterProfilePage(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Not interested?", color = Color.Black, fontSize = 16.sp)
-                    TextButton(onClick = { onUploadGalleryClick() }) {
+                    TextButton(onClick = { onUploadGalleryClick()  }) {
                         Text(text = "Upload Gallery", color = Color.Black)
                     }
                 }
