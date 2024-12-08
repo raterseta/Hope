@@ -4,28 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.hope.R
-import com.example.hope.ui.composables.bottomNav.BottomNavComposable
-import com.example.hope.ui.composables.post.DummyPostData
-import com.example.hope.ui.composables.post.PostComposable
-import com.example.hope.ui.composables.post.getDummyPosts
-import com.example.hope.ui.composables.post.getSavedPosts
-import com.example.hope.ui.composables.topNav.SimpleTopNavComposable
-import com.example.hope.ui.composables.topNav.TopNavComposable
-import com.example.hope.ui.pages.upload.UploadPage
+import com.example.hope.ui.pages.login.LoginPage
+import com.example.hope.ui.pages.register.RegisterComposable
+import com.example.hope.ui.pages.register.RegisterPage
+import com.example.hope.ui.pages.register.RegisterProfilePage
+import com.example.hope.ui.pages.register.RegisterUsernamePage
+import com.example.hope.ui.pages.register.RegisterUsernamePageViewModel
+import com.example.hope.ui.pages.user.ProfileUserPage
 import com.example.hope.ui.theme.HopeTheme
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,136 +27,61 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             HopeTheme {
-                var currentScreen by remember { mutableStateOf(Screen.Home) }
-
-                val posts = getDummyPosts()
-                val savedPosts = getSavedPosts()
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        //contoh penggunaan BottomNav
-                        BottomNavComposable(
-                            onItemSelected = { selectedScreen ->
-                                currentScreen = selectedScreen
-                            }
-                        )
-                    },
-                    topBar = {
-                        when (currentScreen) {
-                            Screen.Home -> TopNavComposable(
-                                username = "Elaina",
-                                profilePicture = R.drawable.elaina_stiker,
-                                onProfileClick = { },
-                                onSearch = { },
-                                onFilterClick = { }
-                            )
-                            Screen.Add -> {}
-                            Screen.Chat -> {TODO()}
-                            Screen.Bookmark -> SimpleTopNavComposable(
-                                title = "Saved Posts",
-                                onBackClick = { currentScreen = Screen.Home }
-                            )
-                        }
-                    }
-                ) { innerPadding ->
-                    when (currentScreen) {
-                        Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
-                        Screen.Add -> UploadPage(innerPadding = innerPadding)
-                        Screen.Chat -> TODO()
-                        Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))
-                    }
-                }
+                AppNavHost()
             }
         }
     }
 }
 //change1
+
+
 @Composable
-fun PostList(posts: List<DummyPostData>,  modifier: Modifier = Modifier) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        items(posts) { post ->
-            PostComposable(
-                profilePicture = post.profilePicture,
-                username = post.username,
-                photo = post.photo,
-                title = post.title,
-                description = post.description,
-                isBookmarked = post.isBookmarked,
-                onBookmarkClick = { /* Handle bookmark click */ }
+fun AppNavHost() {
+    val navController = rememberNavController()
+    val auth = FirebaseAuth.getInstance()
+
+    val startDestination = if (auth.currentUser != null) {
+        "homePage" // Jika sudah login, arahkan ke homePage
+    } else {
+        "registerPage" // Jika belum login, arahkan ke registerPage
+    }
+
+    NavHost(navController = navController, startDestination = startDestination) {
+
+        composable("registerPage"){
+            RegisterComposable(
+                onBackClick = { },
+                onCompleteRegistration = { navController.navigate("homePage") },
+                onLoginClick = { navController.navigate("loginPage") }
+            )
+        }
+        composable("loginPage") {
+            LoginPage(
+                onBackClick = { TODO() },
+                onLoginClick = { navController.navigate("homePage") },
+                onGoogleSignInClick = { TODO() },
+                onRegisterClick = { navController.navigate("registerPage") },
+                onForgotPasswordClick = { TODO() }
+            )
+        }
+        composable("homePage") {
+            HomePage(
+                onProfileClick = { navController.navigate("profile") }
+            )
+        }
+        composable("profile") { 
+            ProfileUserPage(
+                selectedAvatarId = R.drawable.avatar3,
+                onBackClick = { navController.navigate("homePage") },
+                onEditClick = { TODO() },
+                navController = navController
             )
         }
     }
 }
-
-@Composable
-fun SavedPostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
-        items(posts) { post ->
-            PostComposable(
-                profilePicture = post.profilePicture,
-                username = post.username,
-                photo = post.photo,
-                title = post.title,
-                description = post.description,
-                isBookmarked = post.isBookmarked,
-                onBookmarkClick = { /* Handle bookmark click */ }
-            )
-        }
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    HopeTheme {
-        var currentScreen by remember { mutableStateOf(Screen.Home) }
-
-        val posts = getDummyPosts()
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                //contoh penggunaan BottomNav
-                BottomNavComposable(
-                    onItemSelected = { selectedScreen ->
-                        currentScreen == selectedScreen
-                    }
-                )
-            },
-            topBar = {
-                when (currentScreen) {
-                    Screen.Home -> TopNavComposable(
-                        username = "Elaina",
-                        profilePicture = R.drawable.elaina_stiker,
-                        onProfileClick = { },
-                        onSearch = { },
-                        onFilterClick = { }
-                    )
-                    Screen.Add -> TopNavComposable(
-                        username = "Elaina",
-                        profilePicture = R.drawable.elaina_stiker,
-                        onProfileClick = { },
-                        onSearch = { },
-                        onFilterClick = { }
-                    )
-                    Screen.Chat -> TopNavComposable(
-                        username = "Elaina",
-                        profilePicture = R.drawable.elaina_stiker,
-                        onProfileClick = { },
-                        onSearch = { },
-                        onFilterClick = { }
-                    )
-                    Screen.Bookmark -> SimpleTopNavComposable(
-                        title = "Saved Posts",
-                        onBackClick = { currentScreen = Screen.Home }
-                    )
-                }
-            }
-        ) { innerPadding ->
-            PostList(posts = posts,
-                modifier = Modifier.padding(innerPadding))
-        }
-    }
+    HopeTheme {}
 }

@@ -1,5 +1,6 @@
 package com.example.hope.ui.pages.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -29,22 +30,28 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hope.ui.pages.register.AuthState
 
 
 @Composable
 fun LoginPage(
-    viewModel: LoginPageViewModel,
     onBackClick: () -> Unit,
-    onLoginClick: (String, String) -> Unit,
+    onLoginClick: () -> Unit,
     onGoogleSignInClick: () -> Unit,
     onRegisterClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
+    viewModel: LoginPageViewModel = viewModel()
 ) {
-    val username = viewModel.username.value
-    val password = viewModel.password.value
+    val username by viewModel.username.collectAsState()
+    val password by viewModel.password.collectAsState()
     val passwordVisible = viewModel.passwordVisible.value
+
+    val context = LocalContext.current
 
     Scaffold(
         containerColor = Color(80, 100, 147)
@@ -83,7 +90,7 @@ fun LoginPage(
                 Text(text = "Username", color = Color.Black, fontSize = 16.sp)
                 BasicTextField(
                     value = username,
-                    onValueChange = { viewModel.username.value = it },
+                    onValueChange = { viewModel.onEmailChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -106,7 +113,7 @@ fun LoginPage(
                 Text(text = "Password", color = Color.Black, fontSize = 16.sp)
                 BasicTextField(
                     value = password,
-                    onValueChange = { viewModel.password.value = it },
+                    onValueChange = {viewModel.onPasswordChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -157,7 +164,10 @@ fun LoginPage(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Button(
-                    onClick = { onLoginClick(username, password) },
+                    onClick = {
+                        // Pertama panggil login
+                        viewModel.login()
+                    },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .height(42.dp)
@@ -165,6 +175,17 @@ fun LoginPage(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black.copy(alpha = 0.4f))
                 ) {
                     Text(text = "Login", color = Color.White)
+                }
+                val authState by viewModel.authState.collectAsState()
+
+                LaunchedEffect(authState) {
+                    if (authState is AuthState.Authenticated) {
+                        // Jika login berhasil, panggil onLoginClick
+                        onLoginClick()
+                    } else if (authState is AuthState.Error) {
+                        // Tangani error login jika diperlukan
+                        Toast.makeText(context, "Login failed: ${(authState as AuthState.Error).message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -197,15 +218,15 @@ fun LoginPage(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Belum punya akun?", color = Color.Black)
-                    TextButton(onClick = { onRegisterClick() }) {
-                        Text(text = "Register", color = Color.Black)
+                    Row(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Belum punya akun?", color = Color.Black)
+                        TextButton(onClick = { onRegisterClick() }) {
+                            Text(text = "Register", color = Color.Black)
+                        }
                     }
-                }
             }
         }
     }
@@ -216,9 +237,8 @@ fun LoginPage(
 fun LoginPagePreview() {
     val viewModel = LoginPageViewModel()
     LoginPage(
-        viewModel = viewModel,
         onBackClick = { println("Back clicked") },
-        onLoginClick = { username, password -> println("Login clicked with username: $username, password: $password") },
+        onLoginClick = { println("Login Clicked") },
         onGoogleSignInClick = { println("Google Sign-In clicked") },
         onRegisterClick = { println("Register clicked") },
         onForgotPasswordClick = { println("Forgot Password clicked") }
