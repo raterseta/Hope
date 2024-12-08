@@ -121,7 +121,7 @@ fun ChatInputField(
                     bottom = screenWidth * 0.015f,
                     start = screenWidth * 0.01f,
                     end = screenWidth * 0.01f,
-                    )
+                )
         ) {
             Button(
                 onClick = {

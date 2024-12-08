@@ -47,7 +47,7 @@ fun SecondBoard(sizeWidth: androidx.compose.ui.unit.TextUnit, screenWidth: andro
             contentDescription = "Logo",
             modifier = Modifier
                 .size(logoSize)
-                .offset(x = screenWidth * 0.02f)
+//                .offset(x = screenWidth * 0.02f)
         )
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hope.R
 import com.example.hope.TempActivity
+import com.example.hope.TempActivity_bck
 import com.example.hope.ui.theme.HopeTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -82,7 +83,7 @@ fun AllChatPage() {
                 .weight(0.1f)
         ) { page ->
             when (page) {
-                0 -> TempActivity(
+                0 -> TempActivity_bck(
                     screenHeight = screenHeight,
                     sizeWidth = sizeWidth,
                     screenWidth = screenWidth,
@@ -91,7 +92,7 @@ fun AllChatPage() {
                     poppinsRegular = poppins_regular,
                     selectedPage = "ContentChatPage"
                 )
-                1 -> TempActivity(
+                1 -> TempActivity_bck(
                     screenHeight = screenHeight,
                     sizeWidth = sizeWidth,
                     screenWidth = screenWidth,

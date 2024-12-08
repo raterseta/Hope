@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,36 +19,81 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.hope.R
-import com.google.accompanist.pager.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.runtime.rememberCoroutineScope
+import com.example.hope.ui.pages.login.LoginPage
+import com.example.hope.ui.pages.main.HomePage
+import com.example.hope.ui.pages.register.RegisterComposable
 import com.example.hope.ui.theme.HopeTheme
+import com.google.accompanist.pager.*
 
-class BoardActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+//class BoardActivity : ComponentActivity() {
+//    @OptIn(ExperimentalMaterial3Api::class)
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        // Change the status bar color
+//        window.statusBarColor = android.graphics.Color.parseColor("#536493")
+//        setContent {
+//            HopeTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = Color(0xFF536493) // Set background color to #536493
+//                ) {
+//                    BoardNavHost()
+//                }
+//            }
+//        }
+//    }
+//}
 
-        // Change the status bar color to yellow
-//        window.statusBarColor = android.graphics.Color.BLUE  ->  saya ingin mengganti warna dengan 0xFF536493
-        window.statusBarColor = android.graphics.Color.parseColor("#536493")
-        setContent {
-            HopeTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color(0xFF536493) // Set background color to #536493
-                ) {
-                    BoardPage()
-                }
-            }
+@Composable
+fun BoardNavHost() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "boardPage") {
+        composable("boardPage") {
+            BoardPage(
+                onLoginClick = { navController.navigate("loginPage") },
+                onRegisterClick = { navController.navigate("registerPage") }
+            )
         }
+
+        composable("loginPage") {
+            LoginPage(
+                onBackClick = { navController.navigateUp() },
+                onLoginClick = { navController.navigate("homePage") },
+                onGoogleSignInClick = { /* TODO: Implement Google Sign-In */ },
+                onRegisterClick = { navController.navigate("registerPage") },
+                onForgotPasswordClick = { /* TODO: Implement Forgot Password */ }
+            )
+        }
+
+        composable("registerPage") {
+            RegisterComposable(
+                onBackClick = { navController.navigateUp() },
+                onCompleteRegistration = { navController.navigate("homePage") },
+                onLoginClick = { navController.navigate("loginPage") }
+            )
+        }
+
+//        composable("homePage") {
+//            HomePage(
+//                onProfileClick = { TODO() }
+//            )
+//        }
     }
 }
 
 @Composable
 @OptIn(ExperimentalPagerApi::class)
-fun BoardPage() {
+fun BoardPage(
+    onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit
+) {
     val poppins_regular = FontFamily(Font(R.font.poppins_regular))
     val poppins_bold = FontFamily(Font(R.font.poppins_bold))
     val configuration = LocalConfiguration.current
@@ -112,7 +158,7 @@ fun BoardPage() {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, shape = RoundedCornerShape(topStart = screenWidth * 0.1f, topEnd = screenWidth * 0.1f))
-                .padding(vertical = 16.dp),
+                .padding(top = screenWidth*0.05f, bottom = screenWidth*0.1f),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -122,7 +168,7 @@ fun BoardPage() {
                         .padding(horizontal = screenWidth * 0.08f)
                 ) {
                     Button(
-                        onClick = { /* Handle login action */ },
+                        onClick = onLoginClick,
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF536493)),
                         modifier = Modifier.weight(1f).padding(top = screenWidth * 0.05f)
                     ) {
@@ -140,7 +186,7 @@ fun BoardPage() {
                         .padding(horizontal = screenWidth * 0.08f)
                 ) {
                     Button(
-                        onClick = { /* Handle register action */ },
+                        onClick = onRegisterClick,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         border = BorderStroke(1.dp, Color(0xFF536493)),
                         modifier = Modifier.weight(1f).padding(start = 0.dp)
@@ -158,13 +204,13 @@ fun BoardPage() {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun BoardPreview() {
     HopeTheme {
-        BoardPage()
+        BoardPage(
+            onLoginClick = {},
+            onRegisterClick = {}
+        )
     }
 }
-
-

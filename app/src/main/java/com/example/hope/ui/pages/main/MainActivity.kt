@@ -10,6 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hope.R
+import com.example.hope.boarding.BoardPage
+import com.example.hope.chat.HomeChatPage
+import com.example.hope.logo.LogoPage
 import com.example.hope.ui.pages.login.LoginPage
 import com.example.hope.ui.pages.register.RegisterComposable
 import com.example.hope.ui.pages.register.RegisterPage
@@ -43,7 +46,8 @@ fun AppNavHost() {
     val startDestination = if (auth.currentUser != null) {
         "homePage" // Jika sudah login, arahkan ke homePage
     } else {
-        "registerPage" // Jika belum login, arahkan ke registerPage
+//        "registerPage" // Jika belum login, arahkan ke registerPage
+        "logoPage"
     }
 
     NavHost(navController = navController, startDestination = startDestination) {
@@ -77,6 +81,18 @@ fun AppNavHost() {
                 navController = navController
             )
         }
+        composable("boardPage") {
+            BoardPage(
+                onLoginClick = { navController.navigate("loginPage") },
+                onRegisterClick = { navController.navigate("registerPage") }
+            )
+        }
+        composable("logoPage") {
+            LogoPage()
+        }
+//        composable("chat") {
+//            HomeChatPage()
+//        }
     }
 }
 

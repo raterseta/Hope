@@ -22,6 +22,7 @@ fun ThirdBoard(sizeWidth: androidx.compose.ui.unit.TextUnit, screenWidth: androi
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
+            .padding(top = screenWidth * 0.085f)
 //            .fillMaxSize()
 //            .background(Color(0xFFD2E0FB))
     ) {
@@ -44,7 +45,7 @@ fun ThirdBoard(sizeWidth: androidx.compose.ui.unit.TextUnit, screenWidth: androi
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start=screenWidth * 0.1f, end=screenWidth * 0.1f, bottom = screenWidth * 0.15f)
+                .padding(start=screenWidth * 0.1f, end=screenWidth * 0.1f)
         )
         Image(
             painter = painterResource(id = R.drawable.third_board),
@@ -52,6 +53,7 @@ fun ThirdBoard(sizeWidth: androidx.compose.ui.unit.TextUnit, screenWidth: androi
             modifier = Modifier
                 .size(logoSize*1.35f)
                 .offset(x = screenWidth * 0.001f)
+                .padding(top=screenWidth*0.1f)
         )
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.hope.R
+import com.example.hope.chat.HomeChatPage
 import com.example.hope.ui.composables.bottomNav.BottomNavComposable
 import com.example.hope.ui.composables.post.DummyPostData
 import com.example.hope.ui.composables.post.PostComposable
@@ -48,7 +49,7 @@ fun HomePage(
                     onFilterClick = { }
                 )
                 Screen.Add -> {}
-                Screen.Chat -> {TODO()}
+                Screen.Chat -> {}
                 Screen.Bookmark -> SimpleTopNavComposable(
                     title = "Saved Posts",
                     onBackClick = { currentScreen = Screen.Home }
@@ -59,7 +60,7 @@ fun HomePage(
         when (currentScreen) {
             Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
             Screen.Add -> UploadPage(innerPadding = innerPadding)
-            Screen.Chat -> TODO()
+            Screen.Chat -> HomeChatPage(modifier = Modifier.padding(innerPadding))
             Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))
         }
     }

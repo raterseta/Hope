@@ -44,7 +44,7 @@ data class BottomNavItemOldd(
 )
 
 @Composable
-fun TempActivity(
+fun TempActivity_bck(
     sizeWidth: TextUnit,
     screenWidth: Dp,
     screenHeight: Dp,  // Added screenHeight for dynamic adjustments
@@ -146,7 +146,7 @@ fun TempActivity(
         },
         content = { innerPadding ->
             when (selectedPage) {
-                "HomeChatPage" -> HomeChatPage(sizeWidth, screenWidth, poppinsBold, poppinsRegular)
+//                "HomeChatPage" -> HomeChatPage(sizeWidth, screenWidth, poppinsBold, poppinsRegular)
                 "ContentChatPage" -> ContentChatPage(sizeWidth, screenWidth, logoSize, poppinsBold, poppinsRegular)
                 else -> Text(
                     text = "Halaman tidak ditemukan",
