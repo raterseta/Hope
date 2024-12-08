@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.example.hope.chat.ContentChatPage
 import com.example.hope.chat.HomeChatPage
 
-data class BottomNavItemOld(
+data class BottomNavItemOldd(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 )
