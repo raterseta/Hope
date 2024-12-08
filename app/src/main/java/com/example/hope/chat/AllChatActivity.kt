@@ -89,7 +89,7 @@ fun AllChatPage() {
                     logoSize = logoSize,
                     poppinsBold = poppins_bold,
                     poppinsRegular = poppins_regular,
-                    selectedPage = "HomeChatPage"
+                    selectedPage = "ContentChatPage"
                 )
                 1 -> TempActivity(
                     screenHeight = screenHeight,

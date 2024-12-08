@@ -31,7 +31,6 @@ fun HomeChatPage(sizeWidth: androidx.compose.ui.unit.TextUnit, screenWidth: andr
         modifier = Modifier.fillMaxWidth()
     ) {
         Column (
-//            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(Color(0xFF8EACCD))
                 .fillMaxWidth()
