@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hope.Greeting
 import com.example.hope.R
+import com.example.hope.ui.composables.topNav.TopNavChatComposable
 import com.example.hope.ui.theme.HopeTheme
 
 @Composable
@@ -42,88 +43,31 @@ fun HomeChatPage(modifier: Modifier = Modifier) {
     val poppins_bold = FontFamily(Font(R.font.poppins_bold))
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-    val screenHeight = configuration.screenHeightDp.dp
     val sizeWidth = configuration.screenWidthDp.sp
-    val logoSize = screenWidth * 0.7f
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column (
-            modifier = Modifier
-                .background(Color(0xFF8EACCD))
-                .fillMaxWidth()
-        ){
-            Row (modifier = Modifier
-                .padding(top = screenWidth*0.05f, bottom = screenWidth*0.05f)
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.profileee),
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(screenWidth*0.2f)
-                        .offset(x = screenWidth * 0.04f)
-                        .padding()
-                )
-                Text(
-                    text = "Akun saya",
-                    fontSize = sizeWidth*0.07f,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = poppins_bold,
-                    modifier = Modifier
-                        .padding(start= screenWidth*0.09f)
-                        .offset(y = screenWidth*0.045f)
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // TopNav untuk halaman chat
+            TopNavChatComposable()
 
-                )
+            // Sisa konten halaman
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black)
+            ) {
             }
         }
+
         Column (modifier = Modifier
             .fillMaxWidth()
             .fillMaxSize()
             .background(Color(0xFFFFFFFF))
         ) {
-//            Box(
-//                modifier = Modifier
-//                    .padding(bottom = screenWidth * 0.05f)
-//                    .fillMaxWidth()
-//                    .shadow(
-//                        elevation = 20.dp, // Tingkat bayangan
-//                        shape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp), // Hanya sudut bawah
-//                        clip = false
-//                    )
-//            ) { Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .background(Color.White) // Pastikan latar belakang putih
-//            ) {
-//                Row(
-//                    modifier = Modifier
-//                        .padding(top = screenWidth * 0.05f, bottom = screenWidth * 0.05f)
-//                        .fillMaxWidth()
-//                ) {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.profileee),
-//                        contentDescription = "Logo",
-//                        modifier = Modifier
-//                            .size(screenWidth * 0.17f)
-//                            .offset(x = screenWidth * 0.05f)
-//                    )
-//                    Text(
-//                        text = "Nalo Nama",
-//                        fontSize = sizeWidth * 0.05f,
-//                        color = Color.Black,
-//                        fontWeight = FontWeight.Bold,
-//                        fontFamily = poppins_bold,
-//                        modifier = Modifier
-//                            .padding(start = screenWidth * 0.07f)
-//                            .offset(y = screenWidth * 0.03f)
-//                    )
-//
-//
-//                }
-//            }
-//            }
-
             Column (modifier = Modifier){
                 Column (modifier = Modifier
                     .padding(start = screenWidth*0.05f, top = screenWidth*0.03f, end = screenWidth*0.05f)
@@ -170,36 +114,6 @@ fun HomeChatPage(modifier: Modifier = Modifier) {
                             )
                         }
                     }
-
-                    //Psikolog lain tidak aktif chatting dengan client
-//                    Column (modifier = Modifier)
-//                    {
-//                        Row (
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            modifier = Modifier
-//                                .padding(top = screenWidth*0.05f, bottom = screenWidth*0.05f),
-//
-//                            ){
-//                            Image(
-//                                painter = painterResource(id = R.drawable.profileee),
-//                                contentDescription = "Logo",
-//                                modifier = Modifier
-//                                    .size(screenWidth*0.17f)
-//                                    .offset(x = screenWidth * 0.05f)
-//                                    .padding()
-//                            )
-//                            Text(
-//                                text = "Psikolog yang tidak aktif",
-//                                fontSize = sizeWidth*0.045f,
-//                                fontWeight = FontWeight.Bold,
-//                                fontFamily = poppins_bold,
-//                                modifier = Modifier
-//                                    .padding(start= screenWidth*0.07f)
-////                                    .offset(y = screenWidth*0.03f)
-//
-//                            )
-//                        }
-//                    }
                 }
             }
         }

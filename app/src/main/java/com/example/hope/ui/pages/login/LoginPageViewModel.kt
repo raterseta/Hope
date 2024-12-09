@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class LoginPageViewModel : ViewModel() {
     private val _email = MutableStateFlow("")
-    val email: StateFlow<String> = _email.asStateFlow()
+    val username: StateFlow<String> = _email.asStateFlow()
 
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> get() = _password

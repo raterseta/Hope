@@ -38,14 +38,6 @@ fun LogoPage(navController: NavHostController) {
     val logoSize = screenWidth * 0.5f
 
     // Navigate to BoardNavHost after 2 seconds
-//    LaunchedEffect(Unit) {
-//        delay(2000) // 2 seconds delay
-//        (context as? ComponentActivity)?.setContent {
-//            HopeTheme {
-//                navController.navigate("boardPage")
-//            }
-//        }
-//    }
     LaunchedEffect(Unit) {
         delay(2000) // 2 seconds delay
         navController.navigate("boardPage") {

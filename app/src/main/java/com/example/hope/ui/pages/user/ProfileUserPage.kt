@@ -105,7 +105,6 @@ fun ProfileUserPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-
             BasicTextField(
                 value = email,
                 onValueChange = viewModel::updateEmail,
