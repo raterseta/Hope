@@ -1,3 +1,4 @@
+//FIle LogoActivity.kt
 package com.example.hope.logo
 
 import android.os.Bundle
@@ -18,36 +19,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.example.hope.R
-import com.example.hope.boarding.BoardNavHost
 import com.example.hope.ui.theme.HopeTheme
 import kotlinx.coroutines.delay
 import androidx.activity.compose.BackHandler
-
-class LogoActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Change the status bar color
-        window.statusBarColor = android.graphics.Color.parseColor("#536493")
-
-        setContent {
-            HopeTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    LogoPage()
-                }
-            }
-        }
-    }
-}
+import androidx.navigation.NavHostController
 
 @Composable
-fun LogoPage() {
+fun LogoPage(navController: NavHostController) {
     // Get screen width
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -59,14 +38,21 @@ fun LogoPage() {
     val logoSize = screenWidth * 0.5f
 
     // Navigate to BoardNavHost after 2 seconds
+//    LaunchedEffect(Unit) {
+//        delay(2000) // 2 seconds delay
+//        (context as? ComponentActivity)?.setContent {
+//            HopeTheme {
+//                navController.navigate("boardPage")
+//            }
+//        }
+//    }
     LaunchedEffect(Unit) {
         delay(2000) // 2 seconds delay
-        (context as? ComponentActivity)?.setContent {
-            HopeTheme {
-                BoardNavHost()
-            }
+        navController.navigate("boardPage") {
+            popUpTo("logoPage") { inclusive = true } // Hapus logoPage dari stack navigasi
         }
     }
+
 
     // Prevent going back
     BackHandler {
@@ -90,10 +76,10 @@ fun LogoPage() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LogoPreview() {
-    HopeTheme {
-        LogoPage()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun LogoPreview() {
+//    HopeTheme {
+//        LogoPage(navController)
+//    }
+//}

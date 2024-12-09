@@ -50,43 +50,43 @@ import com.google.accompanist.pager.*
 //    }
 //}
 
-@Composable
-fun BoardNavHost() {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = "boardPage") {
-        composable("boardPage") {
-            BoardPage(
-                onLoginClick = { navController.navigate("loginPage") },
-                onRegisterClick = { navController.navigate("registerPage") }
-            )
-        }
-
-        composable("loginPage") {
-            LoginPage(
-                onBackClick = { navController.navigateUp() },
-                onLoginClick = { navController.navigate("homePage") },
-                onGoogleSignInClick = { /* TODO: Implement Google Sign-In */ },
-                onRegisterClick = { navController.navigate("registerPage") },
-                onForgotPasswordClick = { /* TODO: Implement Forgot Password */ }
-            )
-        }
-
-        composable("registerPage") {
-            RegisterComposable(
-                onBackClick = { navController.navigateUp() },
-                onCompleteRegistration = { navController.navigate("homePage") },
-                onLoginClick = { navController.navigate("loginPage") }
-            )
-        }
-
-//        composable("homePage") {
-//            HomePage(
-//                onProfileClick = { TODO() }
+//@Composable
+//fun BoardNavHost() {
+//    val navController = rememberNavController()
+//
+//    NavHost(navController = navController, startDestination = "boardPage") {
+//        composable("boardPage") {
+//            BoardPage(
+//                onLoginClick = { navController.navigate("loginPage") },
+//                onRegisterClick = { navController.navigate("registerPage") }
 //            )
 //        }
-    }
-}
+//
+//        composable("loginPage") {
+//            LoginPage(
+//                onBackClick = { navController.navigateUp() },
+//                onLoginClick = { navController.navigate("homePage") },
+//                onGoogleSignInClick = { /* TODO: Implement Google Sign-In */ },
+//                onRegisterClick = { navController.navigate("registerPage") },
+//                onForgotPasswordClick = { /* TODO: Implement Forgot Password */ }
+//            )
+//        }
+//
+//        composable("registerPage") {
+//            RegisterComposable(
+//                onBackClick = { TODO() },
+//                onCompleteRegistration = { navController.navigate("homePage") },
+//                onLoginClick = { navController.navigate("loginPage") }
+//            )
+//        }
+//
+////        composable("homePage") {
+////            HomePage(
+////                onProfileClick = { TODO() }
+////            )
+////        }
+//    }
+//}
 
 @Composable
 @OptIn(ExperimentalPagerApi::class)
