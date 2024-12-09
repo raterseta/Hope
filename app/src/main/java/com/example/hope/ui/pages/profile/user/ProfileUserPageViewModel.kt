@@ -1,4 +1,4 @@
-package com.example.hope.ui.pages.user
+package com.example.hope.ui.pages.profile.user
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf

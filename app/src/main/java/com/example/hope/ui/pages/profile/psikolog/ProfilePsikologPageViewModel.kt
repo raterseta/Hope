@@ -1,4 +1,4 @@
-package com.example.hope.ui.pages.psikolog
+package com.example.hope.ui.pages.profile.psikolog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
