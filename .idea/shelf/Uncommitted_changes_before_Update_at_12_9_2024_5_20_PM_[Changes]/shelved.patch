@@ -1,0 +1,76 @@
+Index: app/src/main/java/com/example/hope/chat/AllChatActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.chat\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.setContent\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.material3.ExperimentalMaterial3Api\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.platform.LocalConfiguration\r\nimport androidx.compose.ui.text.font.Font\r\nimport androidx.compose.ui.text.font.FontFamily\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport com.example.hope.R\r\nimport com.example.hope.TempActivity\r\nimport com.example.hope.ui.theme.HopeTheme\r\nimport com.google.accompanist.pager.ExperimentalPagerApi\r\nimport com.google.accompanist.pager.HorizontalPager\r\nimport com.google.accompanist.pager.rememberPagerState\r\n\r\nclass AllChatActivity : ComponentActivity() {\r\n    @OptIn(ExperimentalMaterial3Api::class)\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n\r\n        // Change the status bar color to yellow\r\n        window.statusBarColor = android.graphics.Color.YELLOW\r\n\r\n        setContent {\r\n            HopeTheme {\r\n                Surface(\r\n                    modifier = Modifier.fillMaxSize(),\r\n                    color = Color(0xFF536493) // Set background color to #536493\r\n                ) {\r\n                    AllChatPage()\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\n@OptIn(ExperimentalPagerApi::class)\r\nfun AllChatPage() {\r\n    val poppins_regular = FontFamily(Font(R.font.poppins_regular))\r\n    val poppins_bold = FontFamily(Font(R.font.poppins_bold))\r\n    val configuration = LocalConfiguration.current\r\n    val screenWidth = configuration.screenWidthDp.dp\r\n    val screenHeight = configuration.screenHeightDp.dp\r\n    val sizeWidth = configuration.screenWidthDp.sp\r\n    val logoSize = screenWidth * 0.7f\r\n\r\n    // Define a pager state\r\n    val pagerState = rememberPagerState()\r\n\r\n    // Define colors for each page\r\n    val pageColors = listOf(\r\n        Color(0xFF8EACCD), // Page 1 color\r\n        Color(0xFFD2E0FB), // Page 2 color\r\n        Color(0xFFDEE5D4)  // Page 3 color (you can adjust as needed)\r\n    )\r\n\r\n    Column(\r\n        modifier = Modifier\r\n            .background(pageColors[pagerState.currentPage])\r\n            .fillMaxSize(),\r\n        horizontalAlignment = Alignment.CenterHorizontally\r\n    ) {\r\n        HorizontalPager(\r\n            count = 3,\r\n            state = pagerState,\r\n            modifier = Modifier\r\n                .fillMaxWidth()\r\n                .weight(0.1f)\r\n        ) { page ->\r\n            when (page) {\r\n                0 -> TempActivity(\r\n                    screenHeight = screenHeight,\r\n                    sizeWidth = sizeWidth,\r\n                    screenWidth = screenWidth,\r\n                    logoSize = logoSize,\r\n                    poppinsBold = poppins_bold,\r\n                    poppinsRegular = poppins_regular,\r\n                    selectedPage = \"ContentChatPage\"\r\n                )\r\n                1 -> TempActivity(\r\n                    screenHeight = screenHeight,\r\n                    sizeWidth = sizeWidth,\r\n                    screenWidth = screenWidth,\r\n                    logoSize = logoSize,\r\n                    poppinsBold = poppins_bold,\r\n                    poppinsRegular = poppins_regular,\r\n                    selectedPage = \"ContentChatPage\"\r\n                )\r\n                // Tambahkan halaman lainnya jika diperlukan\r\n            }\r\n        }\r\n    }\r\n\r\n}\r\n\r\n\r\n@Preview(showBackground = true)\r\n@Composable\r\nfun AllChatPreview() {\r\n    HopeTheme {\r\n        AllChatPage()\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/chat/AllChatActivity.kt b/app/src/main/java/com/example/hope/chat/AllChatActivity.kt
+--- a/app/src/main/java/com/example/hope/chat/AllChatActivity.kt	(revision 9984b3256b1d636534447d336b7dfcb1555f7eab)
++++ b/app/src/main/java/com/example/hope/chat/AllChatActivity.kt	(date 1733739359987)
+@@ -5,8 +5,10 @@
+ import androidx.activity.compose.setContent
+ import androidx.compose.foundation.background
+ import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.PaddingValues
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.padding
+ import androidx.compose.material3.ExperimentalMaterial3Api
+ import androidx.compose.material3.Surface
+ import androidx.compose.runtime.Composable
+@@ -49,7 +51,7 @@
+ 
+ @Composable
+ @OptIn(ExperimentalPagerApi::class)
+-fun AllChatPage() {
++fun AllChatPage(innerPadding: PaddingValues = PaddingValues(0.dp)) {
+     val poppins_regular = FontFamily(Font(R.font.poppins_regular))
+     val poppins_bold = FontFamily(Font(R.font.poppins_bold))
+     val configuration = LocalConfiguration.current
+@@ -70,6 +72,7 @@
+ 
+     Column(
+         modifier = Modifier
++            .padding(innerPadding) // Apply the inner padding here
+             .background(pageColors[pagerState.currentPage])
+             .fillMaxSize(),
+         horizontalAlignment = Alignment.CenterHorizontally
+@@ -104,8 +107,8 @@
+             }
+         }
+     }
+-
+ }
++
+ 
+ 
+ @Preview(showBackground = true)
+Index: app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.main\r\n\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.lazy.LazyColumn\r\nimport androidx.compose.foundation.lazy.items\r\nimport androidx.compose.material3.Scaffold\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Modifier\r\nimport com.example.hope.R\r\nimport com.example.hope.ui.composables.bottomNav.BottomNavComposable\r\nimport com.example.hope.ui.composables.post.DummyPostData\r\nimport com.example.hope.ui.composables.post.PostComposable\r\nimport com.example.hope.ui.composables.post.getDummyPosts\r\nimport com.example.hope.ui.composables.post.getSavedPosts\r\nimport com.example.hope.ui.composables.topNav.SimpleTopNavComposable\r\nimport com.example.hope.ui.composables.topNav.TopNavComposable\r\nimport com.example.hope.ui.composables.topNav.TopNavViewModel\r\nimport com.example.hope.ui.pages.upload.UploadPage\r\n\r\n@Composable\r\nfun HomePage(\r\n    modifier: Modifier = Modifier,\r\n    onProfileClick: () -> Unit\r\n             ) {\r\n    var currentScreen by remember { mutableStateOf(Screen.Home) }\r\n\r\n    val posts = getDummyPosts()\r\n    val savedPosts = getSavedPosts()\r\n    Scaffold(\r\n        modifier = Modifier.fillMaxSize(),\r\n        bottomBar = {\r\n            BottomNavComposable(\r\n                onItemSelected = { selectedScreen ->\r\n                    currentScreen = selectedScreen\r\n                }\r\n            )\r\n        },\r\n        topBar = {\r\n            when (currentScreen) {\r\n                Screen.Home -> TopNavComposable(\r\n                    onProfileClick = onProfileClick,\r\n                    onSearch = { },\r\n                    onFilterClick = { }\r\n                )\r\n                Screen.Add -> {}\r\n                Screen.Chat -> {TODO()}\r\n                Screen.Bookmark -> SimpleTopNavComposable(\r\n                    title = \"Saved Posts\",\r\n                    onBackClick = { currentScreen = Screen.Home }\r\n                )\r\n            }\r\n        }\r\n    ) { innerPadding ->\r\n        when (currentScreen) {\r\n            Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))\r\n            Screen.Add -> UploadPage(innerPadding = innerPadding)\r\n            Screen.Chat -> TODO()\r\n            Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun PostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {\r\n    LazyColumn(\r\n        modifier = modifier\r\n    ) {\r\n        items(posts) { post ->\r\n            PostComposable(\r\n                profilePicture = post.profilePicture,\r\n                username = post.username,\r\n                photo = post.photo,\r\n                title = post.title,\r\n                description = post.description,\r\n                isBookmarked = post.isBookmarked,\r\n                onBookmarkClick = { /* Handle bookmark click */ }\r\n            )\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun SavedPostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {\r\n    LazyColumn(modifier = modifier) {\r\n        items(posts) { post ->\r\n            PostComposable(\r\n                profilePicture = post.profilePicture,\r\n                username = post.username,\r\n                photo = post.photo,\r\n                title = post.title,\r\n                description = post.description,\r\n                isBookmarked = post.isBookmarked,\r\n                onBookmarkClick = { /* Handle bookmark click */ }\r\n            )\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt b/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt	(revision 9984b3256b1d636534447d336b7dfcb1555f7eab)
++++ b/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt	(date 1733739086637)
+@@ -12,6 +12,8 @@
+ import androidx.compose.runtime.setValue
+ import androidx.compose.ui.Modifier
+ import com.example.hope.R
++import com.example.hope.chat.AllChatPage
++import com.example.hope.chat.HomeChatPage
+ import com.example.hope.ui.composables.bottomNav.BottomNavComposable
+ import com.example.hope.ui.composables.post.DummyPostData
+ import com.example.hope.ui.composables.post.PostComposable
+@@ -59,7 +61,7 @@
+         when (currentScreen) {
+             Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
+             Screen.Add -> UploadPage(innerPadding = innerPadding)
+-            Screen.Chat -> TODO()
++            Screen.Chat -> AllChatPage(innerPadding = innerPadding)
+             Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))
+         }
+     }

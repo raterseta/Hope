@@ -1,22 +1,17 @@
-package com.example.hope.ui.pages.profile.psikolog
+package com.example.hope.ui.pages.profile.user
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.hope.ui.pages.register.PsikologData
 import com.example.hope.ui.pages.register.UserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class PsikologProfileViewModel : ViewModel() {
+class UserProfileViewModel: ViewModel() {
     private val _userData = MutableStateFlow(UserData())
     val userData: StateFlow<UserData> = _userData
-
-    private val _psikologData = MutableStateFlow(PsikologData())
-    val psikologData: StateFlow<PsikologData> = _psikologData
 
     // Fungsi untuk mengubah username
     fun updateUsername(newUsername: String) {
@@ -37,16 +32,6 @@ class PsikologProfileViewModel : ViewModel() {
         _userData.update { currentState ->
             currentState.copy(phoneNumber = newPhoneNumber)
         }
-    }
-
-    fun updateStartTime(it: String) {
-        _psikologData.update { currentState ->
-            currentState.copy(startTime = it )
-        }
-    }
-
-    fun updateEndTime(it: String) {
-
     }
 
     init {
@@ -78,7 +63,7 @@ class PsikologProfileViewModel : ViewModel() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         currentUser?.let { user ->
             // Gabungkan data userData dan psikologData
-            val updatedUserData = _userData.value.copy(psikologData = _psikologData.value)
+            val updatedUserData = _userData.value
 
             // Simpan ke Firebase
             FirebaseDatabase.getInstance().getReference("users")
@@ -86,14 +71,12 @@ class PsikologProfileViewModel : ViewModel() {
                 .setValue(updatedUserData)
                 .addOnSuccessListener {
                     // Berhasil menyimpan profil
-                    Log.d("PsikologProfileViewModel", "Profile saved successfully")
+                    Log.d("UserProfile", "Profile saved successfully")
                 }
                 .addOnFailureListener { exception ->
                     // Gagal menyimpan profil
-                    Log.e("PsikologProfileViewModel", "Failed to save profile", exception)
+                    Log.e("UserProfile", "Failed to save profile", exception)
                 }
         }
     }
-
-
 }

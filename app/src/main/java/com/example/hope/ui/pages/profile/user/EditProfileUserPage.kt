@@ -23,16 +23,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.R
+import com.example.hope.ui.pages.register.UserData
 
 @Composable
 fun EditProfileUserPage(
-    selectedAvatarId: Int?,
     onBackClick: () -> Unit,
-    onLogoutClick: () -> Unit,
-    onUploadGalleryClick: () -> Unit,
-    viewModel: EditProfileUserPageViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: UserProfileViewModel = viewModel()
 ) {
+    val userData by viewModel.userData.collectAsState(initial = UserData())
+
     Scaffold(
         containerColor = Color.White
     ) { paddingValues ->
@@ -70,9 +71,9 @@ fun EditProfileUserPage(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Gambar Avatar
-            if (selectedAvatarId != null) {
+            if (userData.avatarID!= null) {
                 Image(
-                    painter = painterResource(id = selectedAvatarId),
+                    painter = painterResource(id = userData.avatarID!!),
                     contentDescription = "Selected Avatar",
                     modifier = Modifier
                         .size(175.dp)
@@ -90,7 +91,7 @@ fun EditProfileUserPage(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Bored of the profile?", color = Color.Black, fontSize = 16.sp)
-                TextButton(onClick = { onUploadGalleryClick() }) {
+                TextButton(onClick = { TODO() }) {
                     Text(text = "Upload Gallery", color = Color.Black)
                 }
             }
@@ -99,15 +100,15 @@ fun EditProfileUserPage(
 
             // Input Email
             Text(
-                text = "Email",
+                text = "Username",
                 color = Color.Black,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
             BasicTextField(
-                value = viewModel.email.value,
-                onValueChange = { viewModel.onEmailChange(it) },
+                value = userData.username,
+                onValueChange = { viewModel.updateUsername(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -120,9 +121,9 @@ fun EditProfileUserPage(
                             .background(Color.LightGray.copy(alpha = 0.2f))
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        if (viewModel.email.value.isEmpty()) {
+                        if (userData.username.isEmpty()) {
                             Text(
-                                text = "Enter your email",
+                                text = "Enter your username",
                                 color = Color.Gray,
                                 fontSize = 16.sp
                             )
@@ -140,7 +141,7 @@ fun EditProfileUserPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            DatePickerField(value = viewModel.birthDate.value, onValueChange = { viewModel.onBirthDateChange(it) })
+            DatePickerField(value = userData.birthDate, onValueChange = { viewModel.updateBirthDate(it) })
 
             // Input Nomor Telepon
             Text(
@@ -151,8 +152,8 @@ fun EditProfileUserPage(
                 modifier = Modifier.align(Alignment.Start)
             )
             BasicTextField(
-                value = viewModel.phoneNumber.value,
-                onValueChange = { viewModel.onPhoneNumberChange(it) },
+                value = userData.phoneNumber,
+                onValueChange = { viewModel.updatePhoneNumber(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -165,7 +166,7 @@ fun EditProfileUserPage(
                             .background(Color.LightGray.copy(alpha = 0.2f))
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        if (viewModel.phoneNumber.value.isEmpty()) {
+                        if (userData.phoneNumber.isEmpty()) {
                             Text(
                                 text = "+62",
                                 color = Color.Gray,
@@ -180,8 +181,12 @@ fun EditProfileUserPage(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Tombol Logout
+            // Tombol Save
             Button(
-                onClick = { onLogoutClick() },
+                onClick = {
+                    viewModel.saveProfile()
+                    onBackClick()
+                },
                 modifier = Modifier
                     .height(48.dp)
                     .fillMaxWidth(0.5f),
@@ -189,7 +194,7 @@ fun EditProfileUserPage(
                     containerColor = Color(83, 100, 147)
                 )
             ) {
-                Text(text = "Logout", color = Color.White, fontSize = 16.sp)
+                Text(text = "Save", color = Color.White, fontSize = 16.sp)
             }
         }
     }
@@ -226,13 +231,14 @@ fun DatePickerField(value: String, onValueChange: (String) -> Unit) {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun EditProfileUserPagePreview() {
-    EditProfileUserPage(
-        selectedAvatarId = R.drawable.avatar3,
-        onBackClick = { println("Back clicked") },
-        onLogoutClick = { println("Logout clicked") },
-        onUploadGalleryClick = { println("Upload Gallery clicked") }
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun EditProfileUserPagePreview() {
+//    EditProfileUserPage(
+//        selectedAvatarId = R.drawable.avatar3,
+//        onBackClick = { println("Back clicked") },
+//        onLogoutClick = { println("Logout clicked") },
+//        onUploadGalleryClick = { println("Upload Gallery clicked") },
+//        userData = userData
+//    )
+//}

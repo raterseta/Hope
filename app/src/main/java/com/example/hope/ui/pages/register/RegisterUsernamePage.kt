@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.hope.R
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hope.ui.composables.template.CustomTextFieldGrey
+import com.example.hope.ui.composables.template.CustomTextFieldWhite
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -97,31 +99,10 @@ fun RegisterUsernamePage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
+            CustomTextFieldGrey(
                 value = username,
                 onValueChange = { viewModel.updateUsername(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (username.isEmpty()) {
-                            Text(
-                                text = "contoh: FaiqSkibidi_",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
+                placeholder = "JohnDoe@gmail.com"
             )
 
             // Input Tanggal Lahir
@@ -132,31 +113,10 @@ fun RegisterUsernamePage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
+            CustomTextFieldGrey(
                 value = birthDate,
                 onValueChange = { viewModel.updateBirthDate(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (birthDate.isEmpty()) {
-                            Text(
-                                text = "DD/MM/YYYY",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
+                placeholder = "DD/MM/YY"
             )
 
             // Input Nomor Telepon
@@ -167,31 +127,10 @@ fun RegisterUsernamePage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
+            CustomTextFieldGrey(
                 value = phoneNumber,
                 onValueChange = { viewModel.updatePhoneNumber(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (phoneNumber.isEmpty()) {
-                            Text(
-                                text = "+62",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
+                placeholder = "+62"
             )
 
             Spacer(modifier = Modifier.height(32.dp))
