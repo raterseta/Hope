@@ -1,0 +1,183 @@
+Index: app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.profile.psikolog\r\n\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.navigation.NavController\r\nimport androidx.navigation.compose.NavHost\r\nimport androidx.navigation.compose.composable\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.example.hope.ui.pages.register.PsikologData\r\nimport com.example.hope.ui.pages.register.UserData\r\n\r\n@Composable\r\nfun ProfilePsikologComposable(\r\n    modifier: Modifier = Modifier,\r\n    userData: UserData,\r\n    onBackClick: () -> Unit,\r\n    onLogoutClick: () -> Unit\r\n) {\r\n    val psikologData = userData.psikologData ?: PsikologData()\r\n    var startTime by remember { mutableStateOf(psikologData.startTime) }\r\n    var endTime by remember { mutableStateOf(psikologData.endTime) }\r\n\r\n    val navController = rememberNavController()\r\n\r\n    NavHost(navController= navController, startDestination = \"profile\"){\r\n        composable(\"profile\"){\r\n            ProfilePsikologPage(\r\n                onBackClick = onBackClick,\r\n                onEditClick = { navController.navigate(\"edit\") },\r\n                onLogoutClick = onLogoutClick\r\n            )\r\n        }\r\n        composable(\"edit\"){\r\n            EditProfilePsikologPage(\r\n                onBackClick = { navController.navigate(\"profile\") }\r\n            )\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt b/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt	(revision aaee8cf8359e0410d073aaaf6809d5efb41491bf)
++++ b/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt	(date 1733753307933)
+@@ -21,8 +21,6 @@
+     onLogoutClick: () -> Unit
+ ) {
+     val psikologData = userData.psikologData ?: PsikologData()
+-    var startTime by remember { mutableStateOf(psikologData.startTime) }
+-    var endTime by remember { mutableStateOf(psikologData.endTime) }
+ 
+     val navController = rememberNavController()
+ 
+Index: app/src/main/java/com/example/hope/ui/pages/profile/user/UserProfileComposable.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/profile/user/UserProfileComposable.kt b/app/src/main/java/com/example/hope/ui/pages/profile/user/UserProfileComposable.kt
+new file mode 100644
+--- /dev/null	(date 1733753870788)
++++ b/app/src/main/java/com/example/hope/ui/pages/profile/user/UserProfileComposable.kt	(date 1733753870788)
+@@ -0,0 +1,4 @@
++package com.example.hope.ui.pages.profile.user
++
++class UserProfileComposable {
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/hope/ui/composables/template/TemplateUse.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/composables/template/TemplateUse.kt b/app/src/main/java/com/example/hope/ui/composables/template/TemplateUse.kt
+new file mode 100644
+--- /dev/null	(date 1733754047674)
++++ b/app/src/main/java/com/example/hope/ui/composables/template/TemplateUse.kt	(date 1733754047674)
+@@ -0,0 +1,139 @@
++package com.example.hope.ui.composables.template
++
++import androidx.compose.foundation.background
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.shape.RoundedCornerShape
++import androidx.compose.foundation.text.BasicTextField
++import androidx.compose.material.*
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.Visibility
++import androidx.compose.material.icons.filled.VisibilityOff
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.draw.clip
++import androidx.compose.ui.graphics.Color
++import androidx.compose.ui.text.TextStyle
++import androidx.compose.ui.text.input.PasswordVisualTransformation
++import androidx.compose.ui.text.input.VisualTransformation
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
++import androidx.compose.ui.unit.sp
++import com.example.hope.ui.pages.login.LoginPage
++
++
++@Composable
++fun CustomTextFieldWhite(
++    value: String,
++    onValueChange: (String) -> Unit,
++    placeholder: String,
++    modifier: Modifier = Modifier,
++    textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
++    isPasswordField: Boolean = false,
++    isPasswordVisible: Boolean = true,
++    togglePasswordVisibility: (() -> Unit)? = null
++) {
++    BasicTextField(
++        value = value,
++        onValueChange = onValueChange,
++        modifier = modifier
++            .fillMaxWidth()
++            .padding(8.dp)
++            .clip(RoundedCornerShape(8.dp)),
++        textStyle = textStyle,
++        visualTransformation = if (isPasswordField && !isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
++        decorationBox = { innerTextField ->
++            Box(
++                Modifier
++                    .fillMaxWidth()
++                    .background(Color.White.copy(alpha = 0.8f))
++                    .padding(horizontal = 16.dp, vertical = 8.dp)
++            ) {
++                if (value.isEmpty()) {
++                    Text(
++                        text = placeholder,
++                        color = Color.Gray.copy(alpha = 1f),
++                        fontSize = 16.sp
++                    )
++                }
++                Row(
++                    modifier = Modifier.fillMaxWidth(),
++                    verticalAlignment = Alignment.CenterVertically
++                ) {
++                    Box(modifier = Modifier.weight(1f)) {
++                        innerTextField()
++                    }
++                    if (isPasswordField && togglePasswordVisibility != null) {
++                        IconButton(
++                            onClick = togglePasswordVisibility,
++                            modifier = Modifier.size(24.dp)
++                        ) {
++                            Icon(
++                                imageVector = if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
++                                contentDescription = "Toggle Password Visibility"
++                            )
++                        }
++                    }
++                }
++            }
++        }
++    )
++}
++
++@Composable
++fun CustomTextFieldGrey(
++    value: String,
++    onValueChange: (String) -> Unit,
++    placeholder: String,
++    modifier: Modifier = Modifier,
++    textStyle: TextStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
++    isPasswordField: Boolean = false,
++    isPasswordVisible: Boolean = true,
++    togglePasswordVisibility: (() -> Unit)? = null
++) {
++    BasicTextField(
++        value = value,
++        onValueChange = onValueChange,
++        modifier = modifier
++            .fillMaxWidth()
++            .padding(8.dp)
++            .clip(RoundedCornerShape(8.dp)),
++        textStyle = textStyle,
++        visualTransformation = if (isPasswordField && !isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
++        decorationBox = { innerTextField ->
++            Box(
++                Modifier
++                    .fillMaxWidth()
++                    .background(Color.LightGray.copy(alpha = 0.6f))
++                    .padding(horizontal = 16.dp, vertical = 8.dp)
++            ) {
++                if (value.isEmpty()) {
++                    Text(
++                        text = placeholder,
++                        color = Color.Gray.copy(alpha = 0.8f),
++                        fontSize = 16.sp
++                    )
++                }
++                Row(
++                    modifier = Modifier.fillMaxWidth(),
++                    verticalAlignment = Alignment.CenterVertically
++                ) {
++                    Box(modifier = Modifier.weight(1f)) {
++                        innerTextField()
++                    }
++                    if (isPasswordField && togglePasswordVisibility != null) {
++                        IconButton(
++                            onClick = togglePasswordVisibility,
++                            modifier = Modifier.size(24.dp)
++                        ) {
++                            Icon(
++                                imageVector = if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
++                                contentDescription = "Toggle Password Visibility"
++                            )
++                        }
++                    }
++                }
++            }
++        }
++    )
++}

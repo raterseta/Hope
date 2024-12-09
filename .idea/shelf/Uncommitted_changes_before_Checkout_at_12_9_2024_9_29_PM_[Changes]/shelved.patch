@@ -1,0 +1,17 @@
+Index: app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.profile.psikolog\r\n\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.navigation.NavController\r\nimport androidx.navigation.compose.NavHost\r\nimport androidx.navigation.compose.composable\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.example.hope.ui.pages.register.PsikologData\r\nimport com.example.hope.ui.pages.register.UserData\r\n\r\n@Composable\r\nfun ProfilePsikologComposable(\r\n    modifier: Modifier = Modifier,\r\n    userData: UserData,\r\n    onBackClick: () -> Unit,\r\n    onLogoutClick: () -> Unit\r\n) {\r\n    val psikologData = userData.psikologData ?: PsikologData()\r\n    var startTime by remember { mutableStateOf(psikologData.startTime) }\r\n    var endTime by remember { mutableStateOf(psikologData.endTime) }\r\n\r\n    val navController = rememberNavController()\r\n\r\n    NavHost(navController= navController, startDestination = \"profile\"){\r\n        composable(\"profile\"){\r\n            ProfilePsikologPage(\r\n                onBackClick = onBackClick,\r\n                onEditClick = { navController.navigate(\"edit\") },\r\n                onLogoutClick = onLogoutClick\r\n            )\r\n        }\r\n        composable(\"edit\"){\r\n            EditProfilePsikologPage(\r\n                onBackClick = { navController.navigate(\"profile\") }\r\n            )\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt b/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt	(revision 4434a3f4601ae03731106ba3bbd261240b8ee8a6)
++++ b/app/src/main/java/com/example/hope/ui/pages/profile/psikolog/PsikologProfileComposable.kt	(date 1733754546913)
+@@ -21,8 +21,6 @@
+     onLogoutClick: () -> Unit
+ ) {
+     val psikologData = userData.psikologData ?: PsikologData()
+-    var startTime by remember { mutableStateOf(psikologData.startTime) }
+-    var endTime by remember { mutableStateOf(psikologData.endTime) }
+ 
+     val navController = rememberNavController()
+ 

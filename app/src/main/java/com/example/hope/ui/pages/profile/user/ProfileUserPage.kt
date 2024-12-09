@@ -26,19 +26,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hope.R
+import com.example.hope.ui.pages.profile.psikolog.ProfileField
 import com.example.hope.ui.pages.register.UserData
 
 @Composable
 fun ProfileUserPage(
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    navController: NavController,
-    viewModel: ProfileUserPageViewModel = viewModel(),
-    userData: UserData
+    onLogoutClick: () -> Unit,
+    viewModel: UserProfileViewModel = viewModel(),
 ) {
-    val email = viewModel.email.value
-    val birthDate = viewModel.birthDate.value
-    val phoneNumber = viewModel.phoneNumber.value
+    val userData by viewModel.userData.collectAsState()
 
     Scaffold(
         containerColor = Color.White
@@ -99,127 +97,25 @@ fun ProfileUserPage(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Input Username
-            Text(
-                text = "Email",
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.align(Alignment.Start)
-            )
-            BasicTextField(
-                value = email,
-                onValueChange = viewModel::updateEmail,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (email.isEmpty()) {
-                            Text(
-                                text = "example@mail.com",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
+            ProfileField(label = "Username", value = userData.username)
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // Input Tanggal Lahir
-            Text(
-                text = "Tanggal Lahir",
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.align(Alignment.Start)
-            )
-            BasicTextField(
-                value = birthDate,
-                onValueChange = viewModel::updateBirthDate,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (birthDate.isEmpty()) {
-                            Text(
-                                text = "DD/MM/YYYY",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
+            ProfileField(label = "Tanggal Lahir", value = userData.birthDate)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // Nomor Telepon
+            ProfileField(label = "Nomor Telepon", value = userData.phoneNumber)
 
-            // Input Nomor Telepon
-            Text(
-                text = "Nomor Telepon",
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.align(Alignment.Start)
-            )
-            BasicTextField(
-                value = phoneNumber,
-                onValueChange = viewModel::updatePhoneNumber,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (phoneNumber.isEmpty()) {
-                            Text(
-                                text = "+62",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Tombol Logout
             Button(
                 onClick = {
-                    viewModel.signout {
-                        // Setelah logout, navigasi ke halaman login/register
-                        navController.navigate("loginPage") {
-                            // Clear backstack to prevent going back to profile page
-                            popUpTo("homePage") { inclusive = true }
-                        }
-                    }
-                          },
+                    viewModel.logout()
+                    onLogoutClick()
+                    },
                 modifier = Modifier
                     .height(48.dp)
                     .fillMaxWidth(0.5f),

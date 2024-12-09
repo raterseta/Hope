@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.hope.ui.pages.profile.psikolog.ProfilePsikologComposable
 import com.example.hope.ui.pages.profile.user.ProfileUserPage
+import com.example.hope.ui.pages.profile.user.UserProfileComposable
 import com.example.hope.ui.pages.register.Role
 import com.example.hope.ui.pages.register.UserData
 import com.google.firebase.auth.FirebaseAuth
@@ -33,7 +34,6 @@ fun ProfileComposable(
         when (userData.value.role) {
             Role.Psikolog -> {
                 ProfilePsikologComposable(
-                    userData = userData.value,
                     onBackClick = { navController.navigate("homePage") },
                     onLogoutClick = { navController.navigate("loginPage") {
                         // Clear backstack to prevent going back to profile page
@@ -42,11 +42,12 @@ fun ProfileComposable(
                 )
             }
             else -> {
-                ProfileUserPage(
-                    userData = userData.value,
+                UserProfileComposable(
                     onBackClick = { navController.navigate("homePage") },
-                    onEditClick = { /* Handle edit */ },
-                    navController = navController
+                    onLogoutClick = { navController.navigate("loginPage") {
+                        // Clear backstack to prevent going back to profile page
+                        popUpTo("homePage") { inclusive = true }
+                    } }
                 )
             }
         }

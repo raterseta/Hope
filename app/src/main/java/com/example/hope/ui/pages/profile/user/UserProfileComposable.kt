@@ -1,37 +1,30 @@
-package com.example.hope.ui.pages.profile.psikolog
+package com.example.hope.ui.pages.profile.user
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.hope.ui.pages.register.PsikologData
 import com.example.hope.ui.pages.register.UserData
 
 @Composable
-fun ProfilePsikologComposable(
+fun UserProfileComposable(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-
     val navController = rememberNavController()
 
-    NavHost(navController= navController, startDestination = "profile"){
-        composable("profile"){
-            ProfilePsikologPage(
+    NavHost(navController = navController, startDestination = "profile"){
+        composable("profile") {
+            ProfileUserPage(
                 onBackClick = onBackClick,
                 onEditClick = { navController.navigate("edit") },
                 onLogoutClick = onLogoutClick
             )
         }
-        composable("edit"){
-            EditProfilePsikologPage(
+        composable("edit") {
+            EditProfileUserPage(
                 onBackClick = { navController.navigate("profile") }
             )
         }
