@@ -1,14 +1,15 @@
-package com.example.hope.ui.pages.psikolog
+package com.example.hope.ui.pages.profile.psikolog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,15 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.R
+import com.example.hope.ui.pages.register.UserData
 
 @Composable
-fun ProfilePsikologPage(
-    viewModel: ProfilePsikologPageViewModel = viewModel(),
-    onBackClick: () -> Unit,
-    onEditClick: () -> Unit
+fun EditProfilePsikologPage(
+    viewModel: PsikologProfileViewModel = viewModel(),
+    onBackClick: () -> Unit
 ) {
     // Collect the state from the ViewModel
-    val state by viewModel.state.collectAsState()
+    val userData by viewModel.userData.collectAsState(initial = UserData())
 
     Scaffold(
         containerColor = Color.White
@@ -42,15 +43,16 @@ fun ProfilePsikologPage(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Header
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                    .padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { onBackClick() }) {
@@ -60,20 +62,12 @@ fun ProfilePsikologPage(
                         tint = Color.Black
                     )
                 }
-                IconButton(onClick = { onEditClick() }) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = "Edit",
-                        tint = Color.Black
-                    )
-                }
             }
 
-            // Title
             Text(
-                text = "Profile",
+                text = "Edit Profile",
                 color = Color.Black,
-                fontSize = 40.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -82,53 +76,53 @@ fun ProfilePsikologPage(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Avatar
-            if (state.selectedAvatarId != null) {
+            if (userData.avatarID != null) {
                 Image(
-                    painter = painterResource(id = state.selectedAvatarId!!),
+                    painter = painterResource(id = userData.avatarID!!),
                     contentDescription = "Profile Avatar",
                     modifier = Modifier
-                        .size(175.dp)
+                        .size(128.dp)
                         .clip(CircleShape)
                         .background(Color.Gray.copy(alpha = 0.2f)),
                     contentScale = ContentScale.Crop
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // Email Input
+            TextButton(onClick = { TODO() }) {
+                Text(
+                    text = "Change Profile Picture",
+                    color = Color.Black,
+                    fontSize = 14.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Username
             Text(
-                text = "Email",
+                text = "Username",
                 color = Color.Black,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
             BasicTextField(
-                value = state.email,
-                onValueChange = { viewModel.updateEmail(it) },
+                value = userData.username,
+                onValueChange = { viewModel.updateUsername(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color.LightGray.copy(alpha = 0.2f))
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    if (state.email.isEmpty()) {
-                        Text(
-                            text = "example@mail.com",
-                            color = Color.Gray,
-                            fontSize = 16.sp
-                        )
-                    }
-                    innerTextField()
-                }
+                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Tanggal Lahir Input
+            // Tanggal Lahir
             Text(
                 text = "Tanggal Lahir",
                 color = Color.Black,
@@ -136,13 +130,13 @@ fun ProfilePsikologPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            DatePickerField(state.birthDate) { selectedDate ->
+            DatePickerField(userData.birthDate) { selectedDate ->
                 viewModel.updateBirthDate(selectedDate)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Nomor Telepon Input
+            // Nomor Telepon
             Text(
                 text = "Nomor Telepon",
                 color = Color.Black,
@@ -151,7 +145,7 @@ fun ProfilePsikologPage(
                 modifier = Modifier.align(Alignment.Start)
             )
             BasicTextField(
-                value = state.phoneNumber,
+                value = userData.phoneNumber,
                 onValueChange = { viewModel.updatePhoneNumber(it) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -159,22 +153,12 @@ fun ProfilePsikologPage(
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color.LightGray.copy(alpha = 0.2f))
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    if (state.phoneNumber.isEmpty()) {
-                        Text(
-                            text = "+62",
-                            color = Color.Gray,
-                            fontSize = 16.sp
-                        )
-                    }
-                    innerTextField()
-                }
+                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Jadwal Input
+            // Jadwal
             Text(
                 text = "Jadwal",
                 color = Color.Black,
@@ -182,60 +166,30 @@ fun ProfilePsikologPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            Row(modifier = Modifier.fillMaxWidth()) {
-                BasicTextField(
-                    value = state.startTime,
-                    onValueChange = { viewModel.updateStartTime(it) },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.LightGray.copy(alpha = 0.2f))
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                    decorationBox = { innerTextField ->
-                        if (state.startTime.isEmpty()) {
-                            Text(
-                                text = "08:00",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                )
 
+            Row(modifier = Modifier.fillMaxWidth()) {
+                // Dropdown untuk waktu mulai
+                TimeDropdownMenu(
+                    label = "Start Time",
+                    selectedTime = userData.psikologData?.startTime ?: "08:00",  // Default "08:00" jika kosong
+                    onTimeSelected = { viewModel.updateStartTime(it) }
+                )
                 Spacer(modifier = Modifier.width(8.dp))
 
-                BasicTextField(
-                    value = state.endTime,
-                    onValueChange = { viewModel.updateEndTime(it) },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.LightGray.copy(alpha = 0.2f))
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                    decorationBox = { innerTextField ->
-                        if (state.endTime.isEmpty()) {
-                            Text(
-                                text = "10:00",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
+                // Dropdown untuk waktu selesai
+                TimeDropdownMenu(
+                    label = "End Time",
+                    selectedTime = userData.psikologData?.endTime ?: "16:00",  // Default "16:00" jika kosong
+                    onTimeSelected = { viewModel.updateEndTime(it) }
                 )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Logout Button
+            // Tombol Save
             Button(
                 onClick = {
-                    viewModel.logout()
+                    viewModel.saveProfile()
                     onBackClick()
                 },
                 modifier = Modifier
@@ -245,21 +199,21 @@ fun ProfilePsikologPage(
                     containerColor = Color(83, 100, 147)
                 )
             ) {
-                Text(text = "Logout", color = Color.White, fontSize = 16.sp)
+                Text(text = "Save", color = Color.White, fontSize = 16.sp)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ProfilePsikologPagePreview() {
-    val previewViewModel = ProfilePsikologPageViewModel().apply {
-        updateSelectedAvatar(R.drawable.avatar3)
-    }
-    ProfilePsikologPage(
-        viewModel = previewViewModel,
-        onBackClick = { println("Back clicked") },
-        onEditClick = { println("Edit clicked") }
-    )
-}
+
+//@Preview(showBackground = true)
+//@Composable
+//fun EditProfilePsikologPagePreview() {
+//    val previewViewModel = EditProfilePsikologPageViewModel().apply {
+//        updateSelectedAvatar(R.drawable.avatar3)
+//    }
+//    EditProfilePsikologPage(
+//        viewModel = previewViewModel,
+//        onBackClick = { println("Back clicked") }
+//    )
+//}

@@ -14,8 +14,9 @@ import com.example.hope.R
 import com.example.hope.boarding.BoardPage
 import com.example.hope.logo.LogoPage
 import com.example.hope.ui.pages.login.LoginPage
+import com.example.hope.ui.pages.profile.ProfileComposable
 import com.example.hope.ui.pages.register.RegisterComposable
-import com.example.hope.ui.pages.user.ProfileUserPage
+import com.example.hope.ui.pages.profile.user.ProfileUserPage
 import com.example.hope.ui.theme.HopeTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -50,14 +51,14 @@ fun AppNavHost() {
 
         composable("registerPage"){
             RegisterComposable(
-                onBackClick = { },
+                onBackClick = { navController.navigate("logoPage") },
                 onCompleteRegistration = { navController.navigate("homePage") },
                 onLoginClick = { navController.navigate("loginPage") }
             )
         }
         composable("loginPage") {
             LoginPage(
-                onBackClick = { TODO() },
+                onBackClick = { navController.navigate("logoPage") },
                 onLoginClick = { navController.navigate("homePage") },
                 onGoogleSignInClick = { TODO() },
                 onRegisterClick = { navController.navigate("registerPage") },
@@ -69,11 +70,8 @@ fun AppNavHost() {
                 onProfileClick = { navController.navigate("profile") }
             )
         }
-        composable("profile") { 
-            ProfileUserPage(
-                selectedAvatarId = R.drawable.avatar3,
-                onBackClick = { navController.navigate("homePage") },
-                onEditClick = { TODO() },
+        composable("profile") {
+            ProfileComposable(
                 navController = navController
             )
         }

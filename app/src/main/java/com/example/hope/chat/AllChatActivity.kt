@@ -5,8 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -50,7 +52,7 @@ class AllChatActivity : ComponentActivity() {
 
 @Composable
 @OptIn(ExperimentalPagerApi::class)
-fun AllChatPage() {
+fun AllChatPage(innerPadding: PaddingValues = PaddingValues(0.dp)) {
     val poppins_regular = FontFamily(Font(R.font.poppins_regular))
     val poppins_bold = FontFamily(Font(R.font.poppins_bold))
     val configuration = LocalConfiguration.current
@@ -71,6 +73,7 @@ fun AllChatPage() {
 
     Column(
         modifier = Modifier
+            .padding(innerPadding) // Apply the inner padding here
             .background(pageColors[pagerState.currentPage])
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -105,8 +108,8 @@ fun AllChatPage() {
             }
         }
     }
-
 }
+
 
 
 @Preview(showBackground = true)
