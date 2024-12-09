@@ -23,7 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.R
+import com.example.hope.ui.composables.template.CustomTextFieldGrey
 
 @Composable
 fun EditProfileUserPage(
@@ -31,8 +33,12 @@ fun EditProfileUserPage(
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onUploadGalleryClick: () -> Unit,
-    viewModel: EditProfileUserPageViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: EditProfileUserPageViewModel = viewModel()
 ) {
+    val username = viewModel.username.value
+    val birthDate = viewModel.birthDate.value
+    val phoneNumber = viewModel.phoneNumber.value
+
     Scaffold(
         containerColor = Color.White
     ) { paddingValues ->
@@ -97,39 +103,20 @@ fun EditProfileUserPage(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input Email
+            // Input Username
             Text(
-                text = "Email",
+                text = "Username",
                 color = Color.Black,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
-                value = viewModel.email.value,
-                onValueChange = { viewModel.onEmailChange(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (viewModel.email.value.isEmpty()) {
-                            Text(
-                                text = "Enter your email",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
+            CustomTextFieldGrey(
+                value = username,
+                onValueChange = { viewModel.onUsernameChange(it) },
+                placeholder = "Enter your username",
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
             )
 
             // Input Tanggal Lahir
@@ -140,8 +127,13 @@ fun EditProfileUserPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            DatePickerField(value = viewModel.birthDate.value, onValueChange = { viewModel.onBirthDateChange(it) })
-
+            CustomTextFieldGrey(
+                value = birthDate,
+                onValueChange = { viewModel.onBirthDateChange(it) },
+                placeholder = "DD/MM/YYYY",
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
+            )
             // Input Nomor Telepon
             Text(
                 text = "Nomor Telepon",
@@ -150,31 +142,12 @@ fun EditProfileUserPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
-                value = viewModel.phoneNumber.value,
+            CustomTextFieldGrey(
+                value = phoneNumber,
                 onValueChange = { viewModel.onPhoneNumberChange(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                decorationBox = { innerTextField ->
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        if (viewModel.phoneNumber.value.isEmpty()) {
-                            Text(
-                                text = "+62",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
+                placeholder = "+62",
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -195,36 +168,7 @@ fun EditProfileUserPage(
     }
 }
 
-@Composable
-fun DatePickerField(value: String, onValueChange: (String) -> Unit) {
-    // Placeholder untuk TextField kalender
-    BasicTextField(
-        value = value,
-        onValueChange = { onValueChange(it) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-        decorationBox = { innerTextField ->
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .background(Color.LightGray.copy(alpha = 0.2f))
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                if (value.isEmpty()) {
-                    Text(
-                        text = "DD/MM/YYYY",
-                        color = Color.Gray,
-                        fontSize = 16.sp
-                    )
-                }
-                innerTextField()
-            }
-        }
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable

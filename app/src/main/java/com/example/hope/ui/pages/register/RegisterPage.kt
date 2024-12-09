@@ -32,6 +32,7 @@ import androidx.compose.material3.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hope.ui.composables.template.CustomTextFieldWhite
 
 
 @Composable
@@ -85,104 +86,34 @@ fun RegisterPage(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(text = "Email", color = Color.Black, fontSize = 16.sp)
-                BasicTextField(
+                CustomTextFieldWhite(
                     value = email,
                     onValueChange = { viewModel.onEmailChange(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                    decorationBox = { innerTextField ->
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .background(Color.LightGray.copy(alpha = 0.2f))
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            innerTextField()
-                        }
-                    }
+                    placeholder = "JohnDoe@gmail.com"
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(text = "Password", color = Color.Black, fontSize = 16.sp)
-                BasicTextField(
+                CustomTextFieldWhite(
                     value = password,
                     onValueChange = { viewModel.onPasswordChange(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    decorationBox = { innerTextField ->
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .background(Color.LightGray.copy(alpha = 0.2f))
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(modifier = Modifier.weight(1f)) {
-                                    innerTextField()
-                                }
-                                IconButton(
-                                    onClick = viewModel::togglePasswordVisibility,
-                                    modifier = Modifier.size(24.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                                        contentDescription = "Toggle Password Visibility"
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    placeholder = "********",
+                    isPasswordField = true,
+                    isPasswordVisible = passwordVisible,
+                    togglePasswordVisibility = { viewModel.togglePasswordVisibility() }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(text = "Confirm Password", color = Color.Black, fontSize = 16.sp)
-                BasicTextField(
+                CustomTextFieldWhite(
                     value = confirmedPassword,
                     onValueChange = { viewModel.onConfirmedPasswordChange(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
-                    visualTransformation = if (confirmedPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    decorationBox = { innerTextField ->
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .background(Color.LightGray.copy(alpha = 0.2f))
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(modifier = Modifier.weight(1f)) {
-                                    innerTextField()
-                                }
-                                IconButton(
-                                    onClick = viewModel::toggleConfirmedPasswordVisibility,
-                                    modifier = Modifier.size(24.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = if (confirmedPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                                        contentDescription = "Toggle Password Visibility"
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    placeholder = "********",
+                    isPasswordField = true,
+                    isPasswordVisible = confirmedPasswordVisible,
+                    togglePasswordVisibility = { viewModel.toggleConfirmedPasswordVisibility() }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
