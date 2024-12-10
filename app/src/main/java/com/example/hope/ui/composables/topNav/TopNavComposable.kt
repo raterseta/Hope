@@ -138,7 +138,7 @@ fun TopNavComposable(
 
             // Row 3: Filter Buttons
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items.forEachIndexed { index, item ->
@@ -148,7 +148,8 @@ fun TopNavComposable(
                             selectedIndex = index
                             onFilterClick(item)
                         },
-                        isHighlighted = index == selectedIndex
+                        isHighlighted = index == selectedIndex,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }

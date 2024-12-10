@@ -2,6 +2,7 @@ package com.example.hope.ui.composables
 
 import android.hardware.lights.Light
 import android.widget.Button
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,15 +36,13 @@ fun ButtonComposable(
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .widthIn(min = 150.dp)
-            .padding(8.dp)
-            .then(
-                if (!isHighlighted) Modifier.border(
-                    width = 2.dp,
-                    color = DarkBlue,
-                    shape = RoundedCornerShape(50)
-                ) else Modifier
-            )
+//            .widthIn(min = 150.dp)
+            .fillMaxWidth()
+            .padding(8.dp) ,
+        border = if (!isHighlighted) BorderStroke(
+            width = 2.dp,
+            color = DarkBlue
+        ) else null // Hanya tambahkan border jika tidak disorot
     ){
         Text(
             text = text,
@@ -58,6 +57,6 @@ private fun PrevButtonComposable() {
     ButtonComposable(
         text = "apacoba aaf",
         onClick = { TODO() },
-        isHighlighted = true
+        isHighlighted = false
     )
 }
