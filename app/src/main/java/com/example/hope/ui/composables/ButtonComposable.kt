@@ -2,8 +2,10 @@ package com.example.hope.ui.composables
 
 import android.hardware.lights.Light
 import android.widget.Button
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Button
@@ -32,8 +34,16 @@ fun ButtonComposable(
             contentColor = if (isHighlighted) Color.White else Color.Black
         ),
         shape = RoundedCornerShape(50),
-        modifier = Modifier
-            .padding(8.dp),
+        modifier = modifier
+            .widthIn(min = 150.dp)
+            .padding(8.dp)
+            .then(
+                if (!isHighlighted) Modifier.border(
+                    width = 2.dp,
+                    color = DarkBlue,
+                    shape = RoundedCornerShape(50)
+                ) else Modifier
+            )
     ){
         Text(
             text = text,

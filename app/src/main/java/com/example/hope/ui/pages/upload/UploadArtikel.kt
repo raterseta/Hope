@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,10 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hope.ui.composables.ButtonComposable
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
-fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
+fun UploadArtikel(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -75,13 +73,13 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
                 ButtonComposable(
                     "Komunitas",
                     onClick = { TODO() },
-                    isHighlighted = true,
+                    isHighlighted = false,
 
-                )
+                    )
                 ButtonComposable(
                     "Artikel",
                     onClick = { TODO() },
-                    isHighlighted = false,
+                    isHighlighted = true,
                 )
             }
 
@@ -119,20 +117,7 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
             Spacer(modifier = modifier.height(16.dp))
 
             // TextField Lokasi
-            TextField(
-                value = "",
-                onValueChange = { TODO() },
-                label = { Text("Lokasi") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                singleLine = true,
-                shape = RoundedCornerShape(35),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
+
 
             Spacer(modifier = modifier.height(16.dp))
 
@@ -176,8 +161,8 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
 
 @Preview
 @Composable
-private fun UploadPagePrev() {
-    UploadPage(
+private fun UploadArtikelPrev() {
+    UploadArtikel(
         innerPadding = PaddingValues(0.dp)
     )
 }
