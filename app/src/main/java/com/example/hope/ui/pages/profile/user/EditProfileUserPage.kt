@@ -201,14 +201,3 @@ fun DatePickerField(value: String, onValueChange: (String) -> Unit) {
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun EditProfileUserPagePreview() {
-//    EditProfileUserPage(
-//        selectedAvatarId = R.drawable.avatar3,
-//        onBackClick = { println("Back clicked") },
-//        onLogoutClick = { println("Logout clicked") },
-//        onUploadGalleryClick = { println("Upload Gallery clicked") },
-//        userData = userData
-//    )
-//}

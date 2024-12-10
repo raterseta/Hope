@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.R
+import com.example.hope.ui.composables.template.CustomTextFieldGrey
 import com.example.hope.ui.pages.register.UserData
 
 @Composable
@@ -108,16 +109,11 @@ fun EditProfilePsikologPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
+
+            CustomTextFieldGrey(
                 value = userData.username,
                 onValueChange = { viewModel.updateUsername(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.LightGray.copy(alpha = 0.2f))
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
+                placeholder = "contoh : FaiqSkibidi_"
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -130,6 +126,13 @@ fun EditProfilePsikologPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
+
+            CustomTextFieldGrey(
+                value = userData.birthDate,
+                onValueChange = { viewModel.updateBirthDate(it) },
+                placeholder = "DD/MM/YY"
+            )
+
             DatePickerField(userData.birthDate) { selectedDate ->
                 viewModel.updateBirthDate(selectedDate)
             }
@@ -144,17 +147,13 @@ fun EditProfilePsikologPage(
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            BasicTextField(
+
+            CustomTextFieldGrey(
                 value = userData.phoneNumber,
                 onValueChange = { viewModel.updatePhoneNumber(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.LightGray.copy(alpha = 0.2f))
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black)
+                placeholder = "+62"
             )
+
 
             Spacer(modifier = Modifier.height(8.dp))
 

@@ -14,6 +14,9 @@ class EditProfileUserPageViewModel : ViewModel() {
     private val _phoneNumber = mutableStateOf("")
     val phoneNumber: State<String> get() = _phoneNumber
 
+    private val _avatarUri = mutableStateOf<String?>(null)
+    val avatarUri: State<String?> get() = _avatarUri
+
     fun onEmailChange(newEmail: String) {
         _email.value = newEmail
     }
@@ -24,5 +27,9 @@ class EditProfileUserPageViewModel : ViewModel() {
 
     fun onPhoneNumberChange(newPhoneNumber: String) {
         _phoneNumber.value = newPhoneNumber
+    }
+
+    fun onAvatarUriChange(newAvatarUri: String?) {
+        _avatarUri.value = newAvatarUri
     }
 }
