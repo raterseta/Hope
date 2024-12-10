@@ -102,7 +102,7 @@ fun RegisterUsernamePage(
             CustomTextFieldGrey(
                 value = username,
                 onValueChange = { viewModel.updateUsername(it) },
-                placeholder = "JohnDoe@gmail.com"
+                placeholder = "contoh : FaiqSkibidi_"
             )
 
             // Input Tanggal Lahir

@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hope.R
-import com.example.hope.ui.pages.profile.psikolog.ProfileField
+import com.example.hope.ui.composables.template.ProfileField
 import com.example.hope.ui.pages.register.UserData
 
 @Composable
@@ -129,15 +129,4 @@ fun ProfileUserPage(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun ProfileUserPagePreview() {
-//    ProfileUserPage(
-//        selectedAvatarId = R.drawable.avatar3,
-//        onBackClick = { println("Back clicked") },
-//        onEditClick = { println("Edit clicked") },
-//        navController = TODO(),
-//        viewModel = TODO(),
-//        userData = userData.value,
-//    )
-//}
+

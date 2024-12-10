@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.R
+import com.example.hope.ui.composables.template.ProfileField
 import com.example.hope.ui.pages.register.UserData
 
 @Composable
@@ -134,43 +135,3 @@ fun ProfilePsikologPage(
     }
 }
 
-@Composable
-fun ProfileField(label: String, value: String) {
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-        Text(
-            text = label,
-            color = Color.Black,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.align(Alignment.Start)
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.LightGray.copy(alpha = 0.2f))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Text(
-                text = value.ifEmpty { "-" }, // Default value if empty
-                fontSize = 16.sp,
-                color = Color.Black
-            )
-        }
-    }
-}
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun ProfilePsikologPagePreview() {
-//    val previewViewModel = ProfilePsikologPageViewModel().apply {
-//        updateSelectedAvatar(R.drawable.avatar3)
-//    }
-//    ProfilePsikologPage(
-//        viewModel = previewViewModel,
-//        onBackClick = { println("Back clicked") },
-//        onEditClick = { println("Edit clicked") }
-//    )
-//}
