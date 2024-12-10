@@ -38,7 +38,7 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding), // Menambahkan padding dari Scaffold
-        color = Color.White
+//        color = Color.White
     ) {
         Column(
             modifier = Modifier
@@ -76,12 +76,13 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
                     "Komunitas",
                     onClick = { TODO() },
                     isHighlighted = true,
-
+                    modifier = Modifier.weight(1f)
                 )
                 ButtonComposable(
                     "Artikel",
                     onClick = { TODO() },
                     isHighlighted = false,
+                    modifier = Modifier.weight(1f)
                 )
             }
 
