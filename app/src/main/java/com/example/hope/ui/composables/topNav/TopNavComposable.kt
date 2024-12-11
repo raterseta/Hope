@@ -138,8 +138,11 @@ fun TopNavComposable(
 
             // Row 3: Filter Buttons
             Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
                 items.forEachIndexed { index, item ->
                     ButtonComposable(
