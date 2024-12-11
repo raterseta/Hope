@@ -33,8 +33,7 @@ import com.example.hope.ui.theme.White
 @Composable
 fun BottomNavComposable(
     modifier: Modifier = Modifier,
-    selectedScreen: Screen, // Tambahkan parameter untuk tab aktif
-    onItemSelected: (Screen) -> Unit // Callback ketika tab dipilih
+    onItemSelected: (Screen) -> Unit // Callback when an item is selected
 ) {
     val items = listOf(
         BottomNavItem.Home,
@@ -42,6 +41,8 @@ fun BottomNavComposable(
         BottomNavItem.Chat,
         BottomNavItem.Bookmark
     )
+
+    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
     Row(
         modifier = modifier
@@ -53,18 +54,18 @@ fun BottomNavComposable(
                     .calculateBottomPadding()
             )
     ) {
-        items.forEach { item ->
+        items.forEachIndexed { index, item ->
             AddItem(
                 screen = item,
-                selected = item.screen == selectedScreen, // Sinkronkan dengan tab aktif
+                selected = index == selectedItemIndex,
                 onClick = {
-                    onItemSelected(item.screen) // Callback ke parent saat tab dipilih
+                    selectedItemIndex = index
+                    onItemSelected(item.screen) // Notify parent to update screen
                 }
             )
         }
     }
 }
-
 
 
 @Composable
@@ -109,13 +110,8 @@ fun RowScope.AddItem(
 
 @Preview
 @Composable
-fun BottomNavPreview() {
-    var currentScreen by rememberSaveable { mutableStateOf(Screen.Home) } // Simulasi state aktif
-
+private fun BottomNavPreview() {
     BottomNavComposable(
-        selectedScreen = currentScreen, // Berikan state aktif
-        onItemSelected = { selectedScreen ->
-            currentScreen = selectedScreen // Perbarui state aktif saat item dipilih
-        }
+        onItemSelected = {}
     )
 }

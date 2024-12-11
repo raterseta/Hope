@@ -1,5 +1,3 @@
-//Tapi BottomNavnya hilang. Saya ingin balik ke HomeChatPage, tetapi lewat sini agar tetap ada bottom navbarnya
-
 package com.example.hope.ui.pages.main
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,12 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
-import androidx.navigation.NavController
-=======
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
->>>>>>> 7d73c3b58825abd1bda380f33bf5f9d34a28711e
 import com.example.hope.R
 import com.example.hope.chat.HomeChatPage
 import com.example.hope.ui.composables.bottomNav.BottomNavComposable
@@ -35,20 +29,16 @@ import com.example.hope.ui.pages.upload.UploadPage
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
-    onProfileClick: () -> Unit,
-    navController: NavController, // Tambahkan navController sebagai parameter
-    initialTab: Screen = Screen.Home // Tambahkan parameter untuk tab awal
-) {
-    var currentScreen by remember { mutableStateOf(initialTab) }
+    onProfileClick: () -> Unit
+             ) {
+    var currentScreen by remember { mutableStateOf(Screen.Home) }
 
     val posts = getDummyPosts()
     val savedPosts = getSavedPosts()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomNavComposable(
-                selectedScreen = currentScreen,
                 onItemSelected = { selectedScreen ->
                     currentScreen = selectedScreen
                 }
@@ -73,15 +63,11 @@ fun HomePage(
         when (currentScreen) {
             Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
             Screen.Add -> UploadPage(innerPadding = innerPadding)
-            Screen.Chat -> HomeChatPage(
-                modifier = Modifier.padding(innerPadding),
-                navController = navController // Teruskan navController ke HomeChatPage
-            )
+            Screen.Chat -> HomeChatPage(modifier = Modifier.padding(innerPadding))
             Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))
         }
     }
 }
-
 
 @Composable
 fun PostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {
