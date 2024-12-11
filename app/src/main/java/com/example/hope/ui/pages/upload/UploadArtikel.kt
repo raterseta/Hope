@@ -36,7 +36,7 @@ fun UploadArtikel(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding), // Menambahkan padding dari Scaffold
-        color = Color.White
+//        color = Color.White
     ) {
         Column(
             modifier = Modifier
@@ -67,19 +67,19 @@ fun UploadArtikel(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-
+                horizontalArrangement = Arrangement.SpaceEvenly // Ubah SpaceBetween menjadi SpaceEvenly
             ) {
                 ButtonComposable(
-                    "Komunitas",
+                    text = "Komunitas",
                     onClick = { TODO() },
                     isHighlighted = false,
-
-                    )
+                    modifier = Modifier.weight(1f)
+                )
                 ButtonComposable(
-                    "Artikel",
+                    text = "Artikel",
                     onClick = { TODO() },
                     isHighlighted = true,
+                    modifier = Modifier.weight(1f)
                 )
             }
 
@@ -116,12 +116,6 @@ fun UploadArtikel(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
 
             Spacer(modifier = modifier.height(16.dp))
 
-            // TextField Lokasi
-
-
-            Spacer(modifier = modifier.height(16.dp))
-
-            // TextField Deskripsi mengisi sisa ruang
             TextField(
                 value = "",
                 onValueChange = { TODO() },

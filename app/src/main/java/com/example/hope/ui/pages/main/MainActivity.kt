@@ -87,6 +87,7 @@ fun AppNavHost() {
                 navController = navController
             )
         }
+<<<<<<< HEAD
         composable("homeChatPage") {
             HomeChatPage(navController = navController)
         }
@@ -105,6 +106,8 @@ fun AppNavHost() {
             )
         }
 
+=======
+>>>>>>> 7d73c3b58825abd1bda380f33bf5f9d34a28711e
     }
 }
 

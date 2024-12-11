@@ -2,6 +2,7 @@
 
 package com.example.hope.ui.pages.main
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+<<<<<<< HEAD
 import androidx.navigation.NavController
+=======
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+>>>>>>> 7d73c3b58825abd1bda380f33bf5f9d34a28711e
 import com.example.hope.R
 import com.example.hope.chat.HomeChatPage
 import com.example.hope.ui.composables.bottomNav.BottomNavComposable
