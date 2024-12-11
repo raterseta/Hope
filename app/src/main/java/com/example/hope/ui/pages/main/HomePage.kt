@@ -1,3 +1,5 @@
+//Tapi BottomNavnya hilang. Saya ingin balik ke HomeChatPage, tetapi lewat sini agar tetap ada bottom navbarnya
+
 package com.example.hope.ui.pages.main
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.example.hope.R
 import com.example.hope.chat.HomeChatPage
 import com.example.hope.ui.composables.bottomNav.BottomNavComposable
@@ -26,16 +29,20 @@ import com.example.hope.ui.pages.upload.UploadPage
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
-    onProfileClick: () -> Unit
-             ) {
-    var currentScreen by remember { mutableStateOf(Screen.Home) }
+    onProfileClick: () -> Unit,
+    navController: NavController, // Tambahkan navController sebagai parameter
+    initialTab: Screen = Screen.Home // Tambahkan parameter untuk tab awal
+) {
+    var currentScreen by remember { mutableStateOf(initialTab) }
 
     val posts = getDummyPosts()
     val savedPosts = getSavedPosts()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomNavComposable(
+                selectedScreen = currentScreen,
                 onItemSelected = { selectedScreen ->
                     currentScreen = selectedScreen
                 }
@@ -60,11 +67,15 @@ fun HomePage(
         when (currentScreen) {
             Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
             Screen.Add -> UploadPage(innerPadding = innerPadding)
-            Screen.Chat -> HomeChatPage(modifier = Modifier.padding(innerPadding))
+            Screen.Chat -> HomeChatPage(
+                modifier = Modifier.padding(innerPadding),
+                navController = navController // Teruskan navController ke HomeChatPage
+            )
             Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))
         }
     }
 }
+
 
 @Composable
 fun PostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {

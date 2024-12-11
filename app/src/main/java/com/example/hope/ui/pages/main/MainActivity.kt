@@ -10,13 +10,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.hope.R
 import com.example.hope.boarding.BoardPage
+import com.example.hope.chat.ContentChatPage
+import com.example.hope.chat.HomeChatPage
 import com.example.hope.logo.LogoPage
 import com.example.hope.ui.pages.login.LoginPage
 import com.example.hope.ui.pages.profile.ProfileComposable
 import com.example.hope.ui.pages.register.RegisterComposable
-import com.example.hope.ui.pages.profile.user.ProfileUserPage
 import com.example.hope.ui.theme.HopeTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -67,7 +67,8 @@ fun AppNavHost() {
         }
         composable("homePage") {
             HomePage(
-                onProfileClick = { navController.navigate("profile") }
+                onProfileClick = { navController.navigate("profile") },
+                navController = navController
             )
         }
         composable("profile") {
@@ -86,9 +87,24 @@ fun AppNavHost() {
                 navController = navController
             )
         }
-//        composable("chat") {
-//            HomeChatPage()
-//        }
+        composable("homeChatPage") {
+            HomeChatPage(navController = navController)
+        }
+        composable("contentChat") {
+            ContentChatPage(navController = navController)
+        }
+        composable("homePage?tab={tab}") { backStackEntry ->
+            val tab = backStackEntry.arguments?.getString("tab")
+            HomePage(
+                onProfileClick = { navController.navigate("profile") },
+                navController = navController,
+                initialTab = when (tab) {
+                    "Chat" -> Screen.Chat
+                    else -> Screen.Home
+                }
+            )
+        }
+
     }
 }
 

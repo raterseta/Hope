@@ -147,7 +147,7 @@ fun TempActivity_bck(
         content = { innerPadding ->
             when (selectedPage) {
 //                "HomeChatPage" -> HomeChatPage(sizeWidth, screenWidth, poppinsBold, poppinsRegular)
-                "ContentChatPage" -> ContentChatPage(sizeWidth, screenWidth, logoSize, poppinsBold, poppinsRegular)
+//                "ContentChatPage" -> ContentChatPage(sizeWidth, screenWidth, logoSize, poppinsBold, poppinsRegular)
                 else -> Text(
                     text = "Halaman tidak ditemukan",
                     fontSize = sizeWidth * 0.05f,

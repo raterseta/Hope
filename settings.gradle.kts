@@ -16,6 +16,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+//        maven(url = "https://jitpack.io")
+        // Tambahkan ini -> Unexpected tokens (use ';' to separate expressions on the same line)
     }
 }
 
