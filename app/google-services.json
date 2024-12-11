@@ -13,7 +13,20 @@
           "package_name": "com.example.hope"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "250357930033-4cdjqrdqalp8rvhrfmnaagr2osaqhsca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hope",
+            "certificate_hash": "026c0b394068e79b152b33ef8c9c6ab80b9ef965"
+          }
+        },
+        {
+          "client_id": "250357930033-2f5am7c6k0o23k2rg74bv9k0h3d4h129.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB4DNhigYp74yF_EbxxGe3-AHUNJtRA3NA"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250357930033-2f5am7c6k0o23k2rg74bv9k0h3d4h129.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
