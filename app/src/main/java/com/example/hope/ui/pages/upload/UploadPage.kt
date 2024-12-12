@@ -1,5 +1,10 @@
 package com.example.hope.ui.pages.upload
 
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,27 +31,53 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.hope.ui.composables.ButtonComposable
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
-fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
+fun UploadPage(
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues,
+    viewModel: UploadViewModel = viewModel()
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding), // Menambahkan padding dari Scaffold
 //        color = Color.White
     ) {
+        var selectedImgUri by remember { mutableStateOf<Uri?>(null)}
+
+        val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = { uri -> selectedImgUri = uri }
+        )
+        val title by viewModel.title.collectAsState()
+        val location by viewModel.location.collectAsState()
+        val description by viewModel.description.collectAsState()
+
+        val context = LocalContext.current
+
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxSize() // Mengisi seluruh halaman
+                .fillMaxSize() // Mengisi seluruh halaman,
+                .verticalScroll(scrollState)
         ) {
             // Tulisan "Postingan Baru!" di tengah
             Box(
@@ -86,25 +120,49 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
                 )
             }
 
-            // IconButton dengan ukuran lebih besar dan berbentuk kotak
-            IconButton(
-                onClick = { TODO() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp) // Tinggi ditambah untuk membuatnya lebih besar
-                    .padding(bottom = 16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Image",
-                    modifier = Modifier.size(48.dp) // Ukuran icon lebih besar
+            if (selectedImgUri == null) {
+                IconButton(
+                    onClick = {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(bottom = 16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Image",
+                        modifier = Modifier.size(48.dp)
+                    )
+                }
+            } else {
+                AsyncImage(
+                    model = selectedImgUri,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Crop
                 )
+                Button(
+                    onClick = {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
+                ) {
+                    Text("Change Photo")
+                }
             }
+
+            // IconButton dengan ukuran lebih besar dan berbentuk kotak
+
 
             // TextField Judul
             TextField(
-                value = "",
-                onValueChange = { TODO() },
+                value = title,
+                onValueChange = { viewModel.onTitleChange(it) },
                 label = { Text("Judul") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,8 +179,8 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
 
             // TextField Lokasi
             TextField(
-                value = "",
-                onValueChange = { TODO() },
+                value = location,
+                onValueChange = { viewModel.onLocationChange(it) },
                 label = { Text("Lokasi") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -139,8 +197,8 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
 
             // TextField Deskripsi mengisi sisa ruang
             TextField(
-                value = "",
-                onValueChange = { TODO() },
+                value = description,
+                onValueChange = { viewModel.onDescriptionChange(it) },
                 label = { Text("Deskripsi") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,12 +220,29 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
             ) {
                 ButtonComposable(
                     text = "Upload",
-                    onClick = { TODO() },
-                    isHighlighted = true, // Sesuai desain untuk button utama
+                    onClick = {
+                        if (selectedImgUri != null) {
+                            viewModel.UploadPost(
+                                imageUri = selectedImgUri,
+                                onSuccess = {
+                                    // Tampilkan pesan sukses
+                                    Toast.makeText(context, "Post uploaded successfully", Toast.LENGTH_SHORT).show()
+                                },
+                                onFailure = { error ->
+                                    // Tampilkan pesan error
+                                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        } else {
+                            Toast.makeText(context, "Please select an image", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    isHighlighted = true,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
                 )
+
             }
         }
     }
@@ -178,7 +253,5 @@ fun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
 @Preview
 @Composable
 private fun UploadPagePrev() {
-    UploadPage(
-        innerPadding = PaddingValues(0.dp)
-    )
+
 }
