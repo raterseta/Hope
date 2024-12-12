@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +24,7 @@ fun RegisterComposable(
 ) {
     var currentStep by remember { mutableStateOf(0) }
 
-    val authState = viewModel.authState.observeAsState()
+    val selectedAvatarId by viewModel.selectedAvatar.collectAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { paddingValues ->
@@ -36,7 +37,7 @@ fun RegisterComposable(
                     onBackClick = onBackClick,
                     onRegisterClick = {
                         if (viewModel.validatePasswordMatch()) {
-                            currentStep = 1
+                            currentStep = 1 //panggil register
                         }
                     },
                     onGoogleSignInClick = { TODO() },
@@ -48,11 +49,11 @@ fun RegisterComposable(
                     onUploadGalleryClick = { TODO() }
                 )
                 2 -> RegisterUsernamePage(
-                    selectedAvatarId = viewModel.selectedAvatar.value,
+                    selectedAvatarId = selectedAvatarId,
                     onBackClick = { currentStep = 1 },
                     onConfirmClick = {
                         viewModel.printUserData() // Memanggil fungsi untuk mencetak data
-                        viewModel.register()
+                        viewModel.register() // panggil saveUserData()
                         onCompleteRegistration() // Menjalankan fungsi untuk menyelesaikan registrasi
                     }
                 )

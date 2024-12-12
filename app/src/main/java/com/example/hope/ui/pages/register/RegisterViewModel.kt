@@ -164,6 +164,9 @@ class RegisterViewModel: ViewModel() {
                 }
             }
     }
+    fun saveUserData(){
+
+    }
 
     fun signout(){
         auth.signOut()
