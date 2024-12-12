@@ -41,8 +41,8 @@ class UploadViewModel: ViewModel() {
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
-        val userId = auth.currentUser?.uid
-        if (userId == null) {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
             onFailure("User not authenticated")
             return
         }
@@ -52,39 +52,54 @@ class UploadViewModel: ViewModel() {
             return
         }
 
-        val fileName = "${System.currentTimeMillis()}_${imageUri.lastPathSegment}"
-        val imgRef = storage.child(fileName)
+        val userId = currentUser.uid
 
-        // Upload image
-        imgRef.putFile(imageUri)
-            .addOnSuccessListener {
-                // Get download URL
-                imgRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                    val postId = database.push().key ?: return@addOnSuccessListener
-                    val postData = PostData(
-                        postID = postId,
-                        userID = userId,
-                        postImg = downloadUri.toString(),
-                        title = _title.value,
-                        location = _location.value,
-                        description = _description.value,
-                        isBookmarked = false
-                    )
+        // Mengambil data pengguna dari Firebase Realtime Database
+        val userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+        userRef.get().addOnSuccessListener { userSnapshot ->
+            val username = userSnapshot.child("username").getValue(String::class.java) ?: "Unknown"
+            val avatarID = userSnapshot.child("avatarID").getValue(Int::class.java) // Misalnya avatarID adalah URL foto
 
-                    // Save post data to database
-                    database.child(postId).setValue(postData)
-                        .addOnSuccessListener {
-                            onSuccess()
-                        }
-                        .addOnFailureListener { e ->
-                            onFailure("Failed to save post: ${e.message}")
-                        }
-                }.addOnFailureListener { e ->
-                    onFailure("Failed to get download URL: ${e.message}")
+            val fileName = "${System.currentTimeMillis()}_${imageUri.lastPathSegment}"
+            val imgRef = storage.child(fileName)
+
+            // Upload image
+            imgRef.putFile(imageUri)
+                .addOnSuccessListener {
+                    // Get download URL
+                    imgRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                        val postId = database.push().key ?: return@addOnSuccessListener
+                        val postData = PostData(
+                            postID = postId,
+                            userID = userId,
+                            postImg = downloadUri.toString(),
+                            title = _title.value,
+                            location = _location.value,
+                            description = _description.value,
+                            isBookmarked = false,
+                            username = username, // Dapatkan username dari database
+                            profilePicture = avatarID // Dapatkan avatarID dari database
+                        )
+
+                        // Simpan post data ke database
+                        database.child(postId).setValue(postData)
+                            .addOnSuccessListener {
+                                onSuccess()
+                            }
+                            .addOnFailureListener { e ->
+                                onFailure("Failed to save post: ${e.message}")
+                            }
+                    }.addOnFailureListener { e ->
+                        onFailure("Failed to get download URL: ${e.message}")
+                    }
                 }
-            }
-            .addOnFailureListener { e ->
-                onFailure("Failed to upload image: ${e.message}")
-            }
+                .addOnFailureListener { e ->
+                    onFailure("Failed to upload image: ${e.message}")
+                }
+        }.addOnFailureListener { e ->
+            onFailure("Failed to get user data: ${e.message}")
+        }
     }
+
+
 }
