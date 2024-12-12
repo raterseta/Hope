@@ -15,10 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,15 +23,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.example.hope.R
 
 @Composable
 fun PostComposable(
-    profilePicture: Painter,
+    profilePicture: Int?,
     username: String,
-    photo: Painter,
+    photo: String,
     title: String,
     description: String,
     isBookmarked: Boolean,
@@ -54,7 +51,7 @@ fun PostComposable(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = profilePicture,
+                painter = painterResource(profilePicture?:R.drawable.avatar3),
                 contentDescription = "profile",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -70,7 +67,7 @@ fun PostComposable(
             )
         }
         Image(
-            painter = photo,
+            painter = rememberAsyncImagePainter(photo),
             contentDescription = "post Photo",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -116,21 +113,21 @@ fun PostComposable(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewPostComposable() {
-    val dummyProfilePicture = painterResource(id = R.drawable.elaina_stiker) // Replace with your drawable
-    val dummyUploadedPhoto = painterResource(id = R.drawable.shrimp) // Replace with your drawable
-
-    var isBookmarked by remember { mutableStateOf(false) }
-
-    PostComposable(
-        profilePicture = dummyProfilePicture,
-        username = "Elaina",
-        photo = dummyUploadedPhoto,
-        title = "Beautiful Shrimp",
-        description = "Captured this amazing sunset during my trip to Bali!, so cute 10/10, will eat again,",
-        isBookmarked = isBookmarked,
-        onBookmarkClick = { isBookmarked = !isBookmarked }
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewPostComposable() {
+//    val dummyProfilePicture = painterResource(id = R.drawable.elaina_stiker) // Replace with your drawable
+//    val dummyUploadedPhoto = painterResource(id = R.drawable.shrimp) // Replace with your drawable
+//
+//    var isBookmarked by remember { mutableStateOf(false) }
+//
+//    PostComposable(
+//        profilePicture = dummyProfilePicture,
+//        username = "Elaina",
+//        photo = dummyUploadedPhoto,
+//        title = "Beautiful Shrimp",
+//        description = "Captured this amazing sunset during my trip to Bali!, so cute 10/10, will eat again,",
+//        isBookmarked = isBookmarked,
+//        onBookmarkClick = { isBookmarked = !isBookmarked }
+//    )
+//}

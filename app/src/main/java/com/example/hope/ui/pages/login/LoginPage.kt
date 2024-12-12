@@ -1,6 +1,9 @@
 package com.example.hope.ui.pages.login
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -53,6 +56,14 @@ fun LoginPage(
     val passwordVisible = viewModel.passwordVisible.value
 
     val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            viewModel.handleGoogleSignInResult(data, context)
+        }
+    }
 
     Scaffold(
         containerColor = Color(80, 100, 147)
@@ -143,7 +154,9 @@ fun LoginPage(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedButton(
-                    onClick = { onGoogleSignInClick() },
+                    onClick = {
+                        viewModel.signInWithGoogle(context, launcher)
+                    },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .height(42.dp)
