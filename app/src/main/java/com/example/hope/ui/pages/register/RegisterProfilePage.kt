@@ -28,7 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RegisterProfilePage(
-    viewModel: RegisterViewModel = viewModel(),
+    viewModel: UserDataInputViewModel = viewModel(),
     onBackClick: () -> Unit,
     onConfirmClick: (Int?) -> Unit,
     onUploadGalleryClick: () -> Unit
