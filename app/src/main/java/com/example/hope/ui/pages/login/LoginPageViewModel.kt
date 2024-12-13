@@ -184,4 +184,23 @@ class LoginPageViewModel : ViewModel() {
                 }
             }
     }
+
+    fun sendPasswordResetEmail(email: String, onComplete: (Boolean) -> Unit) {
+        if (email.isBlank()) {
+            onComplete(false)
+            return
+        }
+
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Email reset password berhasil dikirim
+                    onComplete(true)
+                } else {
+                    // Terjadi kesalahan saat mengirimkan email
+                    onComplete(false)
+                }
+            }
+    }
+
 }

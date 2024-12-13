@@ -108,9 +108,18 @@ fun LoginPage(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(onClick = { onForgotPasswordClick() }) {
+                TextButton(onClick = {
+                    viewModel.sendPasswordResetEmail(username) { result ->
+                        if (result) {
+                            Toast.makeText(context, "Email reset password telah dikirim.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Gagal mengirim email reset password.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }) {
                     Text(text = "Lupa Password?", color = Color.Black)
                 }
+
 
                 Spacer(modifier = Modifier.height(32.dp))
 
