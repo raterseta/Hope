@@ -79,7 +79,11 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.26.5-rc")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.26.5-rc")
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("com.google.code.gson:gson:2.8.9")
     implementation(libs.firebase.storage.ktx)
+//    implementation(libs.firebase.firestore.ktx)
+//    implementation(libs.firebase.firestore.ktx)
 
     // Testing libraries
     testImplementation(libs.junit)
@@ -90,12 +94,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Other libraries
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.0")
-
     implementation("androidx.activity:activity-ktx:1.6.1")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
-
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     // Google Auth libraries
@@ -103,6 +106,4 @@ dependencies {
     implementation("androidx.credentials:credentials:1.2.2")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-
 }
-

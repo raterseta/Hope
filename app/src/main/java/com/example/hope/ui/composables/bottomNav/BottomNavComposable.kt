@@ -33,6 +33,7 @@ import com.example.hope.ui.theme.White
 @Composable
 fun BottomNavComposable(
     modifier: Modifier = Modifier,
+    selectedScreen: Screen, // Tambahkan parameter untuk tab aktif
     onItemSelected: (Screen) -> Unit // Callback when an item is selected
 ) {
     val items = listOf(
@@ -110,8 +111,13 @@ fun RowScope.AddItem(
 
 @Preview
 @Composable
-private fun BottomNavPreview() {
+fun BottomNavPreview() {
+    var currentScreen by rememberSaveable { mutableStateOf(Screen.Home) } // Simulasi state aktif
+
     BottomNavComposable(
-        onItemSelected = {}
+        selectedScreen = currentScreen, // Berikan state aktif
+        onItemSelected = { selectedScreen ->
+            currentScreen = selectedScreen // Perbarui state aktif saat item dipilih
+        }
     )
 }
