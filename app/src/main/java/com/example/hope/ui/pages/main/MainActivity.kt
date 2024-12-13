@@ -19,11 +19,12 @@ import com.example.hope.chat.HomeChatPsikologPage
 import com.example.hope.logo.LogoPage
 import com.example.hope.ui.pages.login.LoginPage
 import com.example.hope.ui.pages.profile.ProfileComposable
-import com.example.hope.ui.pages.register.RegisterComposable
+import com.example.hope.ui.pages.register.RegisterPage
 import com.example.hope.ui.pages.register.UserData
+import com.example.hope.ui.pages.register.UserDataInput
 import com.example.hope.ui.theme.HopeTheme
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
+//import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,10 +56,15 @@ fun AppNavHost() {
     NavHost(navController = navController, startDestination = startDestination) {
 
         composable("registerPage"){
-            RegisterComposable(
-                onBackClick = { navController.navigate("logoPage") },
-                onCompleteRegistration = { navController.navigate("homePage") },
-                onLoginClick = { navController.navigate("loginPage") }
+            RegisterPage(
+                onBackClick = { navController.navigate("boardPage") },
+                onLoginClick = { navController.navigate("loginPage") },
+                onSuccess = {navController.navigate("userDataInput")},
+            )
+        }
+        composable("userDataInput"){
+            UserDataInput(
+                onSaveClick = { navController.navigate("homePage") },
             )
         }
         composable("loginPage") {
@@ -101,16 +107,16 @@ fun AppNavHost() {
 //        composable("contentChat") { backStackEntry ->
 //            ContentChatPage(navController = navController)
 //        }
-        composable(
-            "contentChat/{activePsikolog}",
-            arguments = listOf(navArgument("activePsikolog") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val gson = Gson()
-            val psikologJson = backStackEntry.arguments?.getString("activePsikolog")
-            val activePsikolog = gson.fromJson(psikologJson, UserData::class.java)
-
-            ContentChatPage(navController = navController, activePsikolog = activePsikolog)
-        }
+//        composable(
+//            "contentChat/{activePsikolog}",
+//            arguments = listOf(navArgument("activePsikolog") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val gson = Gson()
+//            val psikologJson = backStackEntry.arguments?.getString("activePsikolog")
+//            val activePsikolog = gson.fromJson(psikologJson, UserData::class.java)
+//
+//            ContentChatPage(navController = navController, activePsikolog = activePsikolog)
+//        }
 
 
 

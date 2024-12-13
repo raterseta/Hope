@@ -24,9 +24,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hope.R
-import com.example.hope.ui.pages.login.LoginPage
-import com.example.hope.ui.pages.main.HomePage
-import com.example.hope.ui.pages.register.RegisterComposable
 import com.example.hope.ui.theme.HopeTheme
 import com.google.accompanist.pager.*
 
