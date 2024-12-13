@@ -33,7 +33,7 @@ fun RegisterUsernamePage(
     selectedAvatarId: Int?,
     onBackClick: () -> Unit,
     onConfirmClick: () -> Unit,
-    viewModel: RegisterViewModel = viewModel()
+    viewModel: UserDataInputViewModel = viewModel()
 
 ) {
     val username by viewModel.username.collectAsState()

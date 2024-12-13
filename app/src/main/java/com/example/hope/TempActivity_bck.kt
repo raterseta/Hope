@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hope.chat.ContentChatPage
-import com.example.hope.chat.HomeChatPage
+//import com.example.hope.chat.HomeChatPage
 
 data class BottomNavItemOldd(
     val selectedIcon: ImageVector,
@@ -147,7 +147,7 @@ fun TempActivity_bck(
         content = { innerPadding ->
             when (selectedPage) {
 //                "HomeChatPage" -> HomeChatPage(sizeWidth, screenWidth, poppinsBold, poppinsRegular)
-                "ContentChatPage" -> ContentChatPage(sizeWidth, screenWidth, logoSize, poppinsBold, poppinsRegular)
+//                "ContentChatPage" -> ContentChatPage(sizeWidth, screenWidth, logoSize, poppinsBold, poppinsRegular)
                 else -> Text(
                     text = "Halaman tidak ditemukan",
                     fontSize = sizeWidth * 0.05f,

@@ -1,5 +1,9 @@
 package com.example.hope.ui.pages.register
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -30,6 +34,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hope.ui.composables.template.CustomTextFieldWhite
@@ -38,8 +43,7 @@ import com.example.hope.ui.composables.template.CustomTextFieldWhite
 @Composable
 fun RegisterPage(
     onBackClick: () -> Unit,
-    onRegisterClick: () -> Unit,
-    onGoogleSignInClick: () -> Unit,
+    onSuccess: () -> Unit,
     onLoginClick: () -> Unit,
     viewModel: RegisterViewModel = viewModel()
 ) {
@@ -48,6 +52,16 @@ fun RegisterPage(
     val confirmedPassword by viewModel.confirmedPassword.collectAsState()
     val passwordVisible by viewModel.passwordVisible.collectAsState()
     val confirmedPasswordVisible by viewModel.confirmedPasswordVisible.collectAsState()
+
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            viewModel.handleGoogleSignInResult(data, context)
+        }
+    }
 
     Scaffold(
         containerColor = Color(80, 100, 147)
@@ -119,7 +133,9 @@ fun RegisterPage(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Button(
-                    onClick = { onRegisterClick() },
+                    onClick = {
+                        viewModel.register()
+                              },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .height(42.dp)
@@ -134,7 +150,9 @@ fun RegisterPage(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedButton(
-                    onClick = onGoogleSignInClick,
+                    onClick = {
+                        viewModel.signInWithGoogle(context, launcher)
+                              },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .height(42.dp)
@@ -159,6 +177,20 @@ fun RegisterPage(
                     }
                 }
 
+                val authState by viewModel.authState.collectAsState()
+                LaunchedEffect(authState) {
+                    if (authState is AuthState.Authenticated) {
+                        // Jika login berhasil, panggil onLoginClick
+                        onSuccess()
+                    } else if (authState is AuthState.Error) {
+                        // Tangani error login jika diperlukan
+                        Toast.makeText(
+                            context,
+                            "Login failed: ${(authState as AuthState.Error).message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
@@ -176,14 +208,14 @@ fun RegisterPage(
 }
 
 
-
-@Preview(showBackground = true)
-@Composable
-fun RegisterPagePreview() {
-    RegisterPage(
-        onBackClick = { println("Back clicked") },
-        onRegisterClick = { },
-        onGoogleSignInClick = { println("Google Sign-In clicked") },
-        onLoginClick = { println("Login clicked") }
-    )
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun RegisterPagePreview() {
+//    RegisterPage(
+//        onBackClick = { println("Back clicked") },
+//        onRegisterClick = { },
+//        onGoogleSignInClick = { println("Google Sign-In clicked") },
+//        onLoginClick = { println("Login clicked") }
+//    )
+//}

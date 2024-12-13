@@ -109,14 +109,14 @@ fun LoginPage(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(text = "Password", color = Color.Black, fontSize = 16.sp)
-               CustomTextFieldWhite(
+                CustomTextFieldWhite(
                     value = password,
                     onValueChange = { viewModel.onPasswordChange(it) },
                     placeholder = "******",
                     isPasswordField = true,
                     isPasswordVisible = passwordVisible,
                     togglePasswordVisibility = { viewModel.togglePasswordVisibility() }
-               )
+                )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -147,7 +147,11 @@ fun LoginPage(
                         onLoginClick()
                     } else if (authState is AuthState.Error) {
                         // Tangani error login jika diperlukan
-                        Toast.makeText(context, "Login failed: ${(authState as AuthState.Error).message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Login failed: ${(authState as AuthState.Error).message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
@@ -183,15 +187,15 @@ fun LoginPage(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Belum punya akun?", color = Color.Black)
-                        TextButton(onClick = { onRegisterClick() }) {
-                            Text(text = "Register", color = Color.Black)
-                        }
+                Row(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Belum punya akun?", color = Color.Black)
+                    TextButton(onClick = { onRegisterClick() }) {
+                        Text(text = "Register", color = Color.Black)
                     }
+                }
             }
         }
     }
