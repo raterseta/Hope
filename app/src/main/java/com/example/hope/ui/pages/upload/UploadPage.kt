@@ -26,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -38,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -67,7 +69,7 @@ fun UploadPage(
             onResult = { uri -> selectedImgUri = uri }
         )
         val title by viewModel.title.collectAsState()
-        val location by viewModel.location.collectAsState()
+//        val location by viewModel.location.collectAsState()
         val description by viewModel.description.collectAsState()
 
         val context = LocalContext.current
@@ -83,7 +85,7 @@ fun UploadPage(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                    .padding(vertical = 64.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -93,32 +95,33 @@ fun UploadPage(
                 )
             }
 
-            Text(
-                text = "Jenis Postingan",
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+//            Text(
+//                text = "Jenis Postingan",
+//                modifier = Modifier.padding(vertical = 8.dp)
+//            )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-
-            ) {
-                ButtonComposable(
-                    "Komunitas",
-                    onClick = { TODO() },
-                    isHighlighted = true,
-                    modifier = Modifier.weight(1f)
-                )
-                ButtonComposable(
-                    "Artikel",
-                    onClick = { TODO() },
-                    isHighlighted = false,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 8.dp),
+//                verticalAlignment = Alignment.CenterVertically,
+//                horizontalArrangement = Arrangement.Center
+//
+//            )
+//            {
+//                ButtonComposable(
+//                    "Komunitas",
+//                    onClick = { TODO() },
+//                    isHighlighted = true,
+//                    modifier = Modifier.weight(1f)
+//                )
+//                ButtonComposable(
+//                    "Artikel",
+//                    onClick = { TODO() },
+//                    isHighlighted = false,
+//                    modifier = Modifier.weight(1f)
+//                )
+//            }
 
             if (selectedImgUri == null) {
                 IconButton(
@@ -131,6 +134,7 @@ fun UploadPage(
                         .fillMaxWidth()
                         .height(100.dp)
                         .padding(bottom = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))//hdeh
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -142,7 +146,9 @@ fun UploadPage(
                 AsyncImage(
                     model = selectedImgUri,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp)),
                     contentScale = ContentScale.Crop
                 )
                 Button(
@@ -160,57 +166,57 @@ fun UploadPage(
 
 
             // TextField Judul
-            TextField(
+            OutlinedTextField(
                 value = title,
                 onValueChange = { viewModel.onTitleChange(it) },
                 label = { Text("Judul") },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
+                    .fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(35),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
+//                colors = TextFieldDefaults.colors(
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                )
             )
 
             Spacer(modifier = modifier.height(16.dp))
 
             // TextField Lokasi
-            TextField(
-                value = location,
-                onValueChange = { viewModel.onLocationChange(it) },
-                label = { Text("Lokasi") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                singleLine = true,
-                shape = RoundedCornerShape(35),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
+//            OutlinedTextField(
+//                value = location,
+//                onValueChange = { viewModel.onLocationChange(it) },
+//                label = { Text("Lokasi") },
+//                modifier = Modifier
+//                    .fillMaxWidth(),
+//                singleLine = true,
+//                shape = RoundedCornerShape(35),
+//                colors = TextFieldDefaults.colors(
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                )
+//            )
 
-            Spacer(modifier = modifier.height(16.dp))
+//            Spacer(modifier = modifier.height(16.dp))
 
             // TextField Deskripsi mengisi sisa ruang
-            TextField(
+            OutlinedTextField(
                 value = description,
                 onValueChange = { viewModel.onDescriptionChange(it) },
                 label = { Text("Deskripsi") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // Mengisi sisa ruang
-                    .padding(bottom = 16.dp),
+//                    .weight(1f) // Mengisi sisa ruang
+                    .height(200.dp),
+//                    .padding(bottom = 16.dp),
                 singleLine = false, // Bisa multi-line untuk deskripsi panjang
                 shape = RoundedCornerShape(16.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
+//                colors = TextFieldDefaults.colors(
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                )
             )
+            Spacer(modifier = modifier.height(16.dp))
 
             Box(
                 modifier = Modifier
@@ -239,7 +245,7 @@ fun UploadPage(
                     },
                     isHighlighted = true,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 8.dp)
                         .fillMaxWidth()
                 )
 
@@ -251,5 +257,4 @@ fun UploadPage(
 @Preview
 @Composable
 private fun UploadPagePrev() {
-
 }
