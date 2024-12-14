@@ -16,7 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hope.chat.HomeChatClientPage
 import com.example.hope.chat.HomeChatPsikologPage
-import com.example.hope.chat.HomeChatViewModel
+import com.example.hope.chat.GetchRoleViewModel
 import com.example.hope.ui.composables.bottomNav.BottomNavComposable
 //import com.example.hope.ui.composables.post.PostList
 import com.example.hope.ui.composables.post.getSavedPosts
@@ -30,7 +30,7 @@ fun HomePage(
     onProfileClick: () -> Unit,
     navController: NavController,
     initialTab: Screen = Screen.Home,
-    homeChatViewModel: HomeChatViewModel = viewModel(),
+    getchRoleViewModel: GetchRoleViewModel = viewModel(),
     homePageViewModel: HomePageViewModel = viewModel()
 ) {
     var currentScreen by remember { mutableStateOf(initialTab) }
@@ -40,7 +40,7 @@ fun HomePage(
     val posts by homePageViewModel.postList.collectAsState()
 
     // Mengambil role pengguna
-    val userRole by homeChatViewModel.userRole.observeAsState()
+    val userRole by getchRoleViewModel.userRole.observeAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
