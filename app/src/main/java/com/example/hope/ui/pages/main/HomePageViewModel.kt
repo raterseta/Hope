@@ -16,42 +16,42 @@ class HomePageViewModel : ViewModel() {
         fetchPosts()
     }
 
-fun fetchPosts() {
-    val postsRef = database.getReference("Posts")
-    val usersRef = database.getReference("users")
+    fun fetchPosts() {
+        val postsRef = database.getReference("Posts")
+        val usersRef = database.getReference("users")
 
-    postsRef.get().addOnSuccessListener { snapshot ->
-        val posts = snapshot.children.mapNotNull { it.getValue(PostData::class.java) }
+        postsRef.get().addOnSuccessListener { snapshot ->
+            val posts = snapshot.children.mapNotNull { it.getValue(PostData::class.java) }
 
-        // Daftar untuk menyimpan semua tugas pengambilan data user
-        val postUpdates = posts.map { post ->
-            val userRef = usersRef.child(post.userID)
-            userRef.get().continueWith { task ->
-                if (task.isSuccessful) {
-                    val userSnapshot = task.result
-                    val username = userSnapshot.child("username").getValue(String::class.java) ?: "Unknown"
-                    val profilePicture = userSnapshot.child("avatarID").getValue(Int::class.java) ?: null
+            // Daftar untuk menyimpan semua tugas pengambilan data user
+            val postUpdates = posts.map { post ->
+                val userRef = usersRef.child(post.userID)
+                userRef.get().continueWith { task ->
+                    if (task.isSuccessful) {
+                        val userSnapshot = task.result
+                        val username = userSnapshot.child("username").getValue(String::class.java) ?: "Unknown"
+                        val profilePicture = userSnapshot.child("avatarID").getValue(Int::class.java) ?: null
 
-                    // Perbarui data post
-                    post.username = username
-                    post.profilePicture = profilePicture
-                }
-                post
-            }
-        }
-
-        // Tunggu semua pembaruan selesai
-        postUpdates.forEach { task ->
-            task.addOnSuccessListener {
-                if (postUpdates.all { it.isSuccessful }) {
-                    _postList.value = postUpdates.mapNotNull { it.result }
+                        // Perbarui data post
+                        post.username = username
+                        post.profilePicture = profilePicture
+                    }
+                    post
                 }
             }
+
+            // Tunggu semua pembaruan selesai
+            postUpdates.forEach { task ->
+                task.addOnSuccessListener {
+                    if (postUpdates.all { it.isSuccessful }) {
+                        _postList.value = postUpdates.mapNotNull { it.result }
+                    }
+                }
+            }
+        }.addOnFailureListener { exception ->
+            Log.e("HomePageViewModel", "Error fetching posts: ${exception.message}")
         }
-    }.addOnFailureListener { exception ->
-        Log.e("HomePageViewModel", "Error fetching posts: ${exception.message}")
     }
-}
 
 
 }
