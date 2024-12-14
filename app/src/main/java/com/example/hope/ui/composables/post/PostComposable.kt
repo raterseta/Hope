@@ -1,10 +1,11 @@
 package com.example.hope.ui.composables.post
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +28,8 @@ fun PostComposable(
     isBookmarked: Boolean,
     onBookmarkClick: () -> Unit
 ) {
+    var isExpanded by remember { mutableStateOf(false) } // State untuk deskripsi
+
     val profilePicturePainter: Painter = profilePicture?.let {
         painterResource(it)
     } ?: painterResource(R.drawable.avatar3) // Pastikan `avatar3` ada di res/drawable
@@ -42,6 +45,7 @@ fun PostComposable(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
+        // Header: Foto profil dan username
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,6 +68,8 @@ fun PostComposable(
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
+
+        // Gambar postingan
         Image(
             painter = postImagePainter,
             contentDescription = "Post Photo",
@@ -72,8 +78,10 @@ fun PostComposable(
                 .fillMaxWidth()
                 .aspectRatio(1f)
         )
+
         Spacer(modifier = Modifier.size(8.dp))
 
+        // Deskripsi dan tombol bookmark
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -88,12 +96,22 @@ fun PostComposable(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = description,
+                    text = if (isExpanded) description else description.take(100),
                     style = MaterialTheme.typography.titleSmall,
-                    maxLines = 2,
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.fillMaxWidth()
                 )
+                if (description.length > 100) {
+                    Text(
+                        text = if (isExpanded) "Tampilkan lebih sedikit" else "Baca selengkapnya",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .clickable { isExpanded = !isExpanded }
+                            .padding(top = 4.dp)
+                    )
+                }
             }
 
             IconButton(onClick = onBookmarkClick) {
@@ -107,4 +125,3 @@ fun PostComposable(
         }
     }
 }
-
