@@ -27,7 +27,7 @@ fun HomePage(
 ) {
     var currentScreen by remember { mutableStateOf(initialTab) }
 
-    homePageViewModel.fetchPosts()
+
     val posts by homePageViewModel.postList.collectAsState()
 
     val userRole by getchRoleViewModel.userRole.observeAsState()
@@ -58,7 +58,10 @@ fun HomePage(
         }
     ) { innerPadding ->
         when (currentScreen) {
-            Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
+            Screen.Home -> PostList(
+                posts = posts,
+                modifier = Modifier.padding(innerPadding),
+            )
             Screen.Add -> UploadPage(innerPadding = innerPadding)
             Screen.Chat -> {
                 when (userRole) {

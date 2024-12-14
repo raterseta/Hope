@@ -174,28 +174,6 @@ fun UploadPage(
                     .fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(35),
-//                colors = TextFieldDefaults.colors(
-//                    focusedIndicatorColor = Color.Transparent,
-//                    unfocusedIndicatorColor = Color.Transparent
-//                )
-            )
-
-            Spacer(modifier = modifier.height(16.dp))
-
-            // TextField Lokasi
-//            OutlinedTextField(
-//                value = location,
-//                onValueChange = { viewModel.onLocationChange(it) },
-//                label = { Text("Lokasi") },
-//                modifier = Modifier
-//                    .fillMaxWidth(),
-//                singleLine = true,
-//                shape = RoundedCornerShape(35),
-//                colors = TextFieldDefaults.colors(
-//                    focusedIndicatorColor = Color.Transparent,
-//                    unfocusedIndicatorColor = Color.Transparent
-//                )
-//            )
 
 //            Spacer(modifier = modifier.height(16.dp))
 
@@ -211,10 +189,7 @@ fun UploadPage(
 //                    .padding(bottom = 16.dp),
                 singleLine = false, // Bisa multi-line untuk deskripsi panjang
                 shape = RoundedCornerShape(16.dp),
-//                colors = TextFieldDefaults.colors(
-//                    focusedIndicatorColor = Color.Transparent,
-//                    unfocusedIndicatorColor = Color.Transparent
-//                )
+
             )
             Spacer(modifier = modifier.height(16.dp))
 
