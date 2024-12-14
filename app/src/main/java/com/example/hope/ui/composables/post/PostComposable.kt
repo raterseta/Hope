@@ -112,22 +112,3 @@ fun PostComposable(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewPostComposable() {
-//    val dummyProfilePicture = painterResource(id = R.drawable.elaina_stiker) // Replace with your drawable
-//    val dummyUploadedPhoto = painterResource(id = R.drawable.shrimp) // Replace with your drawable
-//
-//    var isBookmarked by remember { mutableStateOf(false) }
-//
-//    PostComposable(
-//        profilePicture = dummyProfilePicture,
-//        username = "Elaina",
-//        photo = dummyUploadedPhoto,
-//        title = "Beautiful Shrimp",
-//        description = "Captured this amazing sunset during my trip to Bali!, so cute 10/10, will eat again,",
-//        isBookmarked = isBookmarked,
-//        onBookmarkClick = { isBookmarked = !isBookmarked }
-//    )
-//}

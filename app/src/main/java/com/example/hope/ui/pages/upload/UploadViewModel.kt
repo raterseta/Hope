@@ -55,7 +55,7 @@ class UploadViewModel: ViewModel() {
         val userId = currentUser.uid
 
         // Mengambil data pengguna dari Firebase Realtime Database
-        val userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(userId)
         userRef.get().addOnSuccessListener { userSnapshot ->
             val username = userSnapshot.child("username").getValue(String::class.java) ?: "Unknown"
             val avatarID = userSnapshot.child("avatarID").getValue(Int::class.java) // Misalnya avatarID adalah URL foto
