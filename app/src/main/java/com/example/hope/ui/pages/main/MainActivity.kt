@@ -7,20 +7,25 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.hope.boarding.BoardPage
+import com.example.hope.chat.ChatClienttoPsikologPage
+import com.example.hope.chat.ChatClienttoPsikologViewModel
+import com.example.hope.chat.ChatPsikologtoClientPage
 import com.example.hope.chat.ContentChatPage
 import com.example.hope.chat.HomeChatClientPage
 import com.example.hope.chat.HomeChatPsikologPage
 import com.example.hope.logo.LogoPage
 import com.example.hope.ui.pages.login.LoginPage
 import com.example.hope.ui.pages.profile.ProfileComposable
-import com.example.hope.ui.pages.register.RegisterComposable
+import com.example.hope.ui.pages.register.RegisterPage
 import com.example.hope.ui.pages.register.UserData
+import com.example.hope.ui.pages.register.UserDataInput
 import com.example.hope.ui.theme.HopeTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
@@ -55,10 +60,15 @@ fun AppNavHost() {
     NavHost(navController = navController, startDestination = startDestination) {
 
         composable("registerPage"){
-            RegisterComposable(
-                onBackClick = { navController.navigate("logoPage") },
-                onCompleteRegistration = { navController.navigate("homePage") },
-                onLoginClick = { navController.navigate("loginPage") }
+            RegisterPage(
+                onBackClick = { navController.navigate("boardPage") },
+                onLoginClick = { navController.navigate("loginPage") },
+                onSuccess = {navController.navigate("userDataInput")},
+            )
+        }
+        composable("userDataInput"){
+            UserDataInput(
+                onSaveClick = { navController.navigate("homePage") },
             )
         }
         composable("loginPage") {
@@ -101,15 +111,56 @@ fun AppNavHost() {
 //        composable("contentChat") { backStackEntry ->
 //            ContentChatPage(navController = navController)
 //        }
-        composable(
-            "contentChat/{activePsikolog}",
-            arguments = listOf(navArgument("activePsikolog") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val gson = Gson()
-            val psikologJson = backStackEntry.arguments?.getString("activePsikolog")
-            val activePsikolog = gson.fromJson(psikologJson, UserData::class.java)
+//        composable(
+//            "contentChat/{activePsikolog}",
+//            arguments = listOf(navArgument("activePsikolog") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val gson = Gson()
+//            val psikologJson = backStackEntry.arguments?.getString("activePsikolog")
+//            val activePsikolog = gson.fromJson(psikologJson, UserData::class.java)
+//
+//            ContentChatPage(navController = navController, activePsikolog = activePsikolog)
+//        }
+        composable("chatClienttoPsikologPage/{chatId}/{activePsikolog}") { backStackEntry ->
+            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+            val activePsikologJson = backStackEntry.arguments?.getString("activePsikolog") ?: ""
 
-            ContentChatPage(navController = navController, activePsikolog = activePsikolog)
+            // Deserialize JSON menjadi UserData
+            val gson = Gson()
+            val activePsikolog = gson.fromJson(activePsikologJson, UserData::class.java)
+
+            // Kirim ke ContentChatPage
+            ChatClienttoPsikologPage(chatId = chatId, activePsikolog = activePsikolog, navController = navController)
+        }
+
+        composable("chatPsikologtoClientPage/{chatId}/{activeClient}") { backStackEntry ->
+            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+            val activeClientJson = backStackEntry.arguments?.getString("activeClient") ?: ""
+
+            // Log untuk memeriksa data yang diterima
+            println("Received activeClientJson: $activeClientJson")
+
+            // Deserialize JSON menjadi UserData
+            val gson = Gson()
+            val activeClient = try {
+                gson.fromJson(activeClientJson, UserData::class.java)
+            } catch (e: Exception) {
+                println("Error deserializing activeClient: ${e.message}")
+                null // Menghindari crash jika deserialisasi gagal
+            }
+
+            // Log jika deserialisasi gagal
+            if (activeClient == null) {
+                println("Failed to deserialize activeClient")
+            }
+
+            // Kirim ke ContentChatPage
+            if (activeClient != null) {
+                ChatPsikologtoClientPage(chatId = chatId, activeClient = activeClient, navController = navController)
+            } else {
+                // Tampilkan pesan error atau lakukan fallback
+                println("Error: activeClient is null")
+            }
         }
 
 

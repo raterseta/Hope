@@ -1,10 +1,19 @@
 package com.example.hope.ui.pages.register
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.hope.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,18 +34,6 @@ class RegisterViewModel: ViewModel() {
 
     private val _confirmedPasswordVisible = MutableStateFlow(false)
     val confirmedPasswordVisible: StateFlow<Boolean> get() = _confirmedPasswordVisible
-
-    private val _selectedAvatar = MutableStateFlow<Int?>(null)
-    val selectedAvatar: StateFlow<Int?> get() = _selectedAvatar
-
-    private val _username = MutableStateFlow("")
-    val username: StateFlow<String> = _username.asStateFlow()
-
-    private val _birthDate = MutableStateFlow("")
-    val birthDate: StateFlow<String> = _birthDate.asStateFlow()
-
-    private val _phoneNumber = MutableStateFlow("")
-    val phoneNumber: StateFlow<String> = _phoneNumber.asStateFlow()
 
     //fun
     fun onEmailChange(newEmail: String) {
@@ -63,116 +60,93 @@ class RegisterViewModel: ViewModel() {
         _confirmedPasswordVisible.value = !_confirmedPasswordVisible.value
     }
 
-    fun selectAvatar(avatarId: Int) {
-        _selectedAvatar.value = avatarId
-    }
-
-    fun confirmSelection(): Int? {
-        return _selectedAvatar.value
-    }
-
-    fun updateUsername(newUsername: String) {
-        _username.value = newUsername
-    }
-
-    fun updateBirthDate(newBirthDate: String) {
-        _birthDate.value = newBirthDate
-    }
-
-    fun updatePhoneNumber(newPhoneNumber: String) {
-        _phoneNumber.value = newPhoneNumber
-    }
-
-    fun validateAndSubmitUserData(): Boolean {
-        return username.value.isNotBlank() &&
-                birthDate.value.isNotBlank() &&
-                phoneNumber.value.isNotBlank()
-    }
-
-    // Fungsi untuk mereset data
-    fun resetData() {
-        _username.value = ""
-        _birthDate.value = ""
-        _phoneNumber.value = ""
-    }
-
-    fun printUserData() {
-        Log.d("RegisterViewModel", "Email: ${_email.value}")
-        Log.d("RegisterViewModel", "Password: ${_password.value}")
-        Log.d("RegisterViewModel", "Confirmed Password: ${_confirmedPassword.value}")
-        Log.d("RegisterViewModel", "Username: ${_username.value}")
-        Log.d("RegisterViewModel", "Birth Date: ${_birthDate.value}")
-        Log.d("RegisterViewModel", "Phone Number: ${_phoneNumber.value}")
-        Log.d("RegisterViewModel", "Selected Avatar: ${_selectedAvatar.value}")
-    }
-
     //firebase
-    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private val _authState = MutableLiveData<AuthState>()
-    val authState: LiveData<AuthState> = _authState
+    // MutableStateFlow to handle auth state
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
+    val authState: StateFlow<AuthState> = _authState
 
-    init{
+    init {
         checkAuthStatus()
     }
 
-    fun checkAuthStatus(){
-        if(auth.currentUser == null){
+    fun checkAuthStatus() {
+        // You can update the MutableStateFlow here
+        if (auth.currentUser == null) {
             _authState.value = AuthState.Unauthenticated
-        }else{
+        } else {
             _authState.value = AuthState.Authenticated
         }
     }
 
-    fun register(){
+    fun register() {
         if (_email.value.isBlank() || _password.value.isBlank()) {
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
-        }else if(!validatePasswordMatch()){
+        } else if (!validatePasswordMatch()) {
             _authState.value = AuthState.Error("Confirm password not same")
             return
         }
 
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(_email.value, _password.value)
-            .addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    val userID = auth.currentUser?.uid
-                    if(userID != null && validateAndSubmitUserData()){
-                        val database = FirebaseDatabase.getInstance()
-                        val usersRef = database.getReference("users")
-                        val userData = UserData(
-                            userID = userID,
-                            email = _email.value,
-                            username = _username.value,
-                            birthDate = _birthDate.value,
-                            phoneNumber = _phoneNumber.value,
-                            avatarID = _selectedAvatar.value
-                        )
-                        usersRef.child(userID).setValue(userData)
-                            .addOnSuccessListener {
-                                _authState.value = AuthState.Authenticated
-                            }
-                            .addOnFailureListener{ e ->
-                                _authState.value = AuthState.Error("Failed to save user data: ${e.message}")
-                            }
-                    }else{
-                        _authState.value = AuthState.Error("User ID is null")
-                    }
-                }else{
-                    _authState.value = AuthState.Error(task.exception?.message?: "Something went Wrong")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _authState.value = AuthState.Authenticated
+                } else {
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
-    fun saveUserData(){
 
-    }
+        private lateinit var googleSignInClient: GoogleSignInClient
 
-    fun signout(){
-        auth.signOut()
-        _authState.value = AuthState.Unauthenticated
-    }
+        // Metode untuk membuat GoogleSignInClient
+        fun createGoogleSignInClient(context: Context): GoogleSignInClient {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+
+            return GoogleSignIn.getClient(context, gso)
+        }
+
+        // Metode untuk memproses hasil Google Sign-In
+        fun handleGoogleSignInResult(data: Intent?, context: Context) {
+            try {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account = task.getResult(ApiException::class.java)
+
+                val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+
+                // Autentikasi dengan Firebase
+                auth.signInWithCredential(credential)
+                    .addOnCompleteListener { authTask ->
+                        if (authTask.isSuccessful) {
+                            // Login berhasil
+                            _authState.value = AuthState.Authenticated
+                        } else {
+                            // Login gagal
+                            _authState.value = AuthState.Error(
+                                authTask.exception?.message ?: "Google Sign-In failed"
+                            )
+                        }
+                    }
+            } catch (e: ApiException) {
+                // Tangani error
+                _authState.value = AuthState.Error("Google Sign-In failed: ${e.message}")
+            }
+        }
+
+        // Metode untuk memulai proses Google Sign-In
+        fun signInWithGoogle(context: Context, launcher: ActivityResultLauncher<Intent>) {
+            googleSignInClient = createGoogleSignInClient(context)
+            val signInIntent = googleSignInClient.signInIntent
+            launcher.launch(signInIntent)
+        }
 }
+
 
 sealed class AuthState{
     object Authenticated : AuthState()

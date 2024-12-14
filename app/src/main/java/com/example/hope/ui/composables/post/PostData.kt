@@ -10,6 +10,4 @@ data class PostData(
     var location: String = "",
     var description: String = "",
     var isBookmarked: Boolean = false
-) {
-    // Constructor tanpa argumen secara otomatis tersedia dengan nilai default di atas
-}
+)
