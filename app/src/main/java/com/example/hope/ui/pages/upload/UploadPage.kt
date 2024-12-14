@@ -26,7 +26,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,13 +38,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.hope.ui.composables.ButtonComposable
@@ -69,7 +69,7 @@ fun UploadPage(
             onResult = { uri -> selectedImgUri = uri }
         )
         val title by viewModel.title.collectAsState()
-//        val location by viewModel.location.collectAsState()
+        val location by viewModel.location.collectAsState()
         val description by viewModel.description.collectAsState()
 
         val context = LocalContext.current
@@ -85,7 +85,7 @@ fun UploadPage(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 64.dp),
+                    .padding(vertical = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -95,33 +95,20 @@ fun UploadPage(
                 )
             }
 
-//            Text(
-//                text = "Jenis Postingan",
-//                modifier = Modifier.padding(vertical = 8.dp)
-//            )
+            Text(
+                text = "",
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
 
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 8.dp),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Center
-//
-//            )
-//            {
-//                ButtonComposable(
-//                    "Komunitas",
-//                    onClick = { TODO() },
-//                    isHighlighted = true,
-//                    modifier = Modifier.weight(1f)
-//                )
-//                ButtonComposable(
-//                    "Artikel",
-//                    onClick = { TODO() },
-//                    isHighlighted = false,
-//                    modifier = Modifier.weight(1f)
-//                )
-//            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+
+            ) {
+            }
 
             if (selectedImgUri == null) {
                 IconButton(
@@ -134,7 +121,6 @@ fun UploadPage(
                         .fillMaxWidth()
                         .height(100.dp)
                         .padding(bottom = 16.dp)
-                        .clip(RoundedCornerShape(16.dp))//hdeh
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -146,9 +132,7 @@ fun UploadPage(
                 AsyncImage(
                     model = selectedImgUri,
                     contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
                 Button(
@@ -165,33 +149,102 @@ fun UploadPage(
             // IconButton dengan ukuran lebih besar dan berbentuk kotak
 
 
-            // TextField Judul
-            OutlinedTextField(
-                value = title,
-                onValueChange = { viewModel.onTitleChange(it) },
-                label = { Text("Judul") },
-                modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true,
-                shape = RoundedCornerShape(35),
-
-//            Spacer(modifier = modifier.height(16.dp))
-
-            // TextField Deskripsi mengisi sisa ruang
-            OutlinedTextField(
-                value = description,
-                onValueChange = { viewModel.onDescriptionChange(it) },
-                label = { Text("Deskripsi") },
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-//                    .weight(1f) // Mengisi sisa ruang
-                    .height(200.dp),
-//                    .padding(bottom = 16.dp),
-                singleLine = false, // Bisa multi-line untuk deskripsi panjang
-                shape = RoundedCornerShape(16.dp),
+                    .padding(16.dp), // Padding untuk memberikan ruang di sekitar
+                verticalArrangement = Arrangement.spacedBy(16.dp) // Menambahkan spasi antar elemen
+            ) {
+                // TextField Judul
+                Text(text = "Judul", fontSize = 24.sp)
+                TextField(
+                    value = title,
+                    onValueChange = { viewModel.onTitleChange(it) },
+                    placeholder = {
+                        Text(
+                            text = "Masukkan Judul",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(35),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
+                )
 
-            )
-            Spacer(modifier = modifier.height(16.dp))
+                // TextField Lokasi
+                Text(text = "Lokasi", fontSize = 24.sp)
+                TextField(
+                    value = location,
+                    onValueChange = { viewModel.onLocationChange(it) },
+                    placeholder = {
+                        Text(
+                            text = "Masukkan Lokasi",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(35),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
+                )
+
+                // TextField Deskripsi
+                Text(text = "Deskripsi", fontSize = 24.sp)
+                TextField(
+                    value = description,
+                    onValueChange = { viewModel.onDescriptionChange(it) },
+                    placeholder = {
+                        Text(
+                            text = "Masukkan Deskripsi",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(35),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
+                )
+            }
+
+
+
 
             Box(
                 modifier = Modifier
@@ -220,7 +273,7 @@ fun UploadPage(
                     },
                     isHighlighted = true,
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 16.dp)
                         .fillMaxWidth()
                 )
 
@@ -232,4 +285,5 @@ fun UploadPage(
 @Preview
 @Composable
 private fun UploadPagePrev() {
+
 }
