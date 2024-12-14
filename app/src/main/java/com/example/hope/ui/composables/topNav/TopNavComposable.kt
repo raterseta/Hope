@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -62,7 +61,11 @@ fun TopNavComposable(
 ) {
     val userProfile by viewModel.userProfile.collectAsState()
 
-
+    val items = listOf(
+        FilterButton.Official,
+        FilterButton.Komunitas,
+        FilterButton.Article,
+    )
     var selectedIndex by remember { mutableStateOf(0) }
 
     Surface(
@@ -106,7 +109,7 @@ fun TopNavComposable(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Row 2: Search Bar
             TextField(
@@ -135,14 +138,24 @@ fun TopNavComposable(
 
             // Row 3: Filter Buttons
             Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp) // Tinggi baris (opsional, disesuaikan kebutuhan)
+                    .padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Spacer(modifier = Modifier.weight(1f))
+                items.forEachIndexed { index, item ->
+                    ButtonComposable(
+                        text = item.text,
+                        onClick = {
+                            selectedIndex = index
+                            onFilterClick(item)
+                        },
+                        isHighlighted = index == selectedIndex,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
-
         }
     }
 }
