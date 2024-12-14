@@ -29,6 +29,7 @@ fun HomePage(
 
 
     val posts by homePageViewModel.postList.collectAsState()
+    val savedPosts by homePageViewModel.savedPostList.collectAsState()
 
     val userRole by getchRoleViewModel.userRole.observeAsState()
 
@@ -76,10 +77,10 @@ fun HomePage(
                     else -> Text("Loading...", modifier = Modifier.padding(innerPadding))
                 }
             }
-            Screen.Bookmark -> {
-                val savedPosts = getSavedPosts()
-                Text("Saved Posts", modifier = Modifier.padding(innerPadding))
-            }
+            Screen.Bookmark -> PostList(
+                posts = savedPosts,
+                modifier = Modifier.padding(innerPadding),
+            )
         }
     }
 }

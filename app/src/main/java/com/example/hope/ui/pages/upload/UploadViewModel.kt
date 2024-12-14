@@ -64,7 +64,7 @@ class UploadViewModel: ViewModel() {
 
             val username = userSnapshot.child("username").getValue(String::class.java) ?: "Unknown"
 //            val avatarID = userSnapshot.child("avatarID").getValue(String::class.java)?.toIntOrNull() // Sesuaikan tipe datanya
-            val avatarID = userSnapshot.child("avatarID").getValue(String::class.java)?.toIntOrNull()
+            val avatarID = userSnapshot.child("avatarID").getValue(Int::class.java)
 
             if (avatarID == null) {
                 onFailure("User profile picture not found")
