@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.hope.chat.ContentChatPage
 //import com.example.hope.chat.HomeChatPage
 
 data class BottomNavItemOldd(

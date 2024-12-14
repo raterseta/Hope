@@ -57,8 +57,19 @@ class UploadViewModel: ViewModel() {
         // Mengambil data pengguna dari Firebase Realtime Database
         val userRef = FirebaseDatabase.getInstance().getReference("users").child(userId)
         userRef.get().addOnSuccessListener { userSnapshot ->
+            if (!userSnapshot.exists()) {
+                onFailure("User data not found in database")
+                return@addOnSuccessListener
+            }
+
             val username = userSnapshot.child("username").getValue(String::class.java) ?: "Unknown"
-            val avatarID = userSnapshot.child("avatarID").getValue(Int::class.java) // Misalnya avatarID adalah URL foto
+//            val avatarID = userSnapshot.child("avatarID").getValue(String::class.java)?.toIntOrNull() // Sesuaikan tipe datanya
+            val avatarID = userSnapshot.child("avatarID").getValue(String::class.java)?.toIntOrNull()
+
+            if (avatarID == null) {
+                onFailure("User profile picture not found")
+                return@addOnSuccessListener
+            }
 
             val fileName = "${System.currentTimeMillis()}_${imageUri.lastPathSegment}"
             val imgRef = storage.child(fileName)
@@ -77,9 +88,10 @@ class UploadViewModel: ViewModel() {
                             location = _location.value,
                             description = _description.value,
                             isBookmarked = false,
-                            username = username, // Dapatkan username dari database
-                            profilePicture = avatarID // Dapatkan avatarID dari database
+                            username = username,
+                            profilePicture = avatarID
                         )
+
 
                         // Simpan post data ke database
                         database.child(postId).setValue(postData)

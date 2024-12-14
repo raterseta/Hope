@@ -25,7 +25,6 @@ class HomePageViewModel : ViewModel() {
 
     fun fetchPostsRealTime() {
         val postsRef = database.getReference("Posts")
-
         postsListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val posts = snapshot.children.mapNotNull { postSnapshot ->
@@ -65,5 +64,4 @@ class HomePageViewModel : ViewModel() {
         }
     }
 }
-
 

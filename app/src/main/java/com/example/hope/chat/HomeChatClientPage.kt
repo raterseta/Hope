@@ -33,12 +33,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hope.R
 import com.example.hope.ui.composables.template.ProfileField
 import com.example.hope.ui.composables.topNav.TopNavChatAnotherUserComposable
 import com.example.hope.ui.composables.topNav.TopNavChatComposable
+import com.example.hope.ui.composables.topNav.TopNavViewModel
 import com.google.gson.Gson
+import java.util.UUID
 
 //import com.example.hope.ui.composables.topNav.TopNavChatAnotherUserComposable
 
@@ -47,9 +50,10 @@ import com.google.gson.Gson
 fun HomeChatClientPage(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: GeneratePsikologViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-) {
-    val poppins_regular = FontFamily(Font(R.font.poppins_regular))
+    generatePsikologViewModel: GeneratePsikologViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    currentUserViewModel: TopNavViewModel = viewModel(),
+
+    ) {
     val poppins_bold = FontFamily(Font(R.font.poppins_bold))
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -58,16 +62,17 @@ fun HomeChatClientPage(
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
-//    val currentTime by viewModel.currentTime.collectAsState() // Observe currentTime
-    val activePsikolog by viewModel.activePsikolog.collectAsState()
+    val activePsikolog by generatePsikologViewModel.activePsikolog.collectAsState()
+    val currentUser by currentUserViewModel.userProfile.collectAsState()
+
+    val chatId = UUID.randomUUID().toString()
 
 
 
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
         // Top navigation
-        TopNavChatComposable()
+        TopNavChatAnotherUserComposable(currentUser)
 
-//        TopNavChatAnotherUserComposable(activePsikolog)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -75,35 +80,34 @@ fun HomeChatClientPage(
         ) {
             // Display active psychologist if available
             if (activePsikolog != null && activePsikolog!!.avatarID != null) {
+//                val activePsikologID = activePsikolog?.userID
                 Column(
                     modifier = Modifier
                         .background(Color(0xFFDEE5D4), shape = RoundedCornerShape(screenWidth * 0.03f))
                         .fillMaxWidth()
-//                        .clickable { navController.navigate("contentChat") }
                         .clickable {
-                            val gson = Gson()
-                            val psikologJson = gson.toJson(activePsikolog)
-                            navController.navigate("contentChat/$psikologJson")
+                            // Convert activePsikolog to JSON string for navigation
+                            val gson= Gson()
+                            val activePsikologJson = gson.toJson(activePsikolog)
+
+//                             Navigate to ContentChatPage, passing both chatId and serialized activePsikolog
+//                            navController.navigate("homePage")
+                            navController.navigate("chatClienttoPsikologPage/$chatId/$activePsikologJson")
+
                         }
 
                         .padding(screenWidth * 0.05f)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         val avatarID = activePsikolog?.avatarID?: R.drawable.avatar1 // Fallback ke avatar default
-                        Log.d("AvatarDebug", "Using avatar ID: $avatarID")
-                        Log.d("Debug", "Active psikolog: $activePsikolog")
-                        Log.d("Debug", "Avatar ID: ${activePsikolog?.avatarID}")
                         //STATIK -> ERROR RENDERING AVATARID TO IMAGE
                         Image(
-                            painter = painterResource(id = R.drawable.avatar1),
+                            painter = painterResource(id = avatarID),
                             contentDescription = "Psikolog Avatar",
                             modifier = Modifier
                                 .size(screenWidth * 0.17f)
                                 .clip(CircleShape)
                         )
-
-
-
                         Spacer(modifier = Modifier.width(screenWidth * 0.07f))
 
                         Column {
@@ -140,7 +144,7 @@ fun HomeChatClientPage(
         // Floating action button to generate a new psikolog
         Box(modifier = Modifier.fillMaxSize()) {
             FloatingActionButton(
-                onClick = { viewModel.generateActivePsikolog() },
+                onClick = { generatePsikologViewModel.generateActivePsikolog() },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = screenWidth * 0.25f, end = screenWidth * 0.05f),

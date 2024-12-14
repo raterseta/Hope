@@ -38,7 +38,7 @@ fun ButtonComposable(
         modifier = modifier
 //            .widthIn(min = 150.dp)
             .fillMaxWidth()
-            .padding(8.dp) ,
+            .padding(8.dp),
         border = if (!isHighlighted) BorderStroke(
             width = 2.dp,
             color = DarkBlue

@@ -175,9 +175,7 @@ fun UploadPage(
                 singleLine = true,
                 shape = RoundedCornerShape(35),
 
-            )
-
-            Spacer(modifier = modifier.height(16.dp))
+//            Spacer(modifier = modifier.height(16.dp))
 
             // TextField Deskripsi mengisi sisa ruang
             OutlinedTextField(
