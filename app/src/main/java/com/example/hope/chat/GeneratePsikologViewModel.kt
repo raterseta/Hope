@@ -126,8 +126,8 @@ class GeneratePsikologViewModel(application: Application) : AndroidViewModel(app
             val snapshot = database.get().await()
             val psikologList = snapshot.children.mapNotNull { it.getValue(UserData::class.java) }
                 .filter { user ->
-                    user.role == Role.Psikolog && isPsikologInactive(user)
-//                    user.role == Role.Psikolog && isPsikologActive(user)
+                   // user.role == Role.Psikolog && isPsikologInactive(user)
+                    user.role == Role.Psikolog && isPsikologActive(user)
 
                 }
 

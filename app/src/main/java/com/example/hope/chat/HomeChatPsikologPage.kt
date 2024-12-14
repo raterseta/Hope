@@ -266,89 +266,105 @@ fun HomeChatPsikologPage(
     getClientViewModel: GetClientRefreshViewModel = viewModel(),
     currentUserViewModel: TopNavViewModel = viewModel(),
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
     val currentUser by currentUserViewModel.userProfile.collectAsState()
     val clientList by getClientViewModel.clientList.collectAsState() // State client list
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
 
     val chatId = UUID.randomUUID().toString()
 
     // Header atau navigasi
-    TopNavChatComposable()
+//    TopNavChatComposable()
 
     // Log clientList untuk debugging
     println("Client list size: ${clientList.size}") // Debugging client list size
 
-    Column(modifier = Modifier.fillMaxSize().padding(top = 110.dp, start = 16.dp, end = 16.dp)) {
+//    Column(modifier = Modifier.fillMaxSize().padding(top = 110.dp, start = 16.dp, end = 16.dp)) {
+    Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
 
-        // Hanya panggil getAllClients jika clientList kosong
-        if (clientList.isEmpty()) {
-            currentUser?.let {
-                getClientViewModel.getAllClients(psikologID = it.userID)
+        TopNavChatComposable()
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidth * 0.05f, vertical = screenWidth * 0.03f)
+        ){
+            // Hanya panggil getAllClients jika clientList kosong
+            if (clientList.isEmpty()) {
+                currentUser?.let {
+                    getClientViewModel.getAllClients(psikologID = it.userID)
+                }
             }
-        }
 
-        // Daftar client
-        if (clientList.isNotEmpty()) {
-            clientList.forEach { client ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .background(Color(0xFFDEE5D4), shape = RoundedCornerShape(8.dp))
-                        .clickable {
-                            // Convert selected client to JSON string for navigation
-                            val gson = Gson()
-                            val activeClientJson = gson.toJson(client)
+            // Daftar client
+            if (clientList.isNotEmpty()) {
+                clientList.forEach { client ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .background(Color(0xFFDEE5D4), shape = RoundedCornerShape(8.dp))
+                            .clickable {
+                                // Convert selected client to JSON string for navigation
+                                val gson = Gson()
+                                val activeClientJson = gson.toJson(client)
 
-                            // Log untuk memeriksa data yang akan diteruskan
-                            println("Navigating with activeClientJson: $activeClientJson")
+                                // Log untuk memeriksa data yang akan diteruskan
+                                println("Navigating with activeClientJson: $activeClientJson")
 
-                            // Navigate to ContentChatPage, passing both chatId and serialized activeClient
-                            navController.navigate("chatPsikologtoClientPage/$chatId/$activeClientJson")
-                        }
-                        .padding(16.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Render image using avatarID
-                        val avatarId = client.avatarID ?: 0 // Make sure to access avatarID directly
-                        val avatarResource = when {
-                            avatarId != 0 -> getAvatarResource(avatarId) // Load avatar from resources
-                            else -> R.drawable.avatar1 // Default avatar if no avatarID
-                        }
+                                // Navigate to ContentChatPage, passing both chatId and serialized activeClient
+                                navController.navigate("chatPsikologtoClientPage/$chatId/$activeClientJson")
+                            }
+                            .padding(16.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            // Render image using avatarID
+                            val avatarId = client.avatarID ?: 0 // Make sure to access avatarID directly
+                            val avatarResource = when {
+                                avatarId != 0 -> getAvatarResource(avatarId) // Load avatar from resources
+                                else -> R.drawable.avatar1 // Default avatar if no avatarID
+                            }
 
-                        // Render Avatar Image
-                        Image(
-                            painter = painterResource(id = avatarId),
-                            contentDescription = "Client Avatar",
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                        )
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        // Display Client's Name
-                        Column {
-                            Text(
-                                text = client.username ?: "Unknown Client", // Handle null username
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
+                            // Render Avatar Image
+                            Image(
+                                painter = painterResource(id = avatarId),
+                                contentDescription = "Client Avatar",
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(CircleShape)
                             )
-                            Text(text = "Avatar ID: ${client.avatarID}", color = Color.Black)
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            // Display Client's Name
+                            Column {
+                                Text(
+                                    text = client.username ?: "Unknown Client", // Handle null username
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                )
+                                Text(text = "Avatar ID: ${client.avatarID}", color = Color.Black)
+                            }
                         }
                     }
                 }
+            } else {
+                // Tampilkan pesan jika tidak ada client
+                Text(
+                    text = "No clients found.",
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                    color = Color.Gray
+                )
             }
-        } else {
-            // Tampilkan pesan jika tidak ada client
-            Text(
-                text = "No clients found.",
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                color = Color.Gray
-            )
         }
 
+
         Box(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 0.dp) // Mengisi seluruh layar
+//            modifier = Modifier.fillMaxWidth().padding(bottom = 0.dp) // Mengisi seluruh layar
+            modifier = Modifier.fillMaxSize()
         ) {
             FloatingActionButton(
                 onClick = {
@@ -359,14 +375,15 @@ fun HomeChatPsikologPage(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd) // Menempatkan FAB di pojok kanan bawah
-                    .padding(16.dp),
+                    .padding(bottom = screenWidth * 0.25f, end = screenWidth * 0.05f),
                 shape = CircleShape,
                 containerColor = Color(0xFFDEE5D4)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.reverse), // Tombol Refresh
                     contentDescription = "Get Clients",
-                    tint = Color.Black
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }

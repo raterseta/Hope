@@ -122,6 +122,15 @@ fun ChatPsikologtoClientPage(
                     // Tampilkan pesan klien di kiri
                     DynamicPaddingAnotherUserColumn(message)
                 }
+//                if (message.clientId == activeClient!!.userID)  {
+//                    // Tampilkan pesan psikolog di kanan
+//                    DynamicPaddingCurrentUserColumn(message)
+//                } else if (message.clientId == "") {
+//                    // Tampilkan pesan klien di kiri
+//                    DynamicPaddingAnotherUserColumn(message)
+//                } else {
+//                    Text("an")
+//                }
             }
         }
 
