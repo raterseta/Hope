@@ -207,15 +207,3 @@ fun RegisterPage(
     }
 }
 
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun RegisterPagePreview() {
-//    RegisterPage(
-//        onBackClick = { println("Back clicked") },
-//        onRegisterClick = { },
-//        onGoogleSignInClick = { println("Google Sign-In clicked") },
-//        onLoginClick = { println("Login clicked") }
-//    )
-//}

@@ -41,9 +41,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.hope.ui.composables.ButtonComposable
@@ -94,7 +96,7 @@ fun UploadPage(
             }
 
             Text(
-                text = "Jenis Postingan",
+                text = "",
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
@@ -106,18 +108,6 @@ fun UploadPage(
                 horizontalArrangement = Arrangement.Center
 
             ) {
-                ButtonComposable(
-                    "Komunitas",
-                    onClick = { TODO() },
-                    isHighlighted = true,
-                    modifier = Modifier.weight(1f)
-                )
-                ButtonComposable(
-                    "Artikel",
-                    onClick = { TODO() },
-                    isHighlighted = false,
-                    modifier = Modifier.weight(1f)
-                )
             }
 
             if (selectedImgUri == null) {
@@ -159,58 +149,102 @@ fun UploadPage(
             // IconButton dengan ukuran lebih besar dan berbentuk kotak
 
 
-            // TextField Judul
-            TextField(
-                value = title,
-                onValueChange = { viewModel.onTitleChange(it) },
-                label = { Text("Judul") },
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                singleLine = true,
-                shape = RoundedCornerShape(35),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    .padding(16.dp), // Padding untuk memberikan ruang di sekitar
+                verticalArrangement = Arrangement.spacedBy(16.dp) // Menambahkan spasi antar elemen
+            ) {
+                // TextField Judul
+                Text(text = "Judul", fontSize = 24.sp)
+                TextField(
+                    value = title,
+                    onValueChange = { viewModel.onTitleChange(it) },
+                    placeholder = {
+                        Text(
+                            text = "Masukkan Judul",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(35),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
                 )
-            )
 
-            Spacer(modifier = modifier.height(16.dp))
-
-            // TextField Lokasi
-            TextField(
-                value = location,
-                onValueChange = { viewModel.onLocationChange(it) },
-                label = { Text("Lokasi") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                singleLine = true,
-                shape = RoundedCornerShape(35),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                // TextField Lokasi
+                Text(text = "Lokasi", fontSize = 24.sp)
+                TextField(
+                    value = location,
+                    onValueChange = { viewModel.onLocationChange(it) },
+                    placeholder = {
+                        Text(
+                            text = "Masukkan Lokasi",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(35),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
                 )
-            )
 
-            Spacer(modifier = modifier.height(16.dp))
-
-            // TextField Deskripsi mengisi sisa ruang
-            TextField(
-                value = description,
-                onValueChange = { viewModel.onDescriptionChange(it) },
-                label = { Text("Deskripsi") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f) // Mengisi sisa ruang
-                    .padding(bottom = 16.dp),
-                singleLine = false, // Bisa multi-line untuk deskripsi panjang
-                shape = RoundedCornerShape(16.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                // TextField Deskripsi
+                Text(text = "Deskripsi", fontSize = 24.sp)
+                TextField(
+                    value = description,
+                    onValueChange = { viewModel.onDescriptionChange(it) },
+                    placeholder = {
+                        Text(
+                            text = "Masukkan Deskripsi",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(35),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
                 )
-            )
+            }
+
+
+
 
             Box(
                 modifier = Modifier

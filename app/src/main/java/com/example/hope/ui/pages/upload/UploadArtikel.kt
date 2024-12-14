@@ -69,18 +69,7 @@ fun UploadArtikel(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly // Ubah SpaceBetween menjadi SpaceEvenly
             ) {
-                ButtonComposable(
-                    text = "Komunitas",
-                    onClick = { TODO() },
-                    isHighlighted = false,
-                    modifier = Modifier.weight(1f)
-                )
-                ButtonComposable(
-                    text = "Artikel",
-                    onClick = { TODO() },
-                    isHighlighted = true,
-                    modifier = Modifier.weight(1f)
-                )
+
             }
 
             // IconButton dengan ukuran lebih besar dan berbentuk kotak
