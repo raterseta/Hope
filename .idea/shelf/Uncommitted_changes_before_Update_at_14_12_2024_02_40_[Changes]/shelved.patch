@@ -1,0 +1,103 @@
+Index: app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.main\r\n\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.lazy.LazyColumn\r\nimport androidx.compose.foundation.lazy.items\r\nimport androidx.compose.material3.Scaffold\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.collectAsState\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.lifecycle.viewmodel.compose.viewModel\r\nimport com.example.hope.chat.HomeChatPage\r\nimport com.example.hope.ui.composables.bottomNav.BottomNavComposable\r\nimport com.example.hope.ui.composables.post.DummyPostData\r\nimport com.example.hope.ui.composables.post.PostComposable\r\nimport com.example.hope.ui.composables.post.PostData\r\nimport com.example.hope.ui.composables.post.getSavedPosts\r\nimport com.example.hope.ui.composables.topNav.SimpleTopNavComposable\r\nimport com.example.hope.ui.composables.topNav.TopNavComposable\r\nimport com.example.hope.ui.pages.upload.UploadPage\r\n\r\n@Composable\r\nfun HomePage(\r\n    modifier: Modifier = Modifier,\r\n    onProfileClick: () -> Unit,\r\n    viewModel: HomePageViewModel = viewModel()\r\n) {\r\n    var currentScreen by remember { mutableStateOf(Screen.Home) }\r\n    viewModel.fetchPosts()\r\n    val posts by viewModel.postList.collectAsState()\r\n\r\n    Scaffold(\r\n        modifier = Modifier.fillMaxSize(),\r\n        bottomBar = {\r\n            BottomNavComposable(\r\n                onItemSelected = { selectedScreen ->\r\n                    currentScreen = selectedScreen\r\n                }\r\n            )\r\n        },\r\n        topBar = {\r\n            when (currentScreen) {\r\n                Screen.Home -> TopNavComposable(\r\n                    onProfileClick = onProfileClick,\r\n                    onSearch = { },\r\n                    onFilterClick = { }\r\n                )\r\n                Screen.Add -> {}\r\n                Screen.Chat -> {}\r\n                Screen.Bookmark -> SimpleTopNavComposable(\r\n                    title = \"Saved Posts\",\r\n                    onBackClick = { currentScreen = Screen.Home }\r\n                )\r\n            }\r\n        }\r\n    ) { innerPadding ->\r\n        when (currentScreen) {\r\n            Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))\r\n            Screen.Add -> UploadPage(innerPadding = innerPadding)\r\n            Screen.Chat -> HomeChatPage(modifier = Modifier.padding(innerPadding))\r\n            Screen.Bookmark -> {}\r\n        }\r\n    }\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt b/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt	(revision de4f011083021fef3b52d5905f2b21b3bcb6ecfd)
++++ b/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt	(date 1734118720671)
+@@ -2,22 +2,23 @@
+ 
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.foundation.layout.padding
+-import androidx.compose.foundation.lazy.LazyColumn
+-import androidx.compose.foundation.lazy.items
+ import androidx.compose.material3.Scaffold
++import androidx.compose.material3.Text
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.collectAsState
+ import androidx.compose.runtime.getValue
++import androidx.compose.runtime.livedata.observeAsState
+ import androidx.compose.runtime.mutableStateOf
+ import androidx.compose.runtime.remember
+ import androidx.compose.runtime.setValue
+ import androidx.compose.ui.Modifier
+ import androidx.lifecycle.viewmodel.compose.viewModel
+-import com.example.hope.chat.HomeChatPage
++import androidx.navigation.NavController
++import com.example.hope.chat.HomeChatClientPage
++import com.example.hope.chat.HomeChatPsikologPage
++import com.example.hope.chat.HomeChatViewModel
+ import com.example.hope.ui.composables.bottomNav.BottomNavComposable
+-import com.example.hope.ui.composables.post.DummyPostData
+-import com.example.hope.ui.composables.post.PostComposable
+-import com.example.hope.ui.composables.post.PostData
++//import com.example.hope.ui.composables.post.PostList
+ import com.example.hope.ui.composables.post.getSavedPosts
+ import com.example.hope.ui.composables.topNav.SimpleTopNavComposable
+ import com.example.hope.ui.composables.topNav.TopNavComposable
+@@ -27,16 +28,25 @@
+ fun HomePage(
+     modifier: Modifier = Modifier,
+     onProfileClick: () -> Unit,
+-    viewModel: HomePageViewModel = viewModel()
++    navController: NavController,
++    initialTab: Screen = Screen.Home,
++    homeChatViewModel: HomeChatViewModel = viewModel(),
++    homePageViewModel: HomePageViewModel = viewModel()
+ ) {
+-    var currentScreen by remember { mutableStateOf(Screen.Home) }
+-    viewModel.fetchPosts()
+-    val posts by viewModel.postList.collectAsState()
++    var currentScreen by remember { mutableStateOf(initialTab) }
++
++    // Mengambil data postingan
++    homePageViewModel.fetchPosts()
++    val posts by homePageViewModel.postList.collectAsState()
++
++    // Mengambil role pengguna
++    val userRole by homeChatViewModel.userRole.observeAsState()
+ 
+     Scaffold(
+         modifier = Modifier.fillMaxSize(),
+         bottomBar = {
+             BottomNavComposable(
++                selectedScreen = currentScreen,
+                 onItemSelected = { selectedScreen ->
+                     currentScreen = selectedScreen
+                 }
+@@ -61,10 +71,24 @@
+         when (currentScreen) {
+             Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))
+             Screen.Add -> UploadPage(innerPadding = innerPadding)
+-            Screen.Chat -> HomeChatPage(modifier = Modifier.padding(innerPadding))
+-            Screen.Bookmark -> {}
+-        }
+-    }
+-}
+-
+-
++            Screen.Chat -> {
++                when (userRole) {
++                    "Regular" -> HomeChatClientPage(
++                        modifier = Modifier.padding(innerPadding),
++                        navController = navController
++                    )
++                    "Psikolog" -> HomeChatPsikologPage(
++                        modifier = Modifier.padding(innerPadding),
++                        navController = navController
++                    )
++                    else -> Text("Loading...", modifier = Modifier.padding(innerPadding))
++                }
++            }
++            Screen.Bookmark -> {
++                val savedPosts = getSavedPosts()
++                // Tampilkan halaman Bookmark (implementasi SavedPostList dapat ditambahkan sesuai kebutuhan)
++                Text("Saved Posts", modifier = Modifier.padding(innerPadding))
++            }
++        }
++    }
++}
+\ No newline at end of file

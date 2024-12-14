@@ -1,0 +1,21 @@
+Index: app/src/main/java/com/example/hope/ui/pages/main/HomePageViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.main\r\n\r\nimport android.util.Log\r\nimport androidx.lifecycle.ViewModel\r\nimport com.example.hope.ui.composables.post.PostData\r\nimport com.google.firebase.database.FirebaseDatabase\r\nimport kotlinx.coroutines.flow.MutableStateFlow\r\nimport kotlinx.coroutines.flow.StateFlow\r\n\r\nclass HomePageViewModel : ViewModel() {\r\n    private val database = FirebaseDatabase.getInstance()\r\n    private val _postList = MutableStateFlow<List<PostData>>(emptyList())\r\n    val postList: StateFlow<List<PostData>> = _postList\r\n\r\n    init {\r\n        fetchPosts()\r\n    }\r\n\r\nfun fetchPosts() {\r\n    val postsRef = database.getReference(\"Posts\")\r\n    val usersRef = database.getReference(\"users\")\r\n\r\n    postsRef.get().addOnSuccessListener { snapshot ->\r\n        val posts = snapshot.children.mapNotNull { it.getValue(PostData::class.java) }\r\n\r\n        // Daftar untuk menyimpan semua tugas pengambilan data user\r\n        val postUpdates = posts.map { post ->\r\n            val userRef = usersRef.child(post.userID)\r\n            userRef.get().continueWith { task ->\r\n                if (task.isSuccessful) {\r\n                    val userSnapshot = task.result\r\n                    val username = userSnapshot.child(\"username\").getValue(String::class.java) ?: \"Unknown\"\r\n                    val profilePicture = userSnapshot.child(\"avatarID\").getValue(Int::class.java) ?: null\r\n\r\n                    // Perbarui data post\r\n                    post.username = username\r\n                    post.profilePicture = profilePicture\r\n                }\r\n                post\r\n            }\r\n        }\r\n\r\n        // Tunggu semua pembaruan selesai\r\n        postUpdates.forEach { task ->\r\n            task.addOnSuccessListener {\r\n                if (postUpdates.all { it.isSuccessful }) {\r\n                    _postList.value = postUpdates.mapNotNull { it.result }\r\n                }\r\n            }\r\n        }\r\n    }.addOnFailureListener { exception ->\r\n        Log.e(\"HomePageViewModel\", \"Error fetching posts: ${exception.message}\")\r\n    }\r\n}\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/main/HomePageViewModel.kt b/app/src/main/java/com/example/hope/ui/pages/main/HomePageViewModel.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/main/HomePageViewModel.kt	(revision 97ec6e0c0e60a32b5431fdc4d91a674fc7daf81a)
++++ b/app/src/main/java/com/example/hope/ui/pages/main/HomePageViewModel.kt	(date 1734141830082)
+@@ -52,6 +52,4 @@
+         Log.e("HomePageViewModel", "Error fetching posts: ${exception.message}")
+     }
+ }
+-
+-
+ }
+diff --git a/app/src/main/java/com/example/hope/ui/pages/bookmark/BookmarkViewModel.kt b/app/src/main/java/com/example/hope/ui/pages/bookmark/BookmarkViewModel.kt
+new file mode 100644
+diff --git a/app/src/main/java/com/example/hope/ui/pages/bookmark/BookmarkPage.kt b/app/src/main/java/com/example/hope/ui/pages/bookmark/BookmarkPage.kt
+new file mode 100644
