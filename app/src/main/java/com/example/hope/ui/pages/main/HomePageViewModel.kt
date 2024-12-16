@@ -3,6 +3,8 @@ package com.example.hope.ui.pages.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.hope.ui.composables.post.PostData
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -73,49 +75,54 @@ class HomePageViewModel : ViewModel() {
 
         bookmarksRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
-                // List of post IDs from the user's bookmarks
                 val savedPostIDs = snapshot.children.mapNotNull { it.key }
 
                 if (savedPostIDs.isNotEmpty()) {
                     val postsRef = database.getReference("Posts")
                     val savedPosts = mutableListOf<PostData>()
-                    var processedPosts = 0 // Counter to track the number of processed posts
+                    var processedPosts = 0
 
-                    // Fetch each post using the post IDs
                     savedPostIDs.forEach { postID ->
                         postsRef.child(postID).get().addOnSuccessListener { postSnapshot ->
                             val post = postSnapshot.getValue(PostData::class.java)
-                            post?.let {
-                                // Optionally, fetch the bookmark status for the user
-                                val bookmarkStatusRef = database.getReference("Bookmarks/$userID/$postID")
-                                bookmarkStatusRef.get().addOnSuccessListener { bookmarkSnapshot ->
-                                    val isBookmarked = bookmarkSnapshot.getValue(Boolean::class.java) ?: false
-                                    val postData = PostData(
-                                        postID = it.postID,
-                                        userID = it.userID,
-                                        username = it.username,
-                                        profilePicture = it.profilePicture,
-                                        postImg = it.postImg,
-                                        title = it.title,
-                                        location = it.location,
-                                        description = it.description,
-                                        isBookmarked = isBookmarked
-                                    )
-                                    savedPosts.add(postData)
-                                }.addOnFailureListener {
-                                    Log.e("HomePageViewModel", "Failed to fetch bookmark status: ${it.message}")
+                            if (post != null) {
+                                // Ambil status bookmark
+                                database.getReference("Bookmarks/$userID/$postID")
+                                    .get()
+                                    .addOnSuccessListener { bookmarkSnapshot ->
+                                        val isBookmarked = bookmarkSnapshot.getValue(Boolean::class.java) ?: false
+                                        val postData = PostData(
+                                            postID = post.postID,
+                                            userID = post.userID,
+                                            username = post.username,
+                                            profilePicture = post.profilePicture,
+                                            postImg = post.postImg,
+                                            title = post.title,
+                                            location = post.location,
+                                            description = post.description,
+                                            isBookmarked = isBookmarked
+                                        )
+                                        if(isBookmarked){
+                                            savedPosts.add(postData)
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                        Log.e("HomePageViewModel", "Failed to fetch bookmark status: ${it.message}")
+                                    }
+                                    .addOnCompleteListener {
+                                        processedPosts++
+                                        if (processedPosts == savedPostIDs.size) {
+                                            _savedPostList.value = savedPosts
+                                        }
+                                    }
+                            } else {
+                                processedPosts++
+                                if (processedPosts == savedPostIDs.size) {
+                                    _savedPostList.value = savedPosts
                                 }
                             }
-                            // Increment the processedPosts counter
-                            processedPosts++
-                            // Check if all posts have been processed
-                            if (processedPosts == savedPostIDs.size) {
-                                _savedPostList.value = savedPosts
-                            }
                         }.addOnFailureListener {
-                            // Increment the processedPosts counter even if post is not found
                             processedPosts++
-                            // Check if all posts have been processed
                             if (processedPosts == savedPostIDs.size) {
                                 _savedPostList.value = savedPosts
                             }
@@ -123,18 +130,17 @@ class HomePageViewModel : ViewModel() {
                         }
                     }
                 } else {
-                    // Handle the case when there are no saved posts
                     _savedPostList.value = emptyList()
                 }
             } else {
-                // Handle case when the user has no bookmarks at all
                 _savedPostList.value = emptyList()
             }
         }.addOnFailureListener { exception ->
             Log.e("HomePageViewModel", "Failed to fetch saved posts: ${exception.message}")
-            _savedPostList.value = emptyList() // Return empty list in case of failure
+            _savedPostList.value = emptyList()
         }
     }
+
 
 
 }

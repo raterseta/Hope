@@ -115,18 +115,6 @@ fun RegisterProfilePage(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Upload Gallery
-                Row(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Not interested?", color = Color.Black, fontSize = 16.sp)
-                    TextButton(onClick = { onUploadGalleryClick()  }) {
-                        Text(text = "Upload Gallery", color = Color.Black)
-                    }
-                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
