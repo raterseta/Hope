@@ -1,0 +1,40 @@
+Index: app/src/main/java/com/example/hope/data/Post.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/data/Post.java b/app/src/main/java/com/example/hope/data/Post.java
+new file mode 100644
+--- /dev/null	(date 1733937863456)
++++ b/app/src/main/java/com/example/hope/data/Post.java	(date 1733937863456)
+@@ -0,0 +1,16 @@
++package com.example.hope.data;
++
++data class Post(
++        val id: String = "",
++        val title: String = "",
++        val description: String = "",
++        val location: String = "",
++        val imageUrl: String = "",
++        val type: PostType = PostType.ARTICLE, // Artikel atau Komunitas
++        val timestamp: Long = System.currentTimeMillis()
++)
++
++enum class PostType {
++    ARTICLE,
++    COMMUNITY
++}
+Index: app/src/main/java/com/example/hope/ui/pages/upload/UploadViewModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/upload/UploadViewModel.java b/app/src/main/java/com/example/hope/ui/pages/upload/UploadViewModel.java
+new file mode 100644
+--- /dev/null	(date 1733937733295)
++++ b/app/src/main/java/com/example/hope/ui/pages/upload/UploadViewModel.java	(date 1733937733295)
+@@ -0,0 +1,4 @@
++package com.example.hope.ui.pages.upload;
++
++public class UploadViewModel {
++}

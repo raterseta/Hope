@@ -1,0 +1,310 @@
+Index: app/src/main/java/com/example/hope/ui/composables/ButtonComposable.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.composables\r\n\r\nimport android.hardware.lights.Light\r\nimport android.widget.Button\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.material3.Button\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport androidx.compose.ui.unit.dp\r\nimport com.example.hope.ui.theme.DarkBlue\r\nimport com.example.hope.ui.theme.LightBlue\r\nimport com.example.hope.ui.theme.White\r\n\r\n@Composable\r\nfun ButtonComposable(\r\n    text: String,\r\n    onClick: () -> Unit,\r\n    isHighlighted: Boolean,\r\n    modifier: Modifier = Modifier\r\n) {\r\n    Button(\r\n        onClick = onClick,\r\n        colors = ButtonDefaults.buttonColors(\r\n            containerColor = if (isHighlighted) DarkBlue else White,\r\n            contentColor = if (isHighlighted) Color.White else Color.Black\r\n        ),\r\n        shape = RoundedCornerShape(50),\r\n        modifier = Modifier\r\n            .padding(8.dp),\r\n    ){\r\n        Text(\r\n            text = text,\r\n            style = MaterialTheme.typography.bodyMedium\r\n        )\r\n    }\r\n}\r\n\r\n@Preview(showBackground = true)\r\n@Composable\r\nprivate fun PrevButtonComposable() {\r\n    ButtonComposable(\r\n        text = \"apacoba aaf\",\r\n        onClick = { TODO() },\r\n        isHighlighted = true\r\n    )\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/composables/ButtonComposable.kt b/app/src/main/java/com/example/hope/ui/composables/ButtonComposable.kt
+--- a/app/src/main/java/com/example/hope/ui/composables/ButtonComposable.kt	(revision 09c347479d9fffee1f21bbd416bca67c4fdf4aff)
++++ b/app/src/main/java/com/example/hope/ui/composables/ButtonComposable.kt	(date 1733748865928)
+@@ -2,8 +2,10 @@
+ 
+ import android.hardware.lights.Light
+ import android.widget.Button
++import androidx.compose.foundation.border
+ import androidx.compose.foundation.layout.fillMaxWidth
+ import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.layout.widthIn
+ import androidx.compose.foundation.shape.RoundedCornerShape
+ import androidx.compose.runtime.Composable
+ import androidx.compose.material3.Button
+@@ -32,8 +34,16 @@
+             contentColor = if (isHighlighted) Color.White else Color.Black
+         ),
+         shape = RoundedCornerShape(50),
+-        modifier = Modifier
+-            .padding(8.dp),
++        modifier = modifier
++            .widthIn(min = 150.dp)
++            .padding(8.dp)
++            .then(
++                if (!isHighlighted) Modifier.border(
++                    width = 2.dp,
++                    color = DarkBlue,
++                    shape = RoundedCornerShape(50)
++                ) else Modifier
++            )
+     ){
+         Text(
+             text = text,
+Index: app/src/main/java/com/example/hope/ui/pages/upload/UploadPage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.upload\r\n\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.PaddingValues\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.size\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.Add\r\nimport androidx.compose.material.icons.filled.Search\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.IconButton\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.material3.TextField\r\nimport androidx.compose.material3.TextFieldDefaults\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport androidx.compose.ui.unit.dp\r\nimport com.example.hope.ui.composables.ButtonComposable\r\nimport org.intellij.lang.annotations.JdkConstants.HorizontalAlignment\r\n\r\n@Composable\r\nfun UploadPage(modifier: Modifier = Modifier, innerPadding: PaddingValues) {\r\n    Surface(\r\n        modifier = Modifier\r\n            .fillMaxSize()\r\n            .padding(innerPadding), // Menambahkan padding dari Scaffold\r\n        color = Color.White\r\n    ) {\r\n        Column(\r\n            modifier = Modifier\r\n                .padding(16.dp)\r\n                .fillMaxSize() // Mengisi seluruh halaman\r\n        ) {\r\n            // Tulisan \"Postingan Baru!\" di tengah\r\n            Box(\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .padding(vertical = 16.dp),\r\n                contentAlignment = Alignment.Center\r\n            ) {\r\n                Text(\r\n                    text = \"Postingan Baru!\",\r\n                    style = MaterialTheme.typography.bodyLarge,\r\n                    fontWeight = FontWeight.Black\r\n                )\r\n            }\r\n\r\n            Text(\r\n                text = \"Jenis Postingan\",\r\n                modifier = Modifier.padding(vertical = 8.dp)\r\n            )\r\n\r\n            Row(\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .padding(bottom = 16.dp),\r\n                verticalAlignment = Alignment.CenterVertically,\r\n                horizontalArrangement = Arrangement.SpaceBetween\r\n            ) {\r\n                ButtonComposable(\r\n                    \"Komunitas\",\r\n                    onClick = { TODO() },\r\n                    isHighlighted = true,\r\n                    modifier = Modifier.padding(32.dp)\r\n                )\r\n                ButtonComposable(\r\n                    \"Artikel\",\r\n                    onClick = { TODO() },\r\n                    isHighlighted = false,\r\n                    modifier = Modifier.padding(32.dp)\r\n                )\r\n            }\r\n\r\n            // IconButton dengan ukuran lebih besar dan berbentuk kotak\r\n            IconButton(\r\n                onClick = { TODO() },\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .height(100.dp) // Tinggi ditambah untuk membuatnya lebih besar\r\n                    .padding(bottom = 16.dp)\r\n            ) {\r\n                Icon(\r\n                    imageVector = Icons.Default.Add,\r\n                    contentDescription = \"Add Image\",\r\n                    modifier = Modifier.size(48.dp) // Ukuran icon lebih besar\r\n                )\r\n            }\r\n\r\n            // TextField Judul\r\n            TextField(\r\n                value = \"\",\r\n                onValueChange = { TODO() },\r\n                label = { Text(\"Judul\") },\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .height(56.dp),\r\n                singleLine = true,\r\n                shape = RoundedCornerShape(35),\r\n                colors = TextFieldDefaults.colors(\r\n                    focusedIndicatorColor = Color.Transparent,\r\n                    unfocusedIndicatorColor = Color.Transparent\r\n                )\r\n            )\r\n\r\n            Spacer(modifier = modifier.height(16.dp))\r\n\r\n            // TextField Lokasi\r\n            TextField(\r\n                value = \"\",\r\n                onValueChange = { TODO() },\r\n                label = { Text(\"Lokasi\") },\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .height(56.dp),\r\n                singleLine = true,\r\n                shape = RoundedCornerShape(35),\r\n                colors = TextFieldDefaults.colors(\r\n                    focusedIndicatorColor = Color.Transparent,\r\n                    unfocusedIndicatorColor = Color.Transparent\r\n                )\r\n            )\r\n\r\n            Spacer(modifier = modifier.height(16.dp))\r\n\r\n            // TextField Deskripsi mengisi sisa ruang\r\n            TextField(\r\n                value = \"\",\r\n                onValueChange = { TODO() },\r\n                label = { Text(\"Deskripsi\") },\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .weight(1f) // Mengisi sisa ruang\r\n                    .padding(bottom = 16.dp),\r\n                singleLine = false, // Bisa multi-line untuk deskripsi panjang\r\n                shape = RoundedCornerShape(16.dp),\r\n                colors = TextFieldDefaults.colors(\r\n                    focusedIndicatorColor = Color.Transparent,\r\n                    unfocusedIndicatorColor = Color.Transparent\r\n                )\r\n            )\r\n\r\n            Box(\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .padding(bottom = 8.dp),\r\n                contentAlignment = Alignment.Center\r\n            ) {\r\n                ButtonComposable(\r\n                    text = \"Upload\",\r\n                    onClick = { TODO() },\r\n                    isHighlighted = true, // Sesuai desain untuk button utama\r\n                    modifier = Modifier\r\n                        .padding(horizontal = 16.dp)\r\n                        .fillMaxWidth()\r\n                )\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n\r\n\r\n@Preview\r\n@Composable\r\nprivate fun UploadPagePrev() {\r\n    UploadPage(\r\n        innerPadding = PaddingValues(0.dp)\r\n    )\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/upload/UploadPage.kt b/app/src/main/java/com/example/hope/ui/pages/upload/UploadPage.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/upload/UploadPage.kt	(revision 09c347479d9fffee1f21bbd416bca67c4fdf4aff)
++++ b/app/src/main/java/com/example/hope/ui/pages/upload/UploadPage.kt	(date 1733756211357)
+@@ -67,21 +67,21 @@
+             Row(
+                 modifier = Modifier
+                     .fillMaxWidth()
+-                    .padding(bottom = 16.dp),
++                    .padding(bottom = 8.dp),
+                 verticalAlignment = Alignment.CenterVertically,
+-                horizontalArrangement = Arrangement.SpaceBetween
++                horizontalArrangement = Arrangement.Center
++
+             ) {
+                 ButtonComposable(
+                     "Komunitas",
+                     onClick = { TODO() },
+                     isHighlighted = true,
+-                    modifier = Modifier.padding(32.dp)
++
+                 )
+                 ButtonComposable(
+                     "Artikel",
+                     onClick = { TODO() },
+                     isHighlighted = false,
+-                    modifier = Modifier.padding(32.dp)
+                 )
+             }
+ 
+Index: app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hope.ui.pages.main\r\n\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.lazy.LazyColumn\r\nimport androidx.compose.foundation.lazy.items\r\nimport androidx.compose.material3.Scaffold\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Modifier\r\nimport com.example.hope.R\r\nimport com.example.hope.chat.HomeChatPage\r\nimport com.example.hope.ui.composables.bottomNav.BottomNavComposable\r\nimport com.example.hope.ui.composables.post.DummyPostData\r\nimport com.example.hope.ui.composables.post.PostComposable\r\nimport com.example.hope.ui.composables.post.getDummyPosts\r\nimport com.example.hope.ui.composables.post.getSavedPosts\r\nimport com.example.hope.ui.composables.topNav.SimpleTopNavComposable\r\nimport com.example.hope.ui.composables.topNav.TopNavComposable\r\nimport com.example.hope.ui.composables.topNav.TopNavViewModel\r\nimport com.example.hope.ui.pages.upload.UploadPage\r\n\r\n@Composable\r\nfun HomePage(\r\n    modifier: Modifier = Modifier,\r\n    onProfileClick: () -> Unit\r\n             ) {\r\n    var currentScreen by remember { mutableStateOf(Screen.Home) }\r\n\r\n    val posts = getDummyPosts()\r\n    val savedPosts = getSavedPosts()\r\n    Scaffold(\r\n        modifier = Modifier.fillMaxSize(),\r\n        bottomBar = {\r\n            BottomNavComposable(\r\n                onItemSelected = { selectedScreen ->\r\n                    currentScreen = selectedScreen\r\n                }\r\n            )\r\n        },\r\n        topBar = {\r\n            when (currentScreen) {\r\n                Screen.Home -> TopNavComposable(\r\n                    onProfileClick = onProfileClick,\r\n                    onSearch = { },\r\n                    onFilterClick = { }\r\n                )\r\n                Screen.Add -> {}\r\n                Screen.Chat -> {}\r\n                Screen.Bookmark -> SimpleTopNavComposable(\r\n                    title = \"Saved Posts\",\r\n                    onBackClick = { currentScreen = Screen.Home }\r\n                )\r\n            }\r\n        }\r\n    ) { innerPadding ->\r\n        when (currentScreen) {\r\n            Screen.Home -> PostList(posts = posts, modifier = Modifier.padding(innerPadding))\r\n            Screen.Add -> UploadPage(innerPadding = innerPadding)\r\n            Screen.Chat -> HomeChatPage(modifier = Modifier.padding(innerPadding))\r\n            Screen.Bookmark -> SavedPostList(posts = savedPosts, modifier = Modifier.padding(innerPadding))\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun PostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {\r\n    LazyColumn(\r\n        modifier = modifier\r\n    ) {\r\n        items(posts) { post ->\r\n            PostComposable(\r\n                profilePicture = post.profilePicture,\r\n                username = post.username,\r\n                photo = post.photo,\r\n                title = post.title,\r\n                description = post.description,\r\n                isBookmarked = post.isBookmarked,\r\n                onBookmarkClick = { /* Handle bookmark click */ }\r\n            )\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun SavedPostList(posts: List<DummyPostData>, modifier: Modifier = Modifier) {\r\n    LazyColumn(modifier = modifier) {\r\n        items(posts) { post ->\r\n            PostComposable(\r\n                profilePicture = post.profilePicture,\r\n                username = post.username,\r\n                photo = post.photo,\r\n                title = post.title,\r\n                description = post.description,\r\n                isBookmarked = post.isBookmarked,\r\n                onBookmarkClick = { /* Handle bookmark click */ }\r\n            )\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt b/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt
+--- a/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt	(revision 09c347479d9fffee1f21bbd416bca67c4fdf4aff)
++++ b/app/src/main/java/com/example/hope/ui/pages/main/HomePage.kt	(date 1733756113498)
+@@ -1,5 +1,6 @@
+ package com.example.hope.ui.pages.main
+ 
++import androidx.compose.foundation.layout.PaddingValues
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.foundation.layout.padding
+ import androidx.compose.foundation.lazy.LazyColumn
+@@ -11,6 +12,8 @@
+ import androidx.compose.runtime.remember
+ import androidx.compose.runtime.setValue
+ import androidx.compose.ui.Modifier
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
+ import com.example.hope.R
+ import com.example.hope.chat.HomeChatPage
+ import com.example.hope.ui.composables.bottomNav.BottomNavComposable
+@@ -100,4 +103,4 @@
+             )
+         }
+     }
+-}
+\ No newline at end of file
++}
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n        <DropdownSelection timestamp=\"2024-12-08T18:46:12.424614674Z\">\r\n          <Target type=\"DEFAULT_BOOT\">\r\n            <handle>\r\n              <DeviceId pluginId=\"PhysicalDevice\" identifier=\"serial=078872522N100650\" />\r\n            </handle>\r\n          </Target>\r\n        </DropdownSelection>\r\n        <DialogSelection />\r\n      </SelectionState>\r\n      <SelectionState runConfigName=\"ProfileUserPagePreview\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision 09c347479d9fffee1f21bbd416bca67c4fdf4aff)
++++ b/.idea/deploymentTargetSelector.xml	(date 1733756682896)
+@@ -13,7 +13,10 @@
+         </DropdownSelection>
+         <DialogSelection />
+       </SelectionState>
+-      <SelectionState runConfigName="ProfileUserPagePreview">
++      <SelectionState runConfigName="AndroidStudioProjects.Hope.app">
++        <option name="selectionMode" value="DROPDOWN" />
++      </SelectionState>
++      <SelectionState runConfigName="UploadPagePrev">
+         <option name="selectionMode" value="DROPDOWN" />
+       </SelectionState>
+     </selectionStates>
+Index: app/src/main/java/com/example/hope/ui/pages/upload/UploadArtikel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hope/ui/pages/upload/UploadArtikel.kt b/app/src/main/java/com/example/hope/ui/pages/upload/UploadArtikel.kt
+new file mode 100644
+--- /dev/null	(date 1733751240395)
++++ b/app/src/main/java/com/example/hope/ui/pages/upload/UploadArtikel.kt	(date 1733751240395)
+@@ -0,0 +1,168 @@
++package com.example.hope.ui.pages.upload
++
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Box
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.PaddingValues
++import androidx.compose.foundation.layout.Row
++import androidx.compose.foundation.layout.Spacer
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.height
++import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.layout.size
++import androidx.compose.foundation.shape.RoundedCornerShape
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.Add
++import androidx.compose.material3.Icon
++import androidx.compose.material3.IconButton
++import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.Surface
++import androidx.compose.material3.Text
++import androidx.compose.material3.TextField
++import androidx.compose.material3.TextFieldDefaults
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.graphics.Color
++import androidx.compose.ui.text.font.FontWeight
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
++import com.example.hope.ui.composables.ButtonComposable
++
++@Composable
++fun UploadArtikel(modifier: Modifier = Modifier, innerPadding: PaddingValues) {
++    Surface(
++        modifier = Modifier
++            .fillMaxSize()
++            .padding(innerPadding), // Menambahkan padding dari Scaffold
++        color = Color.White
++    ) {
++        Column(
++            modifier = Modifier
++                .padding(16.dp)
++                .fillMaxSize() // Mengisi seluruh halaman
++        ) {
++            // Tulisan "Postingan Baru!" di tengah
++            Box(
++                modifier = Modifier
++                    .fillMaxWidth()
++                    .padding(vertical = 16.dp),
++                contentAlignment = Alignment.Center
++            ) {
++                Text(
++                    text = "Postingan Baru!",
++                    style = MaterialTheme.typography.bodyLarge,
++                    fontWeight = FontWeight.Black
++                )
++            }
++
++            Text(
++                text = "Jenis Postingan",
++                modifier = Modifier.padding(vertical = 8.dp)
++            )
++
++            Row(
++                modifier = Modifier
++                    .fillMaxWidth()
++                    .padding(bottom = 8.dp),
++                verticalAlignment = Alignment.CenterVertically,
++                horizontalArrangement = Arrangement.Center
++
++            ) {
++                ButtonComposable(
++                    "Komunitas",
++                    onClick = { TODO() },
++                    isHighlighted = false,
++
++                    )
++                ButtonComposable(
++                    "Artikel",
++                    onClick = { TODO() },
++                    isHighlighted = true,
++                )
++            }
++
++            // IconButton dengan ukuran lebih besar dan berbentuk kotak
++            IconButton(
++                onClick = { TODO() },
++                modifier = Modifier
++                    .fillMaxWidth()
++                    .height(100.dp) // Tinggi ditambah untuk membuatnya lebih besar
++                    .padding(bottom = 16.dp)
++            ) {
++                Icon(
++                    imageVector = Icons.Default.Add,
++                    contentDescription = "Add Image",
++                    modifier = Modifier.size(48.dp) // Ukuran icon lebih besar
++                )
++            }
++
++            // TextField Judul
++            TextField(
++                value = "",
++                onValueChange = { TODO() },
++                label = { Text("Judul") },
++                modifier = Modifier
++                    .fillMaxWidth()
++                    .height(56.dp),
++                singleLine = true,
++                shape = RoundedCornerShape(35),
++                colors = TextFieldDefaults.colors(
++                    focusedIndicatorColor = Color.Transparent,
++                    unfocusedIndicatorColor = Color.Transparent
++                )
++            )
++
++            Spacer(modifier = modifier.height(16.dp))
++
++            // TextField Lokasi
++
++
++            Spacer(modifier = modifier.height(16.dp))
++
++            // TextField Deskripsi mengisi sisa ruang
++            TextField(
++                value = "",
++                onValueChange = { TODO() },
++                label = { Text("Deskripsi") },
++                modifier = Modifier
++                    .fillMaxWidth()
++                    .weight(1f) // Mengisi sisa ruang
++                    .padding(bottom = 16.dp),
++                singleLine = false, // Bisa multi-line untuk deskripsi panjang
++                shape = RoundedCornerShape(16.dp),
++                colors = TextFieldDefaults.colors(
++                    focusedIndicatorColor = Color.Transparent,
++                    unfocusedIndicatorColor = Color.Transparent
++                )
++            )
++
++            Box(
++                modifier = Modifier
++                    .fillMaxWidth()
++                    .padding(bottom = 8.dp),
++                contentAlignment = Alignment.Center
++            ) {
++                ButtonComposable(
++                    text = "Upload",
++                    onClick = { TODO() },
++                    isHighlighted = true, // Sesuai desain untuk button utama
++                    modifier = Modifier
++                        .padding(horizontal = 16.dp)
++                        .fillMaxWidth()
++                )
++            }
++        }
++    }
++}
++
++
++
++@Preview
++@Composable
++private fun UploadArtikelPrev() {
++    UploadArtikel(
++        innerPadding = PaddingValues(0.dp)
++    )
++}
+\ No newline at end of file
