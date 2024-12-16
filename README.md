@@ -1,1 +1,1 @@
-I Need Jeyhan
+Tujuan dari perancangan aplikasi HOPE adalah untuk menciptakan platform digital yang menyediakan layanan pendampingan psikologis, edukasi, serta komunitas pendukung bagi para penyintas kekerasan dan pelecehan. Aplikasi ini bertujuan memfasilitasi pemulihan trauma secara holistik dengan memberikan akses mudah ke tenaga profesional, materi self-help, serta ruang anonim untuk berbagi pengalaman dan mendapatkan dukungan emosional.
