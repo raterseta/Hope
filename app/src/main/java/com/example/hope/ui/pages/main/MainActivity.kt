@@ -21,6 +21,8 @@ import com.example.hope.chat.ContentChatPage
 import com.example.hope.chat.HomeChatClientPage
 import com.example.hope.chat.HomeChatPsikologPage
 import com.example.hope.logo.LogoPage
+import com.example.hope.ui.composables.post.PostData
+import com.example.hope.ui.pages.SearchComposable
 import com.example.hope.ui.pages.login.LoginPage
 import com.example.hope.ui.pages.profile.ProfileComposable
 import com.example.hope.ui.pages.register.RegisterPage
@@ -108,19 +110,17 @@ fun AppNavHost() {
         composable("homeChatPsikologPage") {
             HomeChatPsikologPage(navController = navController)
         }
-//        composable("contentChat") { backStackEntry ->
-//            ContentChatPage(navController = navController)
-//        }
-//        composable(
-//            "contentChat/{activePsikolog}",
-//            arguments = listOf(navArgument("activePsikolog") { type = NavType.StringType })
-//        ) { backStackEntry ->
-//            val gson = Gson()
-//            val psikologJson = backStackEntry.arguments?.getString("activePsikolog")
-//            val activePsikolog = gson.fromJson(psikologJson, UserData::class.java)
-//
-//            ContentChatPage(navController = navController, activePsikolog = activePsikolog)
-//        }
+        composable("searchPage") {
+            val searchedPosts = navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<List<PostData>>("searchedPosts") ?: emptyList()
+
+            SearchComposable(
+                posts = searchedPosts,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
         composable("chatClienttoPsikologPage/{chatId}/{activePsikolog}") { backStackEntry ->
             val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
             val activePsikologJson = backStackEntry.arguments?.getString("activePsikolog") ?: ""

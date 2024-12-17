@@ -18,8 +18,6 @@ class UploadViewModel: ViewModel() {
     private val _title = MutableStateFlow("")
     val title: StateFlow<String> get() = _title
 
-    private val _location = MutableStateFlow("")
-    val location: StateFlow<String> get() = _location
 
     private val _description = MutableStateFlow("")
     val description: StateFlow<String> get() = _description
@@ -28,9 +26,6 @@ class UploadViewModel: ViewModel() {
         _title.value = newTitle
     }
 
-    fun onLocationChange(newLocation: String){
-        _location.value = newLocation
-    }
 
     fun onDescriptionChange(newDescription: String){
         _description.value = newDescription
@@ -85,7 +80,6 @@ class UploadViewModel: ViewModel() {
                             userID = userId,
                             postImg = downloadUri.toString(),
                             title = _title.value,
-                            location = _location.value,
                             description = _description.value,
                             isBookmarked = false,
                             username = username,

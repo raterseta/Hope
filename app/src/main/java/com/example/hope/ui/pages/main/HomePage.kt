@@ -14,6 +14,7 @@ import com.example.hope.ui.composables.bottomNav.BottomNavComposable
 import com.example.hope.ui.composables.post.getSavedPosts
 import com.example.hope.ui.composables.topNav.SimpleTopNavComposable
 import com.example.hope.ui.composables.topNav.TopNavComposable
+import com.example.hope.ui.pages.SearchComposable
 import com.example.hope.ui.pages.upload.UploadPage
 
 @Composable
@@ -33,6 +34,8 @@ fun HomePage(
 
     val userRole by getchRoleViewModel.userRole.observeAsState()
 
+    val searchedPost by homePageViewModel.savedPostList.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -47,9 +50,19 @@ fun HomePage(
             when (currentScreen) {
                 Screen.Home -> TopNavComposable(
                     onProfileClick = onProfileClick,
-                    onSearch = { },
-                    onFilterClick = { }
+                    onSearch = { query ->
+                        homePageViewModel.fetchSearchedPost(query) { searchedPosts ->
+                            // Simpan hasil search ke SavedStateHandle
+                            navController.currentBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("searchedPosts", searchedPosts)
+
+                            // Navigasi ke SearchPage
+                            navController.navigate("searchPage")
+                        }
+                    },
                 )
+
                 Screen.Bookmark -> SimpleTopNavComposable(
                     title = "Saved Posts",
                     onBackClick = { currentScreen = Screen.Home }

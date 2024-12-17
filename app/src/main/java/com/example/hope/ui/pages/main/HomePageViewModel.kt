@@ -45,7 +45,6 @@ class HomePageViewModel : ViewModel() {
                                 profilePicture = it.profilePicture,
                                 postImg = it.postImg,
                                 title = it.title,
-                                location = it.location,
                                 description = it.description,
                                 isBookmarked = isBookmarked
                             )
@@ -98,7 +97,6 @@ class HomePageViewModel : ViewModel() {
                                             profilePicture = post.profilePicture,
                                             postImg = post.postImg,
                                             title = post.title,
-                                            location = post.location,
                                             description = post.description,
                                             isBookmarked = isBookmarked
                                         )
@@ -139,6 +137,28 @@ class HomePageViewModel : ViewModel() {
             Log.e("HomePageViewModel", "Failed to fetch saved posts: ${exception.message}")
             _savedPostList.value = emptyList()
         }
+    }
+
+    private val _searchedPosts = MutableStateFlow<List<PostData>>(emptyList())
+    val searchedPosts: StateFlow<List<PostData>> = _searchedPosts
+
+    fun fetchSearchedPost(query: String, onResult: (List<PostData>) -> Unit) {
+        val databaseRef = database.getReference("Posts")
+
+        databaseRef.orderByChild("title")
+            .startAt(query)
+            .endAt(query + "\uf8ff")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val results = snapshot.children.mapNotNull { it.getValue(PostData::class.java) }
+                    onResult(results) // Kirim hasil ke callback
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Firebase", "Error fetching posts: ${error.message}")
+                    onResult(emptyList()) // Kirim list kosong jika terjadi error
+                }
+            })
     }
 
 
