@@ -29,6 +29,9 @@ import androidx.compose.ui.platform.LocalContext
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -48,11 +51,13 @@ import androidx.compose.ui.text.TextStyle
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.navigation.NavController
 import com.example.hope.ui.composables.topNav.TopNavChatAnotherUserComposable
 import com.example.hope.ui.composables.topNav.TopNavViewModel
 import com.example.hope.ui.pages.register.UserData
+
 
 @Composable
 fun ChatClienttoPsikologPage(
@@ -62,19 +67,13 @@ fun ChatClienttoPsikologPage(
     currentUserViewModel: TopNavViewModel = viewModel(),
     activePsikolog: UserData?
 ) {
-    // State untuk pesan yang diketik
     var messageText by remember { mutableStateOf("") }
-    // State untuk pesan yang sudah dikirim
     var messages by remember { mutableStateOf(listOf<Message>()) }
-    // Coroutine scope untuk melakukan pengiriman pesan
+    var isEmojiPickerVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    // Mendapatkan konteks untuk Toast
     val context = LocalContext.current
-//    val currentUser by currentUserViewModel.userProfile.collectAsState()
-
     val currentUser by currentUserViewModel.userProfile.collectAsState()
     val isLoading by currentUserViewModel.loading.collectAsState()
-
 
     BackHandler {
         navController.navigate("homePage?tab=Chat") {
@@ -82,16 +81,15 @@ fun ChatClienttoPsikologPage(
         }
     }
 
-    // Mendengarkan pembaruan pesan
     DisposableEffect(chatId) {
-        // Memulai listener untuk mendengarkan pembaruan pesan
-        val listenerRegistration = ChatClienttoPsikologViewModel.listenForMessages(chatId, psikologID = activePsikolog!!.userID) { updatedMessages ->
+        val listenerRegistration = ChatClienttoPsikologViewModel.listenForMessages(
+            chatId, psikologID = activePsikolog!!.userID
+        ) { updatedMessages ->
             messages = updatedMessages
         }
 
-        // Clean up listener ketika composable keluar dari komposisi
         onDispose {
-            listenerRegistration.remove() // Menghapus listener saat composable dibuang
+            listenerRegistration.remove()
         }
     }
 
@@ -100,47 +98,57 @@ fun ChatClienttoPsikologPage(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp, top = 30.dp)
+            .padding(16.dp, top = 100.dp)
     ) {
-
-        Spacer(modifier = Modifier.padding(35.dp))
-        // Daftar pesan
         LazyColumn(
             modifier = Modifier.weight(1f),
-            reverseLayout = false  // Pesan baru tampil di bawah
+            reverseLayout = false
         ) {
             items(messages) { message ->
-//                DynamicPaddingCurrentUserColumn(message = message) // Gunakan fungsi DynamicPaddingCurrentUserColumn untuk setiap pesan
-                if (message.clientId != "") {
-                    // Tampilkan pesan psikolog di kanan
+                if (message.clientId.isNotEmpty()) {
                     DynamicPaddingCurrentUserColumn(message)
                 } else {
-                    // Tampilkan pesan klien di kiri
                     DynamicPaddingAnotherUserColumn(message)
                 }
             }
         }
 
+        if (isEmojiPickerVisible) {
+            EmojiPicker(messageText, setMessageText = { messageText = it })
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Kolom input pesan
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Kolom input pesan
-            BasicTextField(
-                value = messageText,
-                onValueChange = { messageText = it },
-                textStyle = TextStyle(color = Color.Black),
-                enabled = !isLoading, // Disable kolom input saat loading
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Send
-                ),
-                keyboardActions = KeyboardActions(
-                    onSend = {
+        //Duarr
+        Row (modifier = Modifier.padding(bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
+            Row(
+                modifier = Modifier
+                    .weight(0.01f)
+                    .background(Color.Gray.copy(alpha = 0.3f), shape = RoundedCornerShape(46.dp))
+                    .border(1.dp, Color.Black, RoundedCornerShape(46.dp))
+                    .padding(horizontal = 10.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { isEmojiPickerVisible = !isEmojiPickerVisible }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.laugh),
+                        contentDescription = "Emoji Picker",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                BasicTextField(
+                    value = messageText,
+                    onValueChange = { messageText = it },
+                    textStyle = TextStyle(color = Color.Black),
+                    modifier = Modifier.weight(0.05f)
+                )
+
+
+            }
+            Row (verticalAlignment = Alignment.CenterVertically){
+                IconButton(
+                    onClick = {
                         if (messageText.isNotEmpty() && currentUser != null && activePsikolog != null) {
                             coroutineScope.launch {
                                 try {
@@ -148,62 +156,23 @@ fun ChatClienttoPsikologPage(
                                         chatId = chatId,
                                         message = messageText,
                                         currentUserID = currentUser!!.userID,
+                                        activePsikologID = activePsikolog!!.userID,
                                         currentUserAvatarID = currentUser!!.avatarID!!,
-                                        currentUsername = currentUser!!.username,
-                                        activePsikologID = activePsikolog!!.userID)
-                                    if (success) {
-                                        messageText = "" // Clear input after sending
-                                    } else {
-                                        showToast(context, "Failed to send message")
-                                    }
-                                } catch (e: Exception) {
-                                    showToast(context, "An error occurred: ${e.message}")
-                                }
-                            }
-                        } else {
-                            showToast(context, "User data is still loading")
-                        }
-                    }
-                ),
-                modifier = Modifier
-                    .weight(1f)
-                    .background(Color.Gray.copy(alpha = 0.1f), shape = MaterialTheme.shapes.medium)
-                    .padding(12.dp)
-            )
-
-            // Tombol Kirim Pesan
-            IconButton(
-                onClick = {
-                    if (messageText.isNotEmpty() && currentUser != null && activePsikolog != null) {
-                        coroutineScope.launch {
-                            try {
-                                val success = ChatClienttoPsikologViewModel.sendMessage(
-                                    chatId,
-                                    messageText,
-                                    currentUser!!.userID,
-                                    activePsikologID = activePsikolog!!.userID,
-                                    currentUserAvatarID = currentUser!!.avatarID!!,
-                                    currentUsername = currentUser!!.username
+                                        currentUsername = currentUser!!.username
                                     )
-                                if (success) {
-                                    messageText = "" // Clear input after sending
-                                } else {
-                                    showToast(context, "Failed to send message")
+                                    if (success) messageText = ""
+                                } catch (e: Exception) {
+                                    showToast(context, "Error: ${e.message}")
                                 }
-                            } catch (e: Exception) {
-                                showToast(context, "An error occurred: ${e.message}")
                             }
                         }
-                    } else {
-                        showToast(context, "User data is still loading")
-                    }
-                },
-                enabled = !isLoading // Disable tombol kirim saat loading
-            ) {
-                Icon(imageVector = Icons.Filled.Send, contentDescription = "Send")
+                    },
+                    enabled = !isLoading
+                ) {
+                    Icon(Icons.Filled.Send, contentDescription = "Send")
+                }
             }
         }
-
     }
 }
 
@@ -215,23 +184,33 @@ private fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
+
+
+data class Message(val clientId: String, val message: String, val timestamp: Long)
+
 @Composable
-fun MessageItem(message: Message) {
-    // Tampilkan pesan, bisa menggunakan gaya yang berbeda untuk pengirim
+fun EmojiPicker(messageText: String, setMessageText: (String) -> Unit) {
+    val emojis = listOf("🙂", "😄", "❤️", "👍", "🎉", "😎")
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .background(Color.Transparent, shape = RoundedCornerShape(8.dp))
+            .padding(8.dp)
+            .height(60.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = message.message,
-            style = TextStyle(color = Color.Black),
-            modifier = Modifier.padding(end = 8.dp)
-        )
+        emojis.forEach { emoji ->
+            IconButton(
+                onClick = { setMessageText(messageText + emoji) },
+                modifier = Modifier.size(48.dp)
+            ) {
+                Text(text = emoji, fontSize = 28.sp)
+            }
+        }
     }
 }
 
-data class Message(val clientId: String, val message: String, val timestamp: Long)
 
 
 @Composable
@@ -241,37 +220,38 @@ fun DynamicPaddingAnotherUserColumn(message: Message) {
     val screenWidth = configuration.screenWidthDp.dp
     val sizeWidth = configuration.screenWidthDp.sp
 
-//    val calculatedStartPadding = calculateDynamicStartPadding(message.message, fontSize, screenWidth)
     val fontSize = sizeWidth * 0.05f
     val calculatedEndPadding = calculateDynamicEndPadding(message.message, fontSize, screenWidth)
 
-    Column(
-        modifier = Modifier
-            .padding(top = screenWidth * 0.05f, end = calculatedEndPadding)
-            .fillMaxWidth()
-    ) {
+    Column (modifier = Modifier.padding(end= 16.dp)){
         Column(
             modifier = Modifier
-                .background(Color(0xFFDEE5D4))
+                .padding(top = screenWidth * 0.05f, end = calculatedEndPadding)
                 .fillMaxWidth()
         ) {
-            Row(
+            Column(
                 modifier = Modifier
-                    .padding(
-                        top = screenWidth * 0.005f,
-                        bottom = screenWidth * 0.05f
-                    )
+                    .background(Color(0xFFDEE5D4))
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = message.message,
-                    fontSize = fontSize,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = poppins_bold,
+                Row(
                     modifier = Modifier
-                        .padding(start = screenWidth * 0.05f, end = screenWidth * 0.05f)
-                        .offset(y = screenWidth * 0.03f),
-                    overflow = TextOverflow.Clip
-                )
+                        .padding(
+                            top = screenWidth * 0.005f,
+                            bottom = screenWidth * 0.05f
+                        )
+                ) {
+                    Text(
+                        text = message.message,
+                        fontSize = fontSize,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = poppins_bold,
+                        modifier = Modifier
+                            .padding(start = screenWidth * 0.05f, end = screenWidth * 0.05f)
+                            .offset(y = screenWidth * 0.03f),
+                        overflow = TextOverflow.Clip
+                    )
+                }
             }
         }
     }
@@ -287,33 +267,35 @@ fun DynamicPaddingCurrentUserColumn(message: Message) {
     val fontSize = sizeWidth * 0.05f
     val calculatedStartPadding = calculateDynamicStartPadding(message.message, fontSize, screenWidth)
 
-    Column(
-        modifier = Modifier
-            .padding(top = screenWidth * 0.05f, start = calculatedStartPadding)
-            .fillMaxWidth()
-    ) {
+    Column (modifier = Modifier.padding(end = 15.dp)){
         Column(
             modifier = Modifier
-                .background(Color(0xFF8EC1CD)) // Ubah warna sesuai dengan kebutuhan
+                .padding(top = screenWidth * 0.05f, start = calculatedStartPadding)
                 .fillMaxWidth()
         ) {
-            Row(
+            Column(
                 modifier = Modifier
-                    .padding(
-                        top = screenWidth * 0.005f,
-                        bottom = screenWidth * 0.05f
-                    )
+                    .background(Color(0xFF8EC1CD)) // Ubah warna sesuai dengan kebutuhan
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = message.message,
-                    fontSize = fontSize,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = poppins_bold,
+                Row(
                     modifier = Modifier
-                        .padding(start = screenWidth * 0.05f, end = screenWidth * 0.05f)
-                        .offset(y = screenWidth * 0.03f),
-                    overflow = TextOverflow.Clip
-                )
+                        .padding(
+                            top = screenWidth * 0.005f,
+                            bottom = screenWidth * 0.05f
+                        )
+                ) {
+                    Text(
+                        text = message.message,
+                        fontSize = fontSize,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = poppins_bold,
+                        modifier = Modifier
+                            .padding(start = screenWidth * 0.05f, end = screenWidth * 0.05f)
+                            .offset(y = screenWidth * 0.03f),
+                        overflow = TextOverflow.Clip
+                    )
+                }
             }
         }
     }
