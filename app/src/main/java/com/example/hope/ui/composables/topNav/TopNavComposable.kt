@@ -89,7 +89,7 @@ fun TopNavComposable(
             ) {
                 Text(
                     text = "Halo, ${userProfile?.username ?: "User"}",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold
                 )
                 IconButton(
@@ -107,8 +107,6 @@ fun TopNavComposable(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
             // Row 2: Search Bar
             TextField(
                 value = searchQuery,
@@ -116,8 +114,7 @@ fun TopNavComposable(
                 placeholder = { Text("Search") },
                 modifier = Modifier
                     .fillMaxWidth(3 / 4f)
-                    .align(Alignment.CenterHorizontally)
-                    .height(56.dp),
+                    .align(Alignment.CenterHorizontally),
                 singleLine = true,
                 shape = RoundedCornerShape(35),
                 trailingIcon = {
@@ -143,15 +140,6 @@ fun TopNavComposable(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Row 3: Filter Buttons
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp) // Tinggi baris (opsional, disesuaikan kebutuhan)
-            ) {
-                Spacer(modifier = Modifier.weight(1f))
-            }
 
         }
     }

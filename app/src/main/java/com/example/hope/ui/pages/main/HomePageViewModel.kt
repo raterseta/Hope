@@ -45,7 +45,6 @@ class HomePageViewModel : ViewModel() {
                                 profilePicture = it.profilePicture,
                                 postImg = it.postImg,
                                 title = it.title,
-                                location = it.location,
                                 description = it.description,
                                 isBookmarked = isBookmarked
                             )
@@ -98,7 +97,6 @@ class HomePageViewModel : ViewModel() {
                                             profilePicture = post.profilePicture,
                                             postImg = post.postImg,
                                             title = post.title,
-                                            location = post.location,
                                             description = post.description,
                                             isBookmarked = isBookmarked
                                         )

@@ -7,7 +7,6 @@ data class PostData(
     var profilePicture: Int? = null,
     var postImg: String = "",
     var title: String = "",
-    var location: String = "",
     var description: String = "",
     var isBookmarked: Boolean = false
 )
