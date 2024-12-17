@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
@@ -46,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,13 +60,11 @@ import com.example.hope.ui.theme.LightBlue
 fun TopNavComposable(
     onProfileClick: () -> Unit,
     onSearch: (String) -> Unit,
-    onFilterClick: (FilterButton) -> Unit,
     viewModel: TopNavViewModel = viewModel()
 ) {
     val userProfile by viewModel.userProfile.collectAsState()
 
-
-    var selectedIndex by remember { mutableStateOf(0) }
+    var searchQuery by remember { mutableStateOf("") }
 
     Surface(
         color = LightBlue,
@@ -110,26 +111,35 @@ fun TopNavComposable(
 
             // Row 2: Search Bar
             TextField(
-                value = "",
-                onValueChange = onSearch,
-                label = { Text("Search") },
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = { Text("Search") },
                 modifier = Modifier
                     .fillMaxWidth(3 / 4f)
                     .align(Alignment.CenterHorizontally)
-                    .height(32.dp),
+                    .height(56.dp),
                 singleLine = true,
                 shape = RoundedCornerShape(35),
                 trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon"
-                    )
+                    IconButton(onClick = { onSearch(searchQuery) }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon"
+                        )
+                    }
                 },
                 colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,  // Disable focused indicator
+                    focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        onSearch(searchQuery) // Panggil fungsi onSearch saat tombol Search ditekan
+                    }
                 )
             )
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -164,16 +174,4 @@ fun SimpleTopNavComposable(
             containerColor = LightBlue
         )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PrevTopNavComposable() {
-    TopNavComposable(
-        onProfileClick = { TODO() },
-        onSearch = { TODO() },
-        onFilterClick = TODO(),
-        viewModel = TODO(),
-    )
-
 }
