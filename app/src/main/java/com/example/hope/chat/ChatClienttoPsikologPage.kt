@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -67,6 +68,8 @@ fun ChatClienttoPsikologPage(
     currentUserViewModel: TopNavViewModel = viewModel(),
     activePsikolog: UserData?
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
     var messageText by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(listOf<Message>()) }
     var isEmojiPickerVisible by remember { mutableStateOf(false) }
@@ -98,7 +101,8 @@ fun ChatClienttoPsikologPage(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp, top = 100.dp)
+            .padding(top = 98.dp)
+            .background(color = backgroundColor)
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
@@ -120,11 +124,15 @@ fun ChatClienttoPsikologPage(
         Spacer(modifier = Modifier.height(8.dp))
 
         //Duarr
-        Row (modifier = Modifier.padding(bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
+        Row (modifier = Modifier.padding(start = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
             Row(
                 modifier = Modifier
                     .weight(0.01f)
-                    .background(Color.Gray.copy(alpha = 0.3f), shape = RoundedCornerShape(46.dp))
+                    .background(
+                        if (isDarkTheme) Color.White.copy(alpha = 0.9f) // tema terang
+                        else Color.Gray.copy(alpha = 0.3f), // tema gelap
+                        shape = RoundedCornerShape(46.dp)
+                    )
                     .border(1.dp, Color.Black, RoundedCornerShape(46.dp))
                     .padding(horizontal = 10.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -169,7 +177,8 @@ fun ChatClienttoPsikologPage(
                     },
                     enabled = !isLoading
                 ) {
-                    Icon(Icons.Filled.Send, contentDescription = "Send")
+                    Icon(Icons.Filled.Send, contentDescription = "Send",
+                        tint = if (isDarkTheme) Color.White else Color.Black)
                 }
             }
         }
@@ -267,7 +276,7 @@ fun DynamicPaddingCurrentUserColumn(message: Message) {
     val fontSize = sizeWidth * 0.05f
     val calculatedStartPadding = calculateDynamicStartPadding(message.message, fontSize, screenWidth)
 
-    Column (modifier = Modifier.padding(end = 15.dp)){
+    Column (modifier = Modifier.padding(end = 0.dp)){
         Column(
             modifier = Modifier
                 .padding(top = screenWidth * 0.05f, start = calculatedStartPadding)

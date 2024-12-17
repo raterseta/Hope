@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -59,7 +60,8 @@ fun ChatPsikologtoClientPage(
     currentUserViewModel: TopNavViewModel = viewModel(),
     activeClient: UserData? // Pastikan data ini bisa null
 ) {
-    // State untuk pesan yang diketik
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
     var messageText by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(listOf<Message>()) }
     var isEmojiPickerVisible by remember { mutableStateOf(false) }
@@ -104,7 +106,8 @@ fun ChatPsikologtoClientPage(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp, top = 100.dp)
+            .padding(top = 98.dp)
+            .background(color = backgroundColor)
     ) {
         // Daftar pesan
         LazyColumn(
@@ -139,11 +142,15 @@ fun ChatPsikologtoClientPage(
         Spacer(modifier = Modifier.height(8.dp))
 
         // Kolom input pesan
-        Row (modifier = Modifier.padding(bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
+        Row (modifier = Modifier.padding(start = 10.dp,bottom = 10.dp), verticalAlignment = Alignment.CenterVertically){
             Row(
                 modifier = Modifier
                     .weight(0.01f)
-                    .background(Color.Gray.copy(alpha = 0.3f), shape = RoundedCornerShape(46.dp))
+                    .background(
+                        if (isDarkTheme) Color.White.copy(alpha = 0.9f) // tema terang
+                        else Color.Gray.copy(alpha = 0.3f), // tema gelap
+                        shape = RoundedCornerShape(46.dp)
+                    )
                     .border(1.dp, Color.Black, RoundedCornerShape(46.dp))
                     .padding(horizontal = 10.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -155,44 +162,7 @@ fun ChatPsikologtoClientPage(
                         modifier = Modifier.size(24.dp)
                     )
                 }
-                // Kolom input pesan
-//                BasicTextField(
-//                    value = messageText,
-//                    onValueChange = { messageText = it },
-//                    textStyle = TextStyle(color = Color.Black),
-//                    enabled = !isLoading, // Disable kolom input saat loading
-//                    keyboardOptions = KeyboardOptions.Default.copy(
-//                        imeAction = ImeAction.Send
-//                    ),
-//                    keyboardActions = KeyboardActions(
-//                        onSend = {
-//                            if (messageText.isNotEmpty() && currentUser != null && activeClient != null) {
-//                                coroutineScope.launch {
-//                                    try {
-//                                        val success = ChatPsikologtoCLientViewModel.sendMessage(
-//                                            chatId = chatId,
-//                                            message = messageText,
-//                                            currentUserID = currentUser!!.userID,
-//                                            currentUserAvatarID = currentUser!!.avatarID ?: 0,
-//                                            currentUsername = currentUser!!.username,
-//                                            activeClientID = activeClient.userID)
-//                                        if (success) {
-//                                            messageText = "" // Clear input after sending
-//                                        } else {
-//                                            showToast(context, "Failed to send message")
-//                                        }
-//                                    } catch (e: Exception) {
-//                                        showToast(context, "An error occurred: ${e.message}")
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    ),
-//                    modifier = Modifier
-//                        .weight(1f)
-//                        .border(1.dp, Color.Gray, RoundedCornerShape(50))
-//                        .padding(16.dp)
-//                )
+
                 BasicTextField(
                     value = messageText,
                     onValueChange = { messageText = it },
@@ -229,7 +199,9 @@ fun ChatPsikologtoClientPage(
                 },
                     enabled = !isLoading
                 ) {
-                    Icon(Icons.Filled.Send, contentDescription = "Send")                }
+                    Icon(Icons.Filled.Send, contentDescription = "Send",
+                        tint = if (isDarkTheme) Color.White else Color.Black)
+                }
             }
         }
     }
